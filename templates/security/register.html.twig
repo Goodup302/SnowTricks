@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}S'enregistrer{% endblock %}
+
+{% block body %}
+    <form method="post">
+        {% for label, flashes in app.session.flashbag.all %}
+            {% for flash in flashes %}
+                {% if ( label == 'success' ) %}
+                    <div class="alert alert-success alert-dismissible fade show">
+                        {{ flash }}
+                    </div>
+                {% elseif ( label == 'error' ) %}
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        {{ flash }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+
+        <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.username) }}
+            {{ form_row(form.password) }}
+
+            <button type="submit">S'enregistrer</button>
+        {{ form_end(form) }}
+    </form>
+{% endblock %}
