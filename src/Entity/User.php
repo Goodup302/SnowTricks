@@ -216,8 +216,7 @@ class User implements UserInterface, \Serializable
             array(
                 $this->id,
                 $this->username,
-                $this->password,
-                $this->roles
+                $this->password
             )
         );
     }
@@ -236,8 +235,7 @@ class User implements UserInterface, \Serializable
         list(
             $this->id,
             $this->username,
-            $this->password,
-            $this->roles
+            $this->password
             ) = unserialize($serialized, ['allowed_classes' => false]);
     }
 }

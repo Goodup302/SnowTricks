@@ -15,6 +15,24 @@ class HomeController extends AbstractController
      */
     public function home(): Response
     {
-        return $this->render('base.html.twig');
+        return $this->render('figure/index.html.twig', ['nb' => 4]);
+    }
+
+    /**
+     * @Route("/edit/{id}", name="figure.edit")
+     * @return Response
+     */
+    public function edit(): Response
+    {
+        return $this->render('figure/index.html.twig', ['nb' => 4]);
+    }
+
+    /**
+     * @Route("/delete/{id}", name="figure.delete")
+     * @return Response
+     */
+    public function delete(): Response
+    {
+        return $this->render('figure/index.html.twig', ['nb' => 4]);
     }
 }

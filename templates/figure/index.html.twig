@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}S'enregistrer{% endblock %}
+
+{% block wallpaper %}
+    <div id="wallpaper">
+        <img src="{{ asset('image/snowboard-wallpaper.jpg') }}">
+        <div class="wallpaper_body">
+            <h2>Bienvenue sur la communauté SnowTricks</h2>
+        </div>
+        <a href="#content"><i class="arrow_down fas fa-angle-down"></i></a>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {% for i in 0..15 %}
+        <div class="col-12 col-sm-6 col-md-4 col-xl-3 tricks_card">
+            <img src="{{ asset('image/snowboard-wallpaper.jpg') }}">
+            <div class="align-items-center d-flex justify-content-around pt-2 tricks_card_body">
+                <h5 class="text-center">Je suis le titre</h5>
+                <a class="edit" href="{{ path('figure.edit', {'id': i}) }}"><i class="fas fa-edit"></i></a>
+                <a class="delete" href="{{ path('figure.delete', {'id': i}) }}"><i class="fas fa-trash-alt"></i></a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
