@@ -23,15 +23,106 @@ class User implements UserInterface, \Serializable
     private $username;
 
     /**
-     * @ORM\Column(type="json")
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      */
-    private $roles = [];
+    private $password;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private $picture;
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
+     */
+    private $email;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=128)
+     */
+    private $token;
+
+    /**
+     * @return string
+     */
+    public function getPicture(): string
+    {
+        return $this->picture;
+    }
+
+    /**
+     * @param string $picture
+     * @return User
+     */
+    public function setPicture(string $picture): User
+    {
+        $this->picture = $picture;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     * @return User
+     */
+    public function setEmail(string $email): User
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     * @return User
+     */
+    public function setToken(string $token): User
+    {
+        $this->token = $token;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActivate(): bool
+    {
+        return $this->activate;
+    }
+
+    /**
+     * @param bool $activate
+     * @return User
+     */
+    public function setActivate(bool $activate): User
+    {
+        $this->activate = $activate;
+        return $this;
+    }
+
+    /**
+     * @var boolean If account is activate
+     * @ORM\Column(type="boolean")
+     */
+    private $activate;
 
     public function getId(): ?int
     {
@@ -60,18 +151,7 @@ class User implements UserInterface, \Serializable
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
+        return ['ROLE_ADMIN'];
     }
 
     /**
@@ -87,6 +167,24 @@ class User implements UserInterface, \Serializable
         $this->password = $password;
 
         return $this;
+    }
+
+    /**
+     * Create an unique token
+     *
+     * @return string
+     */
+    public function createToken() : string
+    {
+        $length = 128;
+        $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$-_.+!*()";
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        $this->token = $randomString;
+        return (string) $randomString;
     }
 
     /**
