@@ -115,10 +115,12 @@ class User implements UserInterface, \Serializable
     public function serialize()
     {
         return serialize(
-            $this->id,
-            $this->username,
-            $this->password,
-            $this->roles
+            array(
+                $this->id,
+                $this->username,
+                $this->password,
+                $this->roles
+            )
         );
     }
 

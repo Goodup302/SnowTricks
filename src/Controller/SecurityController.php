@@ -14,7 +14,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="app_login")
+     * @Route("/login", name="login")
+     * @param AuthenticationUtils $authenticationUtils
+     * @return Response
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -27,7 +29,10 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="app_register")
+     * @Route("/register", name="register")
+     * @param UserPasswordEncoderInterface $encoder
+     * @param Request $request
+     * @return Response
      */
     public function register(UserPasswordEncoderInterface $encoder, Request $request): Response
     {
@@ -37,14 +42,14 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
             $user->setRoles(['ROLE_USER']);
-            $user->setPassword($encoder->encodePassword($user, $request->get('password')));
-            dump($user);
+            $user->setPassword($encoder->encodePassword($user, $form->getData()->getPassword()));
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
             $this->addFlash('success', 'Compte créé');
+            return $this->redirectToRoute('login');
         }
 
         return $this->render('security/register.html.twig', ['form' => $form->createView()]);
