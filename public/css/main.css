@@ -15,6 +15,11 @@ Table of Contents
 /*
 0.0 - GENERALE
 */
+@import url('https://fonts.googleapis.com/css?family=Abel');
+@import url('https://fonts.googleapis.com/css?family=Acme');
+* {
+    font-family: 'Acme', sans-serif;
+}
 
 :root {
     /* Main color */
@@ -134,11 +139,12 @@ a.current {
 .tricks_card a{
     transition: 0.1s ease-in;
 }
-.tricks_card a:hover{
+.tricks_card a:hover,
+.tricks_card button:hover{
     transform: scale(1.1);
 }
 .tricks_card h5{
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 .tricks_card img{
     object-fit: cover;
@@ -147,6 +153,13 @@ a.current {
 }
 .tricks_card .delete{
     color: red;
+    margin: 0;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+}
+.tricks_card .delete:focus {
+    outline: none;
 }
 
 /* Arrow up */

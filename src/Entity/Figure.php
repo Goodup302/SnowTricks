@@ -17,7 +17,7 @@ class Figure
     private $id;
 
     /**
-     * @ORM\Column(type="string" unique=true)
+     * @ORM\Column(type="string", unique=true)
      */
     private $name;
 
@@ -99,24 +99,24 @@ class Figure
         return $this;
     }
 
-    public function getPublishDate(): ?\DateTimeInterface
+    public function getPublishDate(): ?\DateTime
     {
         return $this->publishDate;
     }
 
-    public function setPublishDate(\DateTimeInterface $publishDate): self
+    public function setPublishDate(\DateTime $publishDate): self
     {
         $this->publishDate = $publishDate;
 
         return $this;
     }
 
-    public function getLastEdit(): ?\DateTimeInterface
+    public function getLastEdit(): ?\DateTime
     {
         return $this->lastEdit;
     }
 
-    public function setLastEdit(\DateTimeInterface $lastEdit): self
+    public function setLastEdit(\DateTime $lastEdit): self
     {
         $this->lastEdit = $lastEdit;
 

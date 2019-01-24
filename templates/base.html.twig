@@ -15,7 +15,7 @@
     <body>
 
         <!-- HEADER OF PAGE -->
-        <nav id="nav_desktop" class="align-items-center justify-content-around text-center row">
+        <nav id="nav_desktop" style="display: none" class="align-items-center justify-content-around text-center row">
             <h1 class="col-lg-4 d-lg-block d-none">SnowTricks</h1>
             <img class="col-6 col-lg-4 my-3" id="nav_logo" src="{{ asset('image/nav-logo.jpg') }}">
 
@@ -23,13 +23,13 @@
                 <a class="current" href="{{ path('home') }}">Accueil</a>
                 {% if app.user %}
                     <a href="{{ path('logout') }}">Se déconnecter</a>
-                {% elseif not app.user %}
+                {% else %}
                     <a href="{{ path('login') }}">Se connecter</a>
                 {% endif %}
             </div>
         </nav>
         <!-- MOBILE HEADER -->
-        <nav id="nav_mobile">
+        <nav id="nav_mobile" style="display: none">
             <a href="{{ path('home') }}"><i class="fas fa-home"></i></a>
             {% if app.user %}
                 <a href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i></a>

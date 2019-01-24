@@ -6,7 +6,7 @@ var breakpoint_xl = 1200;
 $(document).ready(function() {
 
     //Init Page
-    $('.sf-toolbar').remove();
+    //$('.sf-toolbar').remove();
     refreshHeader();
     refreshArrowUp();
 
@@ -39,12 +39,11 @@ $(document).ready(function() {
         }
     }
 
-
     //Arrow up
     function refreshArrowUp() {
         var offset = $('#tricks')[0].getBoundingClientRect().top;
         var tricks = $('#tricks')[0].childElementCount;
-        if (offset < -200 && $(window).width() >= breakpoint_sm && tricks >= 15) {
+        if (offset < -200 && $(window).width() >= breakpoint_md && tricks >= 15) {
             $("#arrow_up").show();
         } else {
             $("#arrow_up").hide();
@@ -57,8 +56,6 @@ $(document).ready(function() {
         refreshHeader();
         refreshArrowUp();
     });
-
-    //arrow ip
     $( window ).scroll(function() {
         refreshArrowUp();
     });
