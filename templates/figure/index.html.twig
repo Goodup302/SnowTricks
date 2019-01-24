@@ -13,14 +13,20 @@
 {% endblock %}
 
 {% block body %}
-    {% for i in 0..15 %}
-        <div class="col-12 col-sm-6 col-md-4 col-xl-3 tricks_card">
-            <img src="{{ asset('image/snowboard-wallpaper.jpg') }}">
-            <div class="align-items-center d-flex justify-content-around pt-2 tricks_card_body">
-                <h5 class="text-center">Je suis le titre</h5>
-                <a class="edit" href="{{ path('figure.edit', {'id': i}) }}"><i class="fas fa-edit"></i></a>
-                <a class="delete" href="{{ path('figure.delete', {'id': i}) }}"><i class="fas fa-trash-alt"></i></a>
+    <a href="#tricks" id="arrow_up" style="display: none">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    <div id="tricks" class="row">
+        {% for i in 0..40 %}
+            <div class="col-12 col-sm-6 col-md-4 col-xl-3 tricks_card">
+                <img src="{{ asset('image/snowboard-wallpaper.jpg') }}">
+                <div class="align-items-center d-flex justify-content-around pt-2 tricks_card_body">
+                    <h5 class="text-center">Je suis le titre</h5>
+                    <a class="edit" href="{{ path('figure.edit', {'id': i}) }}"><i class="fas fa-edit"></i></a>
+                    <a class="delete" href="{{ path('figure.delete', {'id': i}) }}"><i class="fas fa-trash-alt"></i></a>
+                </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
+
 {% endblock %}

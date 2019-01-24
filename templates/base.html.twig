@@ -15,25 +15,36 @@
     <body>
 
         <!-- HEADER OF PAGE -->
-        <nav class="">
-            <img id="nav_logo" src="{{ asset('image/nav-logo.jpg') }}">
-            <h1>Place Title here</h1>
-            <div class="d-flex w-100 justify-content-end align-items-center">
-                <a class="mx-4 current" href="{{ path('home') }}">Accueil</a>
+        <nav id="nav_desktop" class="align-items-center justify-content-around text-center row">
+            <h1 class="col-lg-4 d-lg-block d-none">SnowTricks</h1>
+            <img class="col-6 col-lg-4 my-3" id="nav_logo" src="{{ asset('image/nav-logo.jpg') }}">
+
+            <div class="align-items-center col-6 col-lg-4 d-flex" style="justify-content: space-evenly;">
+                <a class="current" href="{{ path('home') }}">Accueil</a>
                 {% if app.user %}
-                    <a class="mx-4" href="{{ path('logout') }}">Se déconnecter</a>
+                    <a href="{{ path('logout') }}">Se déconnecter</a>
                 {% elseif not app.user %}
-                    <a class="mx-4" href="{{ path('login') }}">Se connecter</a>
+                    <a href="{{ path('login') }}">Se connecter</a>
                 {% endif %}
             </div>
+        </nav>
+        <!-- MOBILE HEADER -->
+        <nav id="nav_mobile">
+            <a href="{{ path('home') }}"><i class="fas fa-home"></i></a>
+            {% if app.user %}
+                <a href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i></a>
+            {% elseif not app.user %}
+                <a href="{{ path('login') }}"><i class="fas fa-sign-in-alt"></i></a>
+            {% endif %}
         </nav>
 
         {% block wallpaper %}{% endblock %}
 
         <div id="content" class="container">
-            <div class="row">
-                {% block body %}{% endblock %}
-            </div>
+            {% block body %}{% endblock %}
+        </div>
+        <div id="mobile_bottom">
+
         </div>
 
         {% block javascripts %}

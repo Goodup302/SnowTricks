@@ -1,17 +1,88 @@
+/**
+Table of Contents
+0.0 GENERALE
+
+1.0 HEADER
+
+1.0 HOME PAGE
+
+2.0 FOOTER
+
+
+7.0 OTHER
+*/
+
+/*
+0.0 - GENERALE
+*/
+
+:root {
+    /* Main color */
+    --primary: #33b5e5 !important;
+    --default: #2BBBAD !important;
+    --secondary: #aa66cc !important;
+
+    /* Default color */
+    --white       : #fff;
+    --red         : #f44336;
+    --pink        : #E91E63;
+    --purple      : #9C27B0;
+    --deep-purple : #9C27B0;
+    --blue        : #2196F3;
+    --light-blue  : #03A9F4;
+    --cyan        : #00BCD4;
+    --teal        : #009688;
+    --green       : #4CAF50;
+    --light-green : #8BC34A;
+    --lime        : #CDDC39;
+    --yellow      : #FFEB3B;
+    --amber       : #FFC107;
+    --orange      : #FF9800;
+    --deep-orange : #FF5722;
+    --brown       : #795548;
+    --grey        : #9E9E9E;
+    --grey_blue   : #607D8B;
+    --grey_light  : #ECEFF1;
+}
+
+
+/*
+0.0 - HEADER
+*/
+
 /*Navbar*/
-nav {
-    display: flex;
+#nav_desktop {
+
 }
 #nav_logo {
     max-height: 50px;
-    object-fit: cover;
-    margin: 15px;
+    object-fit: contain;
 }
 a.current {
+    color: black;
+    font-weight: 500;
+}
+
+#nav_mobile{
+    position: fixed;
+    height: 65px;
+    background: var(--primary);
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    z-index: 9999;
+}
+#nav_mobile i{
+    font-size: 35px;
     color: black;
 }
 
 
+/*
+0.0 - HOME PAGE
+*/
 
 /* Wallpaper of home page */
 #wallpaper{
@@ -27,7 +98,7 @@ a.current {
     color: antiquewhite;
     text-shadow: 3px 3px 15px black;
 }
-.wallpaper_body {
+#wallpaper .wallpaper_body {
     position: absolute;
     display: flex;
     align-items: center;
@@ -55,8 +126,6 @@ a.current {
     color: #cccccc;
 }
 
-
-
 /* tricks_card */
 .tricks_card {
     margin-bottom: 15px;
@@ -78,4 +147,29 @@ a.current {
 }
 .tricks_card .delete{
     color: red;
+}
+
+/* Arrow up */
+#arrow_up {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    z-index: 9999;
+    height: 65px;
+    width: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+#arrow_up i {
+    font-size: 65px;
+    color: white;
+    text-shadow: 1px 1px 15px black;
+    transition: 150ms;
+}
+#arrow_up i:hover {
+    cursor: pointer;
+    font-size: 70px !important;
+    color: #cccccc;
 }
