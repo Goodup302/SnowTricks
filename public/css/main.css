@@ -162,6 +162,18 @@ a.current {
     outline: none;
 }
 
+/* Add new button */
+.button_new {
+    color: green;
+    font-size: 20px;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 /* Arrow up */
 #arrow_up {
     position: fixed;
@@ -185,4 +197,9 @@ a.current {
     cursor: pointer;
     font-size: 70px !important;
     color: #cccccc;
+}
+
+.thumbnail {
+    object-fit: cover;
+    height: 300px;
 }

@@ -9,6 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Group
 {
+
+    const LIST = array(
+        "Grabs" => 0,
+        "Rotations" => 1,
+        "Flips" => 2,
+        "Rotations désaxées" => 3,
+        "Slides" => 4,
+        "One foot tricks" => 5,
+        "Old school" => 6,
+    );
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

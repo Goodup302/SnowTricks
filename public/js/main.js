@@ -41,7 +41,6 @@ $(document).ready(function() {
 
     //Arrow up
     function refreshArrowUp() {
-        var offset = $('#tricks')[0].getBoundingClientRect().top;
         var tricks = $('#tricks')[0].childElementCount;
         if (offset < -200 && $(window).width() >= breakpoint_md && tricks >= 15) {
             $("#arrow_up").show();
@@ -59,4 +58,5 @@ $(document).ready(function() {
     $( window ).scroll(function() {
         refreshArrowUp();
     });
+
 });

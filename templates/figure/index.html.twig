@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% import "macro/figure.html.twig" as figure %}
+{% import "macro/figure.html.twig" as figure_card %}
 
 {% block title %}S'enregistrer{% endblock %}
 
@@ -17,9 +17,15 @@
     <a href="#tricks" id="arrow_up" style="display: none">
         <i class="fas fa-angle-up"></i>
     </a>
+    {% if app.user %}
+        <a class="button_new" href="{{ path('figure.new') }}">
+            <i class="fas fa-plus"></i>
+            <span>Ajouter une figure</span>
+        </a>
+    {% endif %}
     <div id="tricks" class="row">
         {% for figure in figures %}
-            {{ figure.show(figure) }}
+            {{ figure_card.show(figure) }}
         {% endfor %}
     </div>
 {% endblock %}

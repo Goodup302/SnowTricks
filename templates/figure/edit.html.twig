@@ -1,17 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajouter une figure{% endblock %}
+{% block title %}Editer une figure{% endblock %}
 
 {% block body %}
+
+    <script>
+        function media() {
+            $.post("{{ path('media') }}", {})
+            .done(function( data ) {
+                alert( data );
+            });
+        }
+    </script>
+    <i onclick="media()" class="fas fa-pen"></i>
     {{ form_start(form) }}
         {{ form_errors(form) }}
-
+        <i onclick="media()" class="fas fa-pen"></i>
+        <div class="thumbnail">
+            {{ form_row(form.thumbnail) }}
+            <img src="{{ asset('uploads/' ~ figure.thumbnail) }}">
+        </div>
         {{ form_row(form.name) }}
-        {{ form_row(form.groupid) }}
-{#        {{ form_row(form.images) }}
-        {{ form_row(form.videos) }}
-        {{ form_row(form.publishDate) }}
-        {{ form_row(form.lastEdit) }}#}
-        <button type="submit" class="btn btn-primary">Ajouter</button>
+        {{ form_row(form.description) }}
+        {{ form_row(form.tag) }}
+        <button type="submit" class="btn btn-primary">Modifier</button>
     {{ form_end(form) }}
+
+    <a href="{{ path('figure.single', {'id': app.request.get('id')}) }}" class="btn btn-success">Voir</a>
+
+    <form method="post" action="{{ path('figure.delete', {'id': app.request.get('id')}) }}">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+        <input type="hidden" name="_method" value="DELETE">
+    </form>
 {% endblock %}

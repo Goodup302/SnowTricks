@@ -1,0 +1,17 @@
+{% for media in medias %}
+    <input id="upload_media" type="file">
+    <img src="{{ asset('uploads/' ~ media.name) }}">
+
+    <script>
+        $("#upload_media:file").change(function (){
+            console.log($(this).val());
+            $.post("{{ path('media.add') }}",
+                {
+                    'file': $(this).val()
+                }
+            ).done(function( data ) {
+                //alert( data );
+            });
+        });
+    </script>
+{% endfor %}
