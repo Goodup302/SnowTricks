@@ -1,17 +1,56 @@
-{% for media in medias %}
-    <input id="upload_media" type="file">
-    <img src="{{ asset('uploads/' ~ media.name) }}">
+<div id="media_picker">
+
+    <div id="media_content row">
+        <i id="close_media" class="fas fa-times"></i>
+
+        {#
+         <form id="form_media">
+            <input id="upload_media" type="file">
+         </form>
+        #}
+
+        {{ form_start(form, {'attr': {'id': 'form_media', 'action': path('media.add') }}) }}
+        {{ form_widget(form.name) }}
+        {{ form_end(form) }}
+
+
+
+        {% for media in medias %}
+            <img class="" src="{{ asset('uploads/' ~ media.name) }}">
+        {% endfor %}
+    </div>
+
 
     <script>
-        $("#upload_media:file").change(function (){
-            console.log($(this).val());
-            $.post("{{ path('media.add') }}",
-                {
-                    'file': $(this).val()
-                }
-            ).done(function( data ) {
-                //alert( data );
+        $(document).ready(function() {
+            $("#close_media").click(function (){
+                $("#media_picker").remove();
+            });
+
+            $("#media_name:file").change(function(){
+                $(this).prop('disabled', true);
+                var input = $(this);
+                var form = $('#form_media');
+                var url = form.attr('action');
+                var formData = new FormData(document.getElementsByName('media')[0]);
+                var file = document.getElementById('media_name').files[0];
+                formData.append('media[name]', file, file.name);
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    error: function(jqXHR, textStatus, errorMessage) {
+                        console.log(errorMessage);
+                        input.prop('disabled', false);
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        input.prop('disabled', false);
+                    }
+                });
             });
         });
     </script>
-{% endfor %}
+</div>

@@ -4,18 +4,9 @@
 
 {% block body %}
 
-    <script>
-        function media() {
-            $.post("{{ path('media') }}", {})
-            .done(function( data ) {
-                alert( data );
-            });
-        }
-    </script>
-    <i onclick="media()" class="fas fa-pen"></i>
     {{ form_start(form) }}
         {{ form_errors(form) }}
-        <i onclick="media()" class="fas fa-pen"></i>
+        <i onclick="media('{{ path('media') }}')" class="fas fa-pen"></i>
         <div class="thumbnail">
             {{ form_row(form.thumbnail) }}
             <img src="{{ asset('uploads/' ~ figure.thumbnail) }}">

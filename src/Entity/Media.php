@@ -19,8 +19,19 @@ class Media
 
     /**
      * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Upload thumbnail as a JPEG file.")
+     * @Assert\NotBlank(message="Upload a JPEG file.")
      * @Assert\File(mimeTypes={ "image/jpeg" })
      */
     private $name;
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
 }

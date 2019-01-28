@@ -58,5 +58,18 @@ $(document).ready(function() {
     $( window ).scroll(function() {
         refreshArrowUp();
     });
-
 });
+
+//Open media picker
+var waitingMedia = false;
+function media(path) {
+    if (!waitingMedia) {
+        waitingMedia = true;
+        $.post(path, {})
+            .done(function( data ) {
+                $('body').prepend(data);
+                waitingMedia = false;
+            });
+    }
+
+}
