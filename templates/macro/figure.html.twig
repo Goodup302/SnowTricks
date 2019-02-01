@@ -1,8 +1,12 @@
 {% macro show(figure) %}
     <div class="col-12 col-sm-6 col-md-4 col-xl-3 tricks_card">
-        <img src="{{ asset('image/snowboard-wallpaper.jpg') }}">
+        <a href="{{ path('figure.single', {'id': figure.id}) }}">
+            <img class="img_responsive" src="{{ asset_media~figure.thumbnail }}">
+        </a>
         <div class="align-items-center d-flex justify-content-around pt-2 tricks_card_body">
-            <h5 class="text-center">{{ figure.name }}</h5>
+            <a href="{{ path('figure.single', {'id': figure.id}) }}">
+                <h5 class="text-center">{{ figure.name }}</h5>
+            </a>
             {% if app.user %}
                 <a class="edit" href="{{ path('figure.edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
                 <form

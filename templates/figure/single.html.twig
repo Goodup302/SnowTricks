@@ -1,8 +1,46 @@
 {% extends 'base.html.twig' %}
-{% import "macro/figure.html.twig" as figure_card %}
+{% import "macro/video.html.twig" as video_show %}
 
 {% block title %}Figure{% endblock %}
 
 {% block body %}
-    {{ figure_card.show(figure) }}
+    <div class="row">
+
+        <div id="single_thumbnail" class="pt-md-4 position-relative">
+            <img class="img_responsive" src="{{ asset_media~figure.thumbnail }}">
+            <div class="absolute_center">
+                <div class="position-relative">
+                    <h1>{{ figure.name }}</h1>
+                </div>
+            </div>
+        </div>
+
+        {% for image in figure.images %}
+        {% endfor %}
+
+        {% for video in figure.videos %}
+            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
+                {{ video_show.youtube(video) }}
+            </div>
+        {% endfor %}
+
+        <div class="col-12 py-3">
+            {{ figure.description }}
+        </div>
+
+        <div class="align-items-center col-12 d-flex justify-content-around justify-content-lg-center">
+            <div class="descritpion-item">
+                {{ figure.publishDate|date('Y-m-d') }}
+            </div>
+
+            <div class="descritpion-item">
+                {{ figure.tag }}
+            </div>
+
+            <div class="descritpion-item">
+                {{ figure.lastEdit|date('Y-m-d') }}
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

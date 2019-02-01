@@ -52,8 +52,6 @@ $(document).ready(function() {
         }
 
     }
-
-
     //Event
     $( window ).resize(function() {
         refreshHeader();
@@ -77,23 +75,7 @@ function media(path) {
     }
 }
 
-function confirmSwal() {
-    Swal.fire({
-        title: 'Êtes vous sur ?',
-        text: 'Après validation il est impossible de revenire en arrière',
-        type: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Supprimer',
-        cancelButtonText: 'Annuler'
-    }).then(function () {
-        form.submit();
-    }, function () {
-        return false;
-    });
-}
-
+//SwalAlert2 confirm submit form
 $(".swa-confirm").on("click", function(e) {
     e.preventDefault();
     var form = $(this).parents('form');
