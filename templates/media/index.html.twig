@@ -1,25 +1,20 @@
+{% import "macro/media.html.twig" as media_item %}
 <div id="media_picker">
 
-    <div id="media_content row">
-        <i id="close_media" class="fas fa-times"></i>
+    <div id="media_content" class="row">
+        <div class="col-12">
+            <i id="close_media" class="fas fa-times"></i>
+            {{ form_start(form, {'attr': {'id': 'form_media'}}) }}
+            {{ form_widget(form.name) }}
+            {{ form_end(form) }}
+        </div>
+        <div class="col-12 row">
+            {% for media in medias %}
+                {{ media_item.image(media) }}
+            {% endfor %}
+        </div>
 
-        {#
-         <form id="form_media">
-            <input id="upload_media" type="file">
-         </form>
-        #}
-
-        {{ form_start(form, {'attr': {'id': 'form_media', 'action': path('media.add') }}) }}
-        {{ form_widget(form.name) }}
-        {{ form_end(form) }}
-
-
-
-        {% for media in medias %}
-            <img class="" src="{{ asset('uploads/' ~ media.name) }}">
-        {% endfor %}
     </div>
-
 
     <script>
         $(document).ready(function() {
@@ -30,14 +25,18 @@
             $("#media_name:file").change(function(){
                 $(this).prop('disabled', true);
                 var input = $(this);
-                var form = $('#form_media');
-                var url = form.attr('action');
                 var formData = new FormData(document.getElementsByName('media')[0]);
-                var file = document.getElementById('media_name').files[0];
-                formData.append('media[name]', file, file.name);
+                var files = document.getElementById('media_name').files;
+
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    if (file.type.match('image.*')) {
+                        formData.append('media[name]', file, file.name);
+                    }
+                }
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: '{{ path('media.add') }}',
                     data: formData,
                     processData: false,
                     contentType: false,
@@ -48,6 +47,28 @@
                     success: function(data) {
                         console.log(data);
                         input.prop('disabled', false);
+                    }
+                });
+            });
+
+            $(".media_item .delete").click(function(){
+                $(this).prop('disabled', true);
+                var input = $(this);
+                var id = $(this).attr('itemid');
+                var url = $(this).attr('action');
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {
+                        id: id,
+                        _method: "DELETE"
+                    },
+                    error: function(jqXHR, textStatus, errorMessage) {
+                        console.log(errorMessage);
+                        input.prop('disabled', false);
+                    },
+                    success: function(data) {
+                        input.parent().remove();
                     }
                 });
             });

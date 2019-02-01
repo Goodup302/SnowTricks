@@ -51,7 +51,7 @@ class MediaController extends AbstractController
     {
         dump($request);
         $media = new Media();
-        $form = $this->createForm(MediaType::class, $media);
+        $form = $this->createForm(MediaType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             //Upload Thumbnail
@@ -59,18 +59,27 @@ class MediaController extends AbstractController
             $media->setName($uploadedFile);
             $this->em->persist($media);
             $this->em->flush();
-            return $this->render('test.html.twig', ['form' => $form->createView()]);
+
+
+            $result = array(
+                'path' => $fileUploader->getPath($uploadedFile),
+            );
+            //return $this->render('test.html.twig', ['form' => $form->createView()]);
+            return new Response(json_encode($result));
         }
-        return $this->render('test.html.twig', ['form' => $form->createView()]);
-        return new Response($form->getErrors());
+        //return $this->render('test.html.twig', ['form' => $form->createView()]);
+        return new Response(json_encode(false));
     }
 
     /**
-     * @Route("/media", name="media.delete", methods="POST")
+     * @Route("/media/delete/{id}", name="media.delete", methods="DELETE")
      * @return Response
      */
-    public function media(Request $request): Response
+    public function media(Media $media, FileUploader $fileUploader): Response
     {
-        return new Response('true');
+        $fileUploader->delete($media->getName());
+        $this->em->remove($media);
+        $this->em->flush();
+        return new Response(json_encode(true));
     }
 }

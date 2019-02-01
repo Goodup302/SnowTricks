@@ -41,12 +41,16 @@ $(document).ready(function() {
 
     //Arrow up
     function refreshArrowUp() {
-        var tricks = $('#tricks')[0].childElementCount;
-        if (offset < -200 && $(window).width() >= breakpoint_md && tricks >= 15) {
-            $("#arrow_up").show();
-        } else {
-            $("#arrow_up").hide();
+        if ($('#tricks').length) {
+            var offset = $('#tricks')[0].getBoundingClientRect().top;
+            var tricks = $('#tricks')[0].childElementCount;
+            if (offset < -200 && $(window).width() >= breakpoint_md && tricks >= 15) {
+                $("#arrow_up").show();
+            } else {
+                $("#arrow_up").hide();
+            }
         }
+
     }
 
 
@@ -71,5 +75,41 @@ function media(path) {
                 waitingMedia = false;
             });
     }
-
 }
+
+function confirmSwal() {
+    Swal.fire({
+        title: 'Êtes vous sur ?',
+        text: 'Après validation il est impossible de revenire en arrière',
+        type: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Supprimer',
+        cancelButtonText: 'Annuler'
+    }).then(function () {
+        form.submit();
+    }, function () {
+        return false;
+    });
+}
+
+$(".swa-confirm").on("click", function(e) {
+    e.preventDefault();
+    var form = $(this).parents('form');
+    Swal.fire({
+        title: form.attr("swa-title"),
+        text: form.attr("swa-text"),
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Supprimer',
+        cancelButtonText: 'Annuler'
+    }).then(function (result) {
+        console.log(result);
+        if (result.value) {
+            form.submit();
+        }
+    });
+});

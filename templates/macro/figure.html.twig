@@ -5,8 +5,13 @@
             <h5 class="text-center">{{ figure.name }}</h5>
             {% if app.user %}
                 <a class="edit" href="{{ path('figure.edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
-                <form method="post" action="{{ path('figure.delete', {'id': figure.id}) }}">
-                    <button class="fas fa-trash-alt delete"></button>
+                <form
+                    method="post"
+                    action="{{ path('figure.delete', {'id': figure.id}) }}"
+                    swa-title="Êtes vous sur ?"
+                    swa-text="Après validation il est impossible de revenire en arrière"
+                >
+                    <button class="fas fa-trash-alt delete swa-confirm"></button>
                     <input type="hidden" name="_method" value="DELETE">
                 </form>
             {% endif %}

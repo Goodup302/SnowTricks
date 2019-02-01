@@ -17,6 +17,8 @@ class MediaType extends AbstractType
                 'data_class' => null,
                 'label' => 'Ajouter une image',
                 'attr' => ['id' => 'upload_media'],
+                'multiple' => true,
+                ''
             ))
         ;
     }
@@ -24,7 +26,6 @@ class MediaType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Media::class,
             'csrf_protection' => false,
         ]);
     }
