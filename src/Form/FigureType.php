@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Figure;
+use App\Entity\Trick;
 use App\Entity\Group;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -31,7 +31,7 @@ class FigureType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Figure::class,
+            'data_class' => Trick::class,
         ]);
     }
 }

@@ -51,23 +51,28 @@ class MediaController extends AbstractController
     {
         dump($request);
         $media = new Media();
-        $form = $this->createForm(MediaType::class);
+        $form = $this->createForm(MediaType::class, $media);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            //Upload Thumbnail
-            $uploadedFile = $fileUploader->upload($media->getName());
-            $media->setName($uploadedFile);
-            $this->em->persist($media);
-            $this->em->flush();
+        var_dump($media);
+        if (true) {
+            $files = $media->getFiles();
 
+            foreach ($files as $file){
+                $_media = new Media();
+                $uploadedFile = $fileUploader->upload($file);
+                $_media->setName($uploadedFile);
+                var_dump($_media);
+                $this->em->persist($_media);
+            }
+
+            //Upload Thumbnail
+            $this->em->flush();
 
             $result = array(
                 'path' => $fileUploader->getPath($uploadedFile),
             );
-            //return $this->render('test.html.twig', ['form' => $form->createView()]);
-            return new Response(json_encode($result));
+            return new Response(json_encode(true));
         }
-        //return $this->render('test.html.twig', ['form' => $form->createView()]);
         return new Response(json_encode(false));
     }
 

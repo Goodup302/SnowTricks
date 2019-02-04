@@ -13,16 +13,33 @@
                     <h1>{{ figure.name }}</h1>
                 </div>
             </div>
+            {% if app.user %}
+                <div class="edit_single pt-md-4">
+                    <a class="edit" href="{{ path('figure.edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
+                    <form
+                            method="post"
+                            action="{{ path('figure.delete', {'id': figure.id}) }}"
+                            swa-title="Êtes vous sur ?"
+                            swa-text="Après validation il est impossible de revenire en arrière"
+                    >
+                        <button class="fas fa-trash-alt delete swa-confirm"></button>
+                        <input type="hidden" name="_method" value="DELETE">
+                    </form>
+                </div>
+            {% endif %}
         </div>
-
-        {% for image in figure.images %}
-        {% endfor %}
 
         {% for video in figure.videos %}
             <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
                 {{ video_show.youtube(video) }}
             </div>
         {% endfor %}
+
+{#        {% for image in figure.images %}
+            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
+                {{ video_show.youtube(image) }}
+            </div>
+        {% endfor %}#}
 
         <div class="col-12 py-3">
             {{ figure.description }}

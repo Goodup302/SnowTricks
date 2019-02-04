@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\Figure;
-use App\Repository\FigureRepository;
+use App\Entity\Trick;
+use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
 use Faker\Generator;
@@ -14,7 +14,7 @@ class GenerateData {
      */
     private $faker;
     /**
-     * @var FigureRepository
+     * @var TrickRepository
      */
     private $repository;
 
@@ -23,7 +23,7 @@ class GenerateData {
      */
     private $em;
 
-    public function __construct(FigureRepository $repository, EntityManagerInterface $em) {
+    public function __construct(TrickRepository $repository, EntityManagerInterface $em) {
         $this->faker = Factory::create('fr_FR');
         $this->repository = $repository;
         $this->em = $em;
@@ -36,7 +36,7 @@ class GenerateData {
     public function add($number = 20) {
         $this->delete();
         for ($i = 0; $i < $number; $i++) {
-            $figure = new Figure();
+            $figure = new Trick();
             $figure->setThumbnail('wallpaper.jpg');
             $figure->setName($this->faker->text(30));
             $figure->setDescription($this->faker->realText(1000));

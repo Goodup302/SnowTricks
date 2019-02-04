@@ -2,21 +2,21 @@
 
 namespace App\Controller;
 
-use App\Entity\Figure;
+use App\Entity\Trick;
 use App\Service\FileUploader;
 use App\Form\FigureType;
-use App\Repository\FigureRepository;
-use App\Repository\MediaRepository;
+use App\Repository\TrickRepository;
+use App\Service\GenerateData;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FigureController extends AbstractController
+class TrickController extends AbstractController
 {
     /**
-     * @var FigureRepository
+     * @var TrickRepository
      */
     private $repository;
 
@@ -25,29 +25,39 @@ class FigureController extends AbstractController
      */
     private $em;
 
-    public function __construct(FigureRepository $repository, EntityManagerInterface $em)
+    public function __construct(TrickRepository $repository, EntityManagerInterface $em)
     {
         $this->repository = $repository;
         $this->em = $em;
     }
 
     /**
-     * @Route("/figure/{id}", name="figure.single", methods="GET")
-     * @param Figure $figure
+     * @Route("/", name="home")
      * @return Response
      */
-    public function single(Figure $figure): Response
+    public function home(TrickRepository $repository, EntityManagerInterface $em, GenerateData $data): Response
+    {
+        //$data->add();
+        return $this->render('figure/index.html.twig', ['figures' => $repository->findAll()]);
+    }
+
+    /**
+     * @Route("/figure/{id}", name="figure.single", methods="GET")
+     * @param Trick $figure
+     * @return Response
+     */
+    public function single(Trick $figure): Response
     {
         return $this->render('figure/single.html.twig', ['figure' => $figure]);
     }
 
     /**
      * @Route("/edit/{id}", name="figure.edit", methods="GET|POST")
-     * @param Figure $figure
+     * @param Trick $figure
      * @param Request $request
      * @return Response
      */
-    public function edit(Figure $figure, Request $request): Response
+    public function edit(Trick $figure, Request $request): Response
     {
         $form = $this->createForm(FigureType::class, $figure);
         $form->handleRequest($request);
@@ -70,16 +80,15 @@ class FigureController extends AbstractController
      */
     public function new(Request $request, FileUploader $fileUploader): Response
     {
-        $figure = new Figure();
+        $figure = new Trick();
         $form = $this->createForm(FigureType::class, $figure);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            //Upload Thumbnail
+/*            //Upload Thumbnail
             $uploadedFile = $fileUploader->upload($figure->getThumbnail());
-            $figure->setThumbnail($uploadedFile);
+            $figure->setThumbnail($uploadedFile);*/
             //Upload Media
             $figure = $form->getData();
-            $figure->setImages(array());
             $figure->setVideos(array());
             //Publish Date
             //date_default_timezone_set('Europe/Paris');
@@ -98,10 +107,10 @@ class FigureController extends AbstractController
 
     /**
      * @Route("/delete/{id}", name="figure.delete", methods="DELETE")
-     * @param Figure $figure
+     * @param Trick $figure
      * @return Response
      */
-    public function delete(Figure $figure): Response
+    public function delete(Trick $figure): Response
     {
         $this->em->remove($figure);
         $this->em->flush();

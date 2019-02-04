@@ -4,11 +4,13 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\FigureRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  */
-class Figure
+class Trick
 {
     /**
      * @ORM\Id()
@@ -33,7 +35,11 @@ class Figure
     private $tag;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\ManyToMany(targetEntity="Media")
+     * @ORM\JoinTable(name="figures_medias",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     *      )
      */
     private $images;
 
@@ -59,6 +65,10 @@ class Figure
      */
     private $thumbnail;
 
+    public function __construct()
+    {
+        //$this->images = new ArrayCollection();
+    }
 
     public function getThumbnail()
     {
@@ -111,6 +121,7 @@ class Figure
     {
         return $this->images;
     }
+
     public function setImages(array $images): self
     {
         $this->images = $images;
