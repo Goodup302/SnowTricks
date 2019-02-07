@@ -6,7 +6,7 @@
 parameters:
     locale: 'fr'
     media_directory: '%kernel.project_dir%/public/uploads'
-    asset_media_directory: '/uploads/'
+    asset_media_directory: 'uploads/'
 
 services:
     # default configuration for services in *this* file

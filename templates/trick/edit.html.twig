@@ -3,19 +3,24 @@
 {% block title %}Editer une figure{% endblock %}
 
 {% block body %}
-
+    <div id="single_thumbnail" class="pt-md-4 position-relative">
     {{ form_start(form) }}
         {{ form_errors(form) }}
         <i onclick="media('{{ path('media') }}')" class="fas fa-pen"></i>
-        <div class="thumbnail">
-            {{ form_row(form.thumbnail) }}
-            <img src="{{ asset('uploads/' ~ figure.thumbnail) }}">
+        <div class="row position-relative">
+            <img class="img_responsive" src="{{ asset(asset_media~figure.thumbnail) }}">
+            <div class="absolute_center pt-md-4">
+                <div class="position-relative">
+                    <h1>{{ figure.name }}</h1>
+                </div>
+            </div>
         </div>
         {{ form_row(form.name) }}
         {{ form_row(form.description) }}
         {{ form_row(form.tag) }}
         <button type="submit" class="btn btn-primary">Modifier</button>
     {{ form_end(form) }}
+    </div>
 
     <a href="{{ path('figure.single', {'id': app.request.get('id')}) }}" class="btn btn-success">Voir</a>
 

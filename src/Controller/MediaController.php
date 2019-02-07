@@ -45,39 +45,34 @@ class MediaController extends AbstractController
 
     /**
      * @Route("/media/add", name="media.add", methods="POST|GET")
+     * @param Request $request
+     * @param FileUploader $fileUploader
      * @return Response
      */
     public function add(Request $request, FileUploader $fileUploader): Response
     {
-        dump($request);
         $media = new Media();
         $form = $this->createForm(MediaType::class, $media);
         $form->handleRequest($request);
-        var_dump($media);
         if (true) {
             $files = $media->getFiles();
-
-            foreach ($files as $file){
-                $_media = new Media();
+            $uploadMedia = array();
+            foreach ($files as $i => $file){
+                $uploadMedia[$i] = new Media();
                 $uploadedFile = $fileUploader->upload($file);
-                $_media->setName($uploadedFile);
-                var_dump($_media);
-                $this->em->persist($_media);
+                $uploadMedia[$i]->setName($uploadedFile);
+                $this->em->persist($uploadMedia[$i]);
             }
-
-            //Upload Thumbnail
             $this->em->flush();
-
-            $result = array(
-                'path' => $fileUploader->getPath($uploadedFile),
-            );
-            return new Response(json_encode(true));
+            return $this->render('media/item.html.twig', ['medias' => $uploadMedia]);
         }
         return new Response(json_encode(false));
     }
 
     /**
      * @Route("/media/delete/{id}", name="media.delete", methods="DELETE")
+     * @param Media $media
+     * @param FileUploader $fileUploader
      * @return Response
      */
     public function media(Media $media, FileUploader $fileUploader): Response

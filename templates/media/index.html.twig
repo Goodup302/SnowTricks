@@ -8,7 +8,7 @@
             {{ form_widget(form.files) }}
             {{ form_end(form) }}
         </div>
-        <div class="col-12 row">
+        <div id="media_items" class="row">
             {% for media in medias %}
                 {{ media_item.image(media) }}
             {% endfor %}
@@ -17,10 +17,13 @@
     </div>
 
     <script>
+        $('html, body').css('overflow', 'hidden');
         $(document).ready(function() {
             var inputId = '{{ form.files.vars.id }}';
             var inputName = '{{ form.files.vars.full_name }}';
+            var mediaItems = $('#media_items');
             $("#close_media").click(function (){
+                $('html, body').css('overflow', 'unset');
                 $("#media_picker").remove();
             });
 
@@ -54,13 +57,14 @@
                     },
                     success: function(data) {
                         console.log(data);
+                        mediaItems.append(data);
                         input.prop('disabled', false);
                     }
                 });
             });
 
             $(".media_item .delete").click(function(){
-                var input = $(this);
+                var item = $(this).parent();
                 var id = $(this).attr('itemid');
                 var url = $(this).attr('action');
                 $.ajax({
@@ -79,7 +83,7 @@
                         })
                     },
                     success: function(data) {
-                        input.parent().remove();
+                        item.remove();
                     }
                 });
             });

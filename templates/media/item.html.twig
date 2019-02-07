@@ -1,0 +1,4 @@
+{% import "macro/media.html.twig" as media_item %}
+{% for media in medias %}
+    {{ media_item.image(media) }}
+{% endfor %}
