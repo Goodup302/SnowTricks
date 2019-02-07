@@ -8,7 +8,7 @@
         {{ form_errors(form) }}
         <i onclick="media('{{ path('media') }}')" class="fas fa-pen"></i>
         <div class="row position-relative">
-            <img class="img_responsive" src="{{ asset(asset_media~figure.thumbnail) }}">
+            <img class="img_responsive" src="{{ asset(asset_media~figure.thumbnail.name) }}">
             <div class="absolute_center pt-md-4">
                 <div class="position-relative">
                     <h1>{{ figure.name }}</h1>

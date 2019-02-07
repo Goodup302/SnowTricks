@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DoctrineMigrations;
 
@@ -8,14 +10,19 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190125093630 extends AbstractMigration
+final class Version20190207160500 extends AbstractMigration
 {
+    public function getDescription() : string
+    {
+        return '';
+    }
+
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE figure ADD thumbnail VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE trick CHANGE thumbnail_id thumbnail_id INT DEFAULT NULL');
     }
 
     public function down(Schema $schema) : void
@@ -23,6 +30,6 @@ final class Version20190125093630 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE figure DROP thumbnail');
+        $this->addSql('ALTER TABLE trick CHANGE thumbnail_id thumbnail_id INT NOT NULL');
     }
 }

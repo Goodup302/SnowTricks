@@ -45,30 +45,18 @@ class Trick
     private $lastEdit;
 
     /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Upload thumbnail as a JPEG file.")
-     * @Assert\File(mimeTypes={ "image/jpeg" })
-     */
-    private $thumbnail;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Media", inversedBy="tricks")
      */
     private $images;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Media", inversedBy="thumbnail")
+     */
+    private $thumbnail;
+
     public function __construct()
     {
         //$this->images = new ArrayCollection();
-    }
-
-    public function getThumbnail()
-    {
-        return $this->thumbnail;
-    }
-    public function setThumbnail($thumbnail)
-    {
-        $this->thumbnail = $thumbnail;
-        return $this;
     }
 
     public function getId(): ?int
@@ -152,6 +140,18 @@ class Trick
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
         }
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?Media
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(?Media $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }

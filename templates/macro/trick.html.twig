@@ -1,7 +1,7 @@
 {% macro show(figure) %}
     <div class="col-12 col-sm-6 col-md-4 col-xl-3 tricks_card">
         <a href="{{ path('figure.single', {'id': figure.id}) }}">
-            <img class="img_responsive" src="{{ asset(asset_media~figure.thumbnail) }}">
+            <img class="img_responsive" src="{{ asset(asset_media~figure.thumbnail.name) }}">
         </a>
         <div class="align-items-center d-flex justify-content-around pt-2 tricks_card_body">
             <a href="{{ path('figure.single', {'id': figure.id}) }}">

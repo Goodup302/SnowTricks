@@ -23,19 +23,16 @@ class User implements UserInterface, \Serializable
     private $username;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="string")
      */
     private $password;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="string")
      */
     private $picture;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="string")
      */
     private $email;

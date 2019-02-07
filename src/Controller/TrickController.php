@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Form\FigureType;
+use App\Repository\MediaRepository;
 use App\Repository\TrickRepository;
+use App\Service\GenerateData;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,9 +41,9 @@ class TrickController extends AbstractController
      * @param TrickRepository $repository
      * @return Response
      */
-    public function home(TrickRepository $repository): Response
+    public function home(TrickRepository $repository, GenerateData $data): Response
     {
-        //$data->add();
+        $data->add(0);
         return $this->render('trick/index.html.twig', ['figures' => $repository->findAll()]);
     }
 

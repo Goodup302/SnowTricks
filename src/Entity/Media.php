@@ -33,10 +33,16 @@ class Media
      */
     private $tricks;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="thumbnail")
+     */
+    private $thumbnail;
+
     public function __construct()
     {
         $this->files = new ArrayCollection();
         $this->tricks = new ArrayCollection();
+        $this->thumbnail = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,4 +106,35 @@ class Media
 
         return $this;
     }
+
+    /**
+     * @return Collection|Trick[]
+     */
+/*    public function getThumbnail(): Collection
+    {
+        return $this->thumbnail;
+    }
+
+    public function addThumbnail(Trick $thumbnail): self
+    {
+        if (!$this->thumbnail->contains($thumbnail)) {
+            $this->thumbnail[] = $thumbnail;
+            $thumbnail->setThumbnail($this);
+        }
+
+        return $this;
+    }
+
+    public function removeThumbnail(Trick $thumbnail): self
+    {
+        if ($this->thumbnail->contains($thumbnail)) {
+            $this->thumbnail->removeElement($thumbnail);
+            // set the owning side to null (unless already changed)
+            if ($thumbnail->getThumbnail() === $this) {
+                $thumbnail->setThumbnail(null);
+            }
+        }
+
+        return $this;
+    }*/
 }

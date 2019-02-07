@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
+use App\Entity\Media;
 use App\Entity\Trick;
+use App\Repository\MediaRepository;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
@@ -33,16 +35,17 @@ class GenerateData {
      * Create figure
      * @param $number
      */
-    public function add($number = 20) {
-        $this->delete();
+    public function add($number = 20, $delete = false) {
+        if ($delete) {
+            $this->delete();
+        }
         for ($i = 0; $i < $number; $i++) {
             $figure = new Trick();
-            $figure->setThumbnail('wallpaper.jpg');
             $figure->setName($this->faker->text(30));
             $figure->setDescription($this->faker->realText(1000));
             $figure->setTag(0);
-            $figure->setImages(array());
-            $figure->setVideos(array('npb2tsjG9UU', '6q0GGgI3GdQ', '6q0GGgI3GdQ', '6q0GGgI3GdQ', '6q0GGgI3GdQ'));
+/*            $figure->setImages(array());
+            $figure->setVideos(array('npb2tsjG9UU', '6q0GGgI3GdQ', '6q0GGgI3GdQ', '6q0GGgI3GdQ', '6q0GGgI3GdQ'));*/
 
             $date = new \DateTime();
             $date->format('Y-m-d H:i:s');
