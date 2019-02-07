@@ -29,17 +29,17 @@
             {% endif %}
         </div>
 
-        {% for video in figure.videos %}
+{#        {% for video in figure.videos %}
             <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
                 {{ video_show.youtube(video) }}
             </div>
-        {% endfor %}
+        {% endfor %}#}
 
-{#        {% for image in figure.images %}
+        {% for image in figure.images %}
             <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
                 {{ video_show.youtube(image) }}
             </div>
-        {% endfor %}#}
+        {% endfor %}
 
         <div class="col-12 py-3">
             {{ figure.description }}

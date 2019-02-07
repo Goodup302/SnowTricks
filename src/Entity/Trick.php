@@ -35,20 +35,6 @@ class Trick
     private $tag;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Media")
-     * @ORM\JoinTable(name="figures_medias",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
-     *      )
-     */
-    private $images;
-
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $videos;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $publishDate;
@@ -64,6 +50,11 @@ class Trick
      * @Assert\File(mimeTypes={ "image/jpeg" })
      */
     private $thumbnail;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Media", inversedBy="tricks")
+     */
+    private $images;
 
     public function __construct()
     {
@@ -117,29 +108,6 @@ class Trick
         return $this;
     }
 
-    public function getImages(): ?array
-    {
-        return $this->images;
-    }
-
-    public function setImages(array $images): self
-    {
-        $this->images = $images;
-
-        return $this;
-    }
-
-    public function getVideos(): ?array
-    {
-        return $this->videos;
-    }
-    public function setVideos(array $videos): self
-    {
-        $this->videos = $videos;
-
-        return $this;
-    }
-
     public function getPublishDate(): ?\DateTime
     {
         return $this->publishDate;
@@ -158,6 +126,32 @@ class Trick
     public function setLastEdit(\DateTime $lastEdit): self
     {
         $this->lastEdit = $lastEdit;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Media[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Media $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Media $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+        }
 
         return $this;
     }

@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
-use App\Service\FileUploader;
 use App\Form\FigureType;
 use App\Repository\TrickRepository;
-use App\Service\GenerateData;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +23,11 @@ class TrickController extends AbstractController
      */
     private $em;
 
+    /**
+     * TrickController constructor.
+     * @param TrickRepository $repository
+     * @param EntityManagerInterface $em
+     */
     public function __construct(TrickRepository $repository, EntityManagerInterface $em)
     {
         $this->repository = $repository;
@@ -33,12 +36,13 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/", name="home")
+     * @param TrickRepository $repository
      * @return Response
      */
-    public function home(TrickRepository $repository, EntityManagerInterface $em, GenerateData $data): Response
+    public function home(TrickRepository $repository): Response
     {
         //$data->add();
-        return $this->render('figure/index.html.twig', ['figures' => $repository->findAll()]);
+        return $this->render('trick/index.html.twig', ['figures' => $repository->findAll()]);
     }
 
     /**
@@ -48,7 +52,7 @@ class TrickController extends AbstractController
      */
     public function single(Trick $figure): Response
     {
-        return $this->render('figure/single.html.twig', ['figure' => $figure]);
+        return $this->render('trick/single.html.twig', ['figure' => $figure]);
     }
 
     /**
@@ -69,16 +73,15 @@ class TrickController extends AbstractController
             $this->em->flush();
         }
         dump($form->createView()->vars["value"]);
-        return $this->render('figure/edit.html.twig', ['form' => $form->createView(), 'figure' => $figure]);
+        return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'figure' => $figure]);
     }
 
     /**
      * @Route("/new", name="figure.new", methods="GET|POST")
      * @param Request $request
-     * @param FileUploader $fileUploader
      * @return Response
      */
-    public function new(Request $request, FileUploader $fileUploader): Response
+    public function new(Request $request): Response
     {
         $figure = new Trick();
         $form = $this->createForm(FigureType::class, $figure);
@@ -102,7 +105,7 @@ class TrickController extends AbstractController
 
             return $this->redirectToRoute("figure.edit", ['id' => $figure->getId()]);
         }
-        return $this->render('figure/new.html.twig', ['form' => $form->createView()]);
+        return $this->render('trick/new.html.twig', ['form' => $form->createView()]);
     }
 
     /**

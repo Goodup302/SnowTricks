@@ -28,9 +28,15 @@ class Media
 
     private $files;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Trick", mappedBy="images")
+     */
+    private $tricks;
+
     public function __construct()
     {
         $this->files = new ArrayCollection();
+        $this->tricks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,8 +55,6 @@ class Media
         return $this;
     }
 
-
-
     public function setFiles($images)
     {
         $this->files = $images;
@@ -66,6 +70,34 @@ class Media
     public function addFiles($image)
     {
         $this->files[] = $image;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Trick[]
+     */
+    public function getTricks(): Collection
+    {
+        return $this->tricks;
+    }
+
+    public function addTrick(Trick $trick): self
+    {
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks[] = $trick;
+            $trick->addImage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrick(Trick $trick): self
+    {
+        if ($this->tricks->contains($trick)) {
+            $this->tricks->removeElement($trick);
+            $trick->removeImage($this);
+        }
+
         return $this;
     }
 }
