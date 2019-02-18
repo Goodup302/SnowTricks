@@ -42,7 +42,7 @@ class GenerateData {
         for ($i = 0; $i < $number; $i++) {
             $trick = new Trick();
             $trick->setName($this->faker->text(30));
-            $trick->setDescription($this->faker->realText(1000));
+            $trick->setDescription($this->faker->randomHtml(3,8));
             //$trick->addVideo(array('npb2tsjG9UU', '6q0GGgI3GdQ', '6q0GGgI3GdQ', '6q0GGgI3GdQ', '6q0GGgI3GdQ'));
 
             $date = new \DateTime();

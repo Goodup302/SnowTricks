@@ -6,8 +6,12 @@
 {% block body %}
     <div class="row">
 
-        <div id="single_thumbnail" class="pt-md-4 position-relative">
-            <img class="img_responsive" src="{{ asset(asset_media~figure.thumbnail.name) }}">
+        <div id="single_thumbnail" class="w-100 pt-md-4 position-relative">
+            {% if figure.thumbnail.name is defined %}
+                <img class="img_responsive" src="{{ asset(asset_media~figure.thumbnail.name) }}">
+            {% else %}
+                <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}">
+            {% endif %}
             <div class="absolute_center pt-md-4">
                 <div class="position-relative">
                     <h1>{{ figure.name }}</h1>
@@ -42,7 +46,7 @@
         {% endfor %}
 
         <div class="col-12 py-3">
-            {{ figure.description }}
+            {{ figure.description|raw }}
         </div>
 
         <div class="align-items-center col-12 d-flex justify-content-around justify-content-lg-center">
@@ -51,7 +55,7 @@
             </div>
 
             <div class="descritpion-item">
-                {{ figure.tag.name }}
+                {{ figure.tag }}
             </div>
 
             <div class="descritpion-item">

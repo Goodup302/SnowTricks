@@ -2,14 +2,14 @@
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}SnowTricks{% endblock %}</title>
         <link rel="icon" href="{{ asset('image/favicon.jpg') }}" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
         {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('library/bootstrap-4.2.1/css/bootstrap.min.css') }}?ver=1.0">
+            <link rel="stylesheet" href="{{ asset('library/bootstrap-4.2.1/css/bootstrap.min.css') }}">
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-            <link rel="stylesheet" href="{{ asset('library/sweetalert2-8.0.5/sweetalert2.min.css') }}?ver=1.0">
-            <link rel="stylesheet" href="{{ asset('css/main.css') }}?ver=1.0">
+            <link rel="stylesheet" href="{{ asset('library/sweetalert2-8.0.5/sweetalert2.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/main.css') }}">
         {% endblock %}
         {% block seo %}{% endblock %}
     </head>
@@ -48,11 +48,11 @@
         <div id="mobile_bottom"></div>
 
         {% block javascripts %}
-            <script src="{{ asset('library/jQuery-3.3.1/jquery-3.3.1.min.js') }}?ver=1.0"></script>
-            {#<script src="{{ asset('library/bootstrap-4.2.1/js/bootstrap.bundle.min.js') }}?ver=1.0"></script>#}
-            {#<script src="{{ asset('library/bootstrap-4.2.1/js/bootstrap.min.js') }}?ver=1.0"></script>#}
-            <script src="{{ asset('library/sweetalert2-8.0.5/sweetalert2.all.min.js') }}?ver=1.0"></script>
-            <script src="{{ asset('js/main.js') }}?ver=1.0"></script>
+            <script src="{{ asset('library/jQuery-3.3.1/jquery-3.3.1.min.js') }}"></script>
+            <script src="{{ asset('library/bootstrap-4.2.1/js/bootstrap.bundle.min.js') }}?ver=1.0"></script>
+            <script src="{{ asset('library/bootstrap-4.2.1/js/bootstrap.min.js') }}?ver=1.0"></script>
+            <script src="{{ asset('library/sweetalert2-8.0.5/sweetalert2.all.min.js') }}"></script>
+            <script src="{{ asset('js/main.js') }}"></script>
         {% endblock %}
     </body>
 </html>
