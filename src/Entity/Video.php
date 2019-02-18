@@ -4,19 +4,11 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VideoRepository")
  */
 class Video
 {
-    const LIST = array(
-        "youtube" => 0,
-        "dailymotion" => 1,
-        "facebook" => 2,
-        "twitter" => 3
-    );
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -25,56 +17,41 @@ class Video
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $videoId;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $platform;
 
     /**
-     * @return integer
+     * @ORM\Column(type="integer")
      */
-    public function getPlatform()
-    {
-        return $this->platform;
-    }
+    private $videoId;
 
-    /**
-     * @param integer $platform
-     * @return Video
-     */
-    public function setPlatform($platform)
-    {
-        $this->platform = $platform;
-        return $this;
-    }
-
-    /**
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getVideoId()
+    public function getPlatform(): ?int
+    {
+        return $this->platform;
+    }
+
+    public function setPlatform(int $platform): self
+    {
+        $this->platform = $platform;
+
+        return $this;
+    }
+
+    public function getVideoId(): ?int
     {
         return $this->videoId;
     }
 
-    /**
-     * @param string $videoId
-     * @return Video
-     */
-    public function setVideoId($videoId)
+    public function setVideoId(int $videoId): self
     {
         $this->videoId = $videoId;
+
         return $this;
     }
 }

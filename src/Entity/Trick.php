@@ -3,9 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
@@ -20,7 +17,7 @@ class Trick
     private $id;
 
     /**
-     * @ORM\Column(type="string", unique=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $name;
 
@@ -30,34 +27,14 @@ class Trick
     private $description;
 
     /**
-     * @ORM\Column(type="integer", name="groupid")
-     */
-    private $tag;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $publishDate;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime")
      */
     private $lastEdit;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Media", inversedBy="tricks")
-     */
-    private $images;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Media", inversedBy="thumbnail")
-     */
-    private $thumbnail;
-
-    public function __construct()
-    {
-        //$this->images = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -68,6 +45,7 @@ class Trick
     {
         return $this->name;
     }
+
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -75,83 +53,38 @@ class Trick
         return $this;
     }
 
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
-    public function setDescription($description)
+
+    public function setDescription(string $description): self
     {
         $this->description = $description;
-        return $this;
-    }
-
-    public function getTag(): ?int
-    {
-        return $this->tag;
-    }
-    public function setTag(int $tag): self
-    {
-        $this->tag = $tag;
 
         return $this;
     }
 
-    public function getPublishDate(): ?\DateTime
+    public function getPublishDate(): ?\DateTimeInterface
     {
         return $this->publishDate;
     }
-    public function setPublishDate(\DateTime $publishDate): self
+
+    public function setPublishDate(\DateTimeInterface $publishDate): self
     {
         $this->publishDate = $publishDate;
 
         return $this;
     }
 
-    public function getLastEdit(): ?\DateTime
+    public function getLastEdit(): ?\DateTimeInterface
     {
         return $this->lastEdit;
     }
-    public function setLastEdit(\DateTime $lastEdit): self
+
+    public function setLastEdit(\DateTimeInterface $lastEdit): self
     {
         $this->lastEdit = $lastEdit;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Media[]
-     */
-    public function getImages(): Collection
-    {
-        return $this->images;
-    }
-
-    public function addImage(Media $image): self
-    {
-        if (!$this->images->contains($image)) {
-            $this->images[] = $image;
-        }
-
-        return $this;
-    }
-
-    public function removeImage(Media $image): self
-    {
-        if ($this->images->contains($image)) {
-            $this->images->removeElement($image);
-        }
-
-        return $this;
-    }
-
-    public function getThumbnail(): ?Media
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail(?Media $thumbnail): self
-    {
-        $this->thumbnail = $thumbnail;
 
         return $this;
     }

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Form\FigureType;
-use App\Repository\MediaRepository;
+use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
 use App\Service\GenerateData;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,33 +49,33 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/figure/{id}", name="figure.single", methods="GET")
-     * @param Trick $figure
+     * @param Trick $trick
      * @return Response
      */
-    public function single(Trick $figure): Response
+    public function single(Trick $trick): Response
     {
-        return $this->render('trick/single.html.twig', ['figure' => $figure]);
+        return $this->render('trick/single.html.twig', ['figure' => $trick]);
     }
 
     /**
      * @Route("/edit/{id}", name="figure.edit", methods="GET|POST")
-     * @param Trick $figure
+     * @param Trick $trick
      * @param Request $request
      * @return Response
      */
-    public function edit(Trick $figure, Request $request): Response
+    public function edit(Trick $trick, Request $request): Response
     {
-        $form = $this->createForm(FigureType::class, $figure);
+        $form = $this->createForm(FigureType::class, $trick);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             //date_default_timezone_set('Europe/Paris');
             $date = new \DateTime();
             $date->format('Y-m-d H:i:s');
-            $figure->setLastEdit($date);
+            $trick->setLastEdit($date);
             $this->em->flush();
         }
         dump($form->createView()->vars["value"]);
-        return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'figure' => $figure]);
+        return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'figure' => $trick]);
     }
 
     /**
@@ -85,39 +85,39 @@ class TrickController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $figure = new Trick();
-        $form = $this->createForm(FigureType::class, $figure);
+        $trick = new Trick();
+        $form = $this->createForm(FigureType::class, $trick);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 /*            //Upload Thumbnail
-            $uploadedFile = $fileUploader->upload($figure->getThumbnail());
-            $figure->setThumbnail($uploadedFile);*/
+            $uploadedFile = $fileUploader->upload($trick->getThumbnail());
+            $trick->setThumbnail($uploadedFile);*/
             //Upload Media
-            $figure = $form->getData();
-            $figure->setVideos(array());
+            $trick = $form->getData();
+            $trick->setVideos(array());
             //Publish Date
             //date_default_timezone_set('Europe/Paris');
             $date = new \DateTime();
             $date->format('Y-m-d H:i:s');
-            $figure->setPublishDate($date);
+            $trick->setPublishDate($date);
 
-            $this->em->persist($figure);
+            $this->em->persist($trick);
             $this->em->flush();
             $this->addFlash('success', 'Figure ajoutée avec succès');
 
-            return $this->redirectToRoute("figure.edit", ['id' => $figure->getId()]);
+            return $this->redirectToRoute("figure.edit", ['id' => $trick->getId()]);
         }
         return $this->render('trick/new.html.twig', ['form' => $form->createView()]);
     }
 
     /**
      * @Route("/delete/{id}", name="figure.delete", methods="DELETE")
-     * @param Trick $figure
+     * @param Trick $trick
      * @return Response
      */
-    public function delete(Trick $figure): Response
+    public function delete(Trick $trick): Response
     {
-        $this->em->remove($figure);
+        $this->em->remove($trick);
         $this->em->flush();
         return $this->redirectToRoute('home');
     }
