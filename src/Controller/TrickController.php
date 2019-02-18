@@ -42,7 +42,7 @@ class TrickController extends AbstractController
      */
     public function home(TrickRepository $repository, GenerateData $data): Response
     {
-        $data->add(0);
+        $data->add(1);
         return $this->render('trick/index.html.twig', ['figures' => $repository->findAll()]);
     }
 

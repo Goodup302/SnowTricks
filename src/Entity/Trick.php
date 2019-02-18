@@ -34,7 +34,7 @@ class Trick
     private $publishDate;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $lastEdit;
 
