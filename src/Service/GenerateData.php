@@ -43,7 +43,7 @@ class GenerateData {
             $trick = new Trick();
             $trick->setName($this->faker->text(30));
             $trick->setDescription($this->faker->realText(1000));
-            $trick->setTag(0);
+            //$trick->setTag(0);
 /*            $trick->setImages(array());
             $trick->setVideos(array('npb2tsjG9UU', '6q0GGgI3GdQ', '6q0GGgI3GdQ', '6q0GGgI3GdQ', '6q0GGgI3GdQ'));*/
 

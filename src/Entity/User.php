@@ -5,11 +5,12 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id()
@@ -41,7 +42,7 @@ class User
     /**
      * @ORM\Column(type="boolean")
      */
-    private $activate;
+    private $activate = false;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user")
@@ -61,30 +62,6 @@ class User
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
     }
 
     public function getEmail(): ?string
@@ -164,5 +141,107 @@ class User
         $this->profileImage = $profileImage;
 
         return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->username;
+    }
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        return ['ROLE_ADMIN'];
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
+    }
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    /**
+     * Create an unique token
+     *
+     * @return string
+     */
+    public function createToken() : string
+    {
+        $length = 128;
+        $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$-_.+!*()";
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        $this->token = $randomString;
+        return (string) $randomString;
+    }
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+    /**
+     * String representation of object
+     * @link http://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or null
+     * @since 5.1.0
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                $this->id,
+                $this->username,
+                $this->password
+            )
+        );
+    }
+    /**
+     * Constructs the object
+     * @link http://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized <p>
+     * The string representation of the object.
+     * </p>
+     * @return void
+     * @since 5.1.0
+     */
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->username,
+            $this->password
+            ) = unserialize($serialized, ['allowed_classes' => false]);
     }
 }

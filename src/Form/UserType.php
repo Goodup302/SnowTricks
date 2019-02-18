@@ -15,6 +15,9 @@ class UserType extends AbstractType
             ->add('username')
             ->add('password')
             ->add('email')
+            //->add('token')
+            //->add('activate')
+            //->add('profileImage')
         ;
     }
 

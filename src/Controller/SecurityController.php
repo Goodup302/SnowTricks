@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,20 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    /**
+     * TrickController constructor.
+     * @param EntityManagerInterface $em
+     */
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * @Route("/login", name="login")
      * @param AuthenticationUtils $authenticationUtils
@@ -36,16 +51,17 @@ class SecurityController extends AbstractController
      */
     public function register(UserPasswordEncoderInterface $encoder, Request $request): Response
     {
+        /** @var User $user */
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
             $user->setPassword($encoder->encodePassword($user, $form->getData()->getPassword()));
+            $user->createToken();
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $this->em->persist($user);
+            $this->em->flush();
 
             $this->addFlash('success', 'Compte créé');
             return $this->redirectToRoute('login');

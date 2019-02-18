@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Form\FigureType;
-use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
 use App\Service\GenerateData;
 use Doctrine\ORM\EntityManagerInterface;
