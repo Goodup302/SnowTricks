@@ -9,6 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Video
 {
+    const YOUTUBE_TYPE = 0;
+    const DAILYMOTION_TYPE = 1;
+
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -22,7 +26,7 @@ class Video
     private $platform;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
      */
     private $videoId;
 
@@ -43,12 +47,12 @@ class Video
         return $this;
     }
 
-    public function getVideoId(): ?int
+    public function getVideoId(): ?string
     {
         return $this->videoId;
     }
 
-    public function setVideoId(int $videoId): self
+    public function setVideoId(string $videoId): self
     {
         $this->videoId = $videoId;
 

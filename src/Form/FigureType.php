@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Tag;
 use App\Entity\Trick;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -21,9 +22,9 @@ class FigureType extends AbstractType
             ))
             ->add('name')
             ->add('description')
-            ->add('tag', ChoiceType::class, [
-                'choices' => Tag::LIST,
-                'label' => "Type de figure"
+            ->add('tag', EntityType::class, [
+                'label' => 'name',
+                'class' => Tag::class,
             ])
         ;
     }
