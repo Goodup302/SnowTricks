@@ -16,9 +16,10 @@ class ImageType extends AbstractType
             ->add('files', FileType::class, array(
                 //'data_class' => null,
                 'label' => 'Ajouter une image',
-                'attr' => array('accept' => 'image/JPEG',),
+                'attr' => array('accept' => 'image/JPEG'),
                 'multiple' => true
             ))
+            /*->add('name')*/
         ;
     }
 

@@ -49,11 +49,6 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Image", cascade={"persist", "remove"})
-     */
-    private $thumbnail;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Image")
      */
     private $images;
@@ -62,6 +57,11 @@ class Trick
      * @ORM\ManyToMany(targetEntity="App\Entity\Video")
      */
     private $videos;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Image")
+     */
+    private $thumbnail;
 
     public function __construct()
     {
@@ -166,18 +166,6 @@ class Trick
         return $this;
     }
 
-    public function getThumbnail(): ?Image
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail(?Image $thumbnail): self
-    {
-        $this->thumbnail = $thumbnail;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Image[]
      */
@@ -226,6 +214,18 @@ class Trick
         if ($this->videos->contains($video)) {
             $this->videos->removeElement($video);
         }
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?Image
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(?Image $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }

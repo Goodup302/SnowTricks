@@ -62,19 +62,6 @@ $(document).ready(function() {
     });
 });
 
-//Open media picker
-var waitingMedia = false;
-function media(path) {
-    if (!waitingMedia) {
-        waitingMedia = true;
-        $.post(path, {})
-            .done(function( data ) {
-                $('body').prepend(data);
-                waitingMedia = false;
-            });
-    }
-}
-
 //SwalAlert2 confirm submit form
 $(".swa-confirm").on("click", function(e) {
     e.preventDefault();

@@ -8,6 +8,7 @@ use App\Repository\ImageRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,12 +36,16 @@ class ImageController extends AbstractController
      * @Route("/image", name="image", methods="POST|GET")
      * @return Response
      */
-    public function list(): Response
+    public function list(Request $request): Response
     {
         $image = new Image();
         $form = $this->createForm(ImageType::class, $image);
         $images = $this->repository->findAll();
-        return $this->render('media/index.html.twig', ['medias' => $images, 'form' => $form->createView()]);
+        return $this->render('media/index.html.twig', [
+            'target' => $request->get('target'),
+            'medias' => $images,
+            'form' => $form->createView()
+        ]);
     }
 
 
@@ -64,8 +69,7 @@ class ImageController extends AbstractController
                 $uploadMedia[$i]->setName($uploadedFile);
                 $this->em->persist($uploadMedia[$i]);
             }
-            $this->em->flush();
-            return $this->render('media/item.html.twig', ['medias' => $uploadMedia]);
+            return new JsonResponse($uploadMedia);
         }
         return new JsonResponse(false);
     }

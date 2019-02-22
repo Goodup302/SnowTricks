@@ -1,19 +1,21 @@
 {% import "macro/media.html.twig" as media_item %}
-<div id="media_picker">
+<div id="media_picker" target="{{ target }}">
 
     <div id="media_content" class="row">
-        <div class="col-12">
-            <i id="close_media" class="fas fa-times"></i>
-            {{ form_start(form) }}
-            {{ form_widget(form.files) }}
-            {{ form_end(form) }}
+        <div class="col-12" style="height: 10%">
+            {{ form(form) }}
         </div>
-        <div id="media_items" class="row">
+        <div id="media_items" class="card-columns" style="height: 80%">
             {% for media in medias %}
                 {{ media_item.image(media) }}
             {% endfor %}
         </div>
+        <div class="col-12" style="height: 10%">
+            <button class="btn btn-danger close_media" save=false>Annuler</button>
+            <button class="btn btn-primary close_media" save=true>Valider</button>
 
+            {{ form(form) }}
+        </div>
     </div>
 
     <script>
@@ -22,7 +24,11 @@
             var inputId = '{{ form.files.vars.id }}';
             var inputName = '{{ form.files.vars.full_name }}';
             var mediaItems = $('#media_items');
-            $("#close_media").click(function (){
+            $(".close_media").click(function (){
+                $targetInput = $('#'+$('#media_picker').attr('target'));
+                if ($(this).attr('save') == "true") {
+                    $targetInput.remove();
+                }
                 $('html, body').css('overflow', 'unset');
                 $("#media_picker").remove();
             });
@@ -42,7 +48,7 @@
                 console.log(formData.getAll(inputName));
                 $.ajax({
                     type: "POST",
-                    url: '{{ path('media.add') }}',
+                    url: '{{ path('image.add') }}',
                     data: formData,
                     processData: false,
                     contentType: false,

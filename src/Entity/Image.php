@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,9 +18,16 @@ class Image
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $name;
+
+    private $files;
+
+    public function __construct()
+    {
+        $this->files = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -35,6 +43,24 @@ class Image
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    public function setFiles($images)
+    {
+        $this->files = $images;
+
+        return $this;
+    }
+
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
+    public function addFiles($image)
+    {
+        $this->files[] = $image;
         return $this;
     }
 }

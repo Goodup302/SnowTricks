@@ -36,7 +36,7 @@ class AppFixtures extends Fixture
 
         //Images
         $images[] = (new Image())->setName('wallpaper.jpg');
-        $images[] = (new Image())->setName('wallpaper.jpg');
+        $images[] = (new Image())->setName('wallpaper2.jpg');
         foreach ($images as $image) {
             $manager->persist($image);
         }
@@ -67,6 +67,7 @@ class AppFixtures extends Fixture
         $user->setPassword($this->encoder->encodePassword($user, 'admin'));
         $user->setEmail($this->faker->email);
         $user->setActivate(true);
+        $user->setProfileImage($images[0]);
         $user->createToken();
         $manager->persist($user);
 
@@ -83,17 +84,17 @@ class AppFixtures extends Fixture
             for ($i = 0; $i < 2; $i++) {
                 $trick = new Trick();
                 $trick->setName($this->faker->text(30));
-                $trick->setDescription($this->faker->randomHtml(3,8));
+                $trick->setDescription($this->faker->realText(900));
                 $trick->setPublishDate($date);
+                $trick->setThumbnail($images[0]);
                 //
                 $trick->addVideo($videos[0]);
                 $trick->addVideo($videos[1]);
                 //
-                $trick->addImage($images[0]);
                 $trick->addImage($images[1]);
 
                 //Comments
-                for ($i = 0; $i < 2; $i++) {
+                for ($ii = 0; $ii < 4; $ii++) {
                     $comment = (new Comment())
                         ->setContent($this->faker->realText())
                         ->setPublishDate($date)

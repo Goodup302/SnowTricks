@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% import "macro/video.html.twig" as video_show %}
+{% import "macro/video.html.twig" as videoMacro %}
 
 {% block title %}Figure{% endblock %}
 
@@ -7,22 +7,22 @@
     <div class="row">
 
         <div id="single_thumbnail" class="w-100 pt-md-4 position-relative">
-            {% if figure.thumbnail.name is defined %}
-                <img class="img_responsive" src="{{ asset(asset_media~figure.thumbnail.name) }}">
+            {% if trick.thumbnail.name is defined %}
+                <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}">
             {% else %}
                 <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}">
             {% endif %}
             <div class="absolute_center pt-md-4">
                 <div class="position-relative">
-                    <h1>{{ figure.name }}</h1>
+                    <h1>{{ trick.name }}</h1>
                 </div>
             </div>
             {% if app.user %}
                 <div class="edit_single pt-md-4">
-                    <a class="edit" href="{{ path('figure.edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
+                    <a class="edit" href="{{ path('trick.edit', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
                     <form
                             method="post"
-                            action="{{ path('figure.delete', {'id': figure.id}) }}"
+                            action="{{ path('trick.delete', {'id': trick.id}) }}"
                             swa-title="Êtes vous sur ?"
                             swa-text="Après validation il est impossible de revenire en arrière"
                     >
@@ -33,34 +33,36 @@
             {% endif %}
         </div>
 
-{#        {% for video in figure.videos %}
+        {% for video in trick.videos %}
             <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                {{ video_show.youtube(video) }}
+                {{ videoMacro.show(video.videoId) }}
             </div>
-        {% endfor %}#}
+        {% endfor %}
 
-        {% for image in figure.images %}
+        {% for image in trick.images %}
             <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
                 <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
             </div>
         {% endfor %}
 
         <div class="col-12 py-3">
-            {{ figure.description|raw }}
+            {{ trick.description|raw }}
         </div>
 
         <div class="align-items-center col-12 d-flex justify-content-around justify-content-lg-center">
             <div class="descritpion-item">
-                {{ figure.publishDate|date('Y-m-d') }}
+                {{ trick.publishDate|date('Y-m-d') }}
             </div>
 
             <div class="descritpion-item">
-                {{ figure.tag }}
+                {{ trick.tag.name }}
             </div>
 
-            <div class="descritpion-item">
-                {{ figure.lastEdit|date('Y-m-d') }}
-            </div>
+            {% if trick.lastEdit is not null %}
+                <div class="descritpion-item">
+                    {{ trick.lastEdit|date('Y-m-d') }}
+                </div>
+            {% endif %}
         </div>
     </div>
 

@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Trick;
-use App\Form\FigureType;
+use App\Form\TrickType;
+use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use App\Service\GenerateData;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,57 +45,57 @@ class TrickController extends AbstractController
     public function home(TrickRepository $repository, GenerateData $data): Response
     {
         $data->add(0);
-        return $this->render('trick/index.html.twig', ['figures' => $repository->findAll()]);
+        return $this->render('index.html.twig', ['tricks' => $repository->findAll()]);
     }
 
     /**
-     * @Route("/figure/{id}", name="figure.single", methods="GET")
+     * @Route("/trick/{id}", name="trick.single", methods="GET")
      * @param Trick $trick
      * @return Response
      */
     public function single(Trick $trick): Response
     {
-        return $this->render('trick/single.html.twig', ['figure' => $trick]);
+        return $this->render('trick/single.html.twig', ['trick' => $trick]);
     }
 
     /**
-     * @Route("/edit/{id}", name="figure.edit", methods="GET|POST")
+     * @Route("/edit/{id}", name="trick.edit", methods="GET|POST")
      * @param Trick $trick
      * @param Request $request
      * @return Response
      */
     public function edit(Trick $trick, Request $request): Response
     {
-        $form = $this->createForm(FigureType::class, $trick);
+        $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             //date_default_timezone_set('Europe/Paris');
+            $trick = $form->getData();
             $date = new \DateTime();
             $date->format('Y-m-d H:i:s');
             $trick->setLastEdit($date);
+            $this->em->persist($trick);
             $this->em->flush();
+            return $this->redirect("/trick/{$trick->getId()}");
         }
-        dump($form->createView()->vars["value"]);
-        return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'figure' => $trick]);
+        return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'trick' => $trick]);
     }
 
     /**
-     * @Route("/new", name="figure.new", methods="GET|POST")
+     * @Route("/new", name="trick.new", methods="GET|POST")
      * @param Request $request
      * @return Response
      */
     public function new(Request $request): Response
     {
         $trick = new Trick();
-        $form = $this->createForm(FigureType::class, $trick);
+        $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-/*            //Upload Thumbnail
-            $uploadedFile = $fileUploader->upload($trick->getThumbnail());
-            $trick->setThumbnail($uploadedFile);*/
-            //Upload Media
+
+
             $trick = $form->getData();
-            $trick->setVideos(array());
+
             //Publish Date
             //date_default_timezone_set('Europe/Paris');
             $date = new \DateTime();
@@ -104,18 +106,21 @@ class TrickController extends AbstractController
             $this->em->flush();
             $this->addFlash('success', 'Figure ajoutée avec succès');
 
-            return $this->redirectToRoute("figure.edit", ['id' => $trick->getId()]);
+            return $this->redirectToRoute("trick.edit", ['id' => $trick->getId()]);
         }
-        return $this->render('trick/new.html.twig', ['form' => $form->createView()]);
+        return $this->render('trick/edit.html.twig', ['form' => $form->createView()]);
     }
 
     /**
-     * @Route("/delete/{id}", name="figure.delete", methods="DELETE")
+     * @Route("/delete/{id}", name="trick.delete", methods="DELETE")
      * @param Trick $trick
      * @return Response
      */
     public function delete(Trick $trick): Response
     {
+        foreach ($trick->getComments() as $comment) {
+            $this->em->remove($comment);
+        }
         $this->em->remove($trick);
         $this->em->flush();
         return $this->redirectToRoute('home');

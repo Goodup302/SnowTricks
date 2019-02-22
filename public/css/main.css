@@ -212,13 +212,14 @@ a.current {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: var(--grey_blue);
-    width: 95%;
-    height: 95%;
-    border-radius: 11px;
+    background: #ffffff;
+    width: calc(100vw - 50px);
+    height: calc(100vh - 50px);
+    padding: 20px;
+    border-radius: 4px;
     z-index: 99;
-    border: 2px solid var(--blue);
-    box-shadow: var(--blue) 0 0 10px;
+    border: 2px solid #585858;
+    box-shadow: #545454 0 0 10px;
 }
 #media_content {
     position: relative;
@@ -229,17 +230,6 @@ a.current {
 #media_items {
     overflow: auto;
     height: 50%;
-}
-
-/*Close button*/
-#close_media {
-    font-size: 40px;
-    transform: rotate(0deg);
-    transition: 200ms all;
-    cursor: pointer;
-}
-#close_media:hover {
-    transform: rotate(90deg);
 }
 
 /* Media item*/
@@ -275,7 +265,8 @@ a.current {
     position: relative;
     margin-bottom: 15px;
 }
-#single_thumbnail h1{
+#single_thumbnail h1,
+#single_thumbnail input{
     color: white;
     text-shadow: black 2px 2px 15px;
     margin: 0;
@@ -341,3 +332,15 @@ img.img_responsive {
 /*************
 * EDIT TRICK *
 *************/
+.input_trick_title {
+    display: block;
+    width: 100%;
+    font-size: 2.5rem;
+    color: white;
+    background-color: #fff0;
+    border: 0;
+    text-align: center;
+}
+.input_trick_title:focus {
+    outline: 0;
+}
