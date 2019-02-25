@@ -6,6 +6,7 @@ use App\Entity\Image;
 use App\Entity\Tag;
 use App\Entity\Trick;
 use App\Entity\Video;
+use App\Repository\ImageRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -24,6 +25,7 @@ class TrickType extends AbstractType
             ->add('thumbnail', EntityType::class, [
                 'choice_label' => 'name',
                 'class' => Image::class,
+                'multiple' => false
             ])
             ->add('name')
 /*            ->add('videos', CollectionType::class, [
@@ -57,6 +59,7 @@ class TrickType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Trick::class,
+            'csrf_protection' => false,
         ]);
     }
 }

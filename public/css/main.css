@@ -237,6 +237,9 @@ a.current {
     position: relative;
     padding: 5px 5px;
 }
+.media_item.selected {
+    border: 3px solid black;
+}
 .media_item img {
     object-fit: cover;
     width: 100%;
@@ -258,9 +261,13 @@ a.current {
 
 
 /******************
-   Single figure
+   figure
 ******************/
 
+
+.edit_thumbnail {
+    cursor: pointer;
+}
 #single_thumbnail {
     position: relative;
     margin-bottom: 15px;

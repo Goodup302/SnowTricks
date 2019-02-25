@@ -1,0 +1,41 @@
+{% macro select(formValue, data) %}
+    <select id="{{ formValue.vars.id }}"
+            name="{{ formValue.vars.full_name }}"
+            {% if formValue.vars.multiple == true %} multiple {% endif %}
+            {% if formValue.vars.required == true %} required {% endif %}
+            style="display: block;"
+    >
+        {% for item in formValue.vars.choices %}
+            {% if data is iterable %}
+                a
+                {% if item.data in data %}
+                    <option value="{{ item.value }}" selected="selected">{{ item.label }}</option>
+                {% endif %}
+            {% else %}
+                b
+                {% if item.data.id == data.id %}
+                    <option value="{{ item.value }}" selected="selected">{{ item.label }}</option>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </select>
+{% endmacro %}
+
+{% macro picker(form) %}
+    <div id="media_picker" style="display: none;">
+        <div id="media_content" class="row">
+            <div class="col-12" style="height: 10%">
+                {{ form_start(form) }}
+                    {{ form_widget(form.files) }}
+                {{ form_end(form) }}
+            </div>
+            <div id="media_items" class="card-columns" style="height: 80%">
+
+            </div>
+            <div class="col-12" style="height: 10%">
+                <button class="btn btn-danger close_media" save=false>Annuler</button>
+                <button class="btn btn-primary close_media" save=true>Valider</button>
+            </div>
+        </div>
+    </div>
+{% endmacro %}

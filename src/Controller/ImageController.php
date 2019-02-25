@@ -38,14 +38,14 @@ class ImageController extends AbstractController
      */
     public function list(Request $request): Response
     {
-        $image = new Image();
-        $form = $this->createForm(ImageType::class, $image);
         $images = $this->repository->findAll();
-        return $this->render('media/index.html.twig', [
-            'target' => $request->get('target'),
-            'medias' => $images,
-            'form' => $form->createView()
-        ]);
+        $prefix = $this->getParameter('asset_media_directory');
+        foreach ($images as $id => $image) {
+            $result[$id]['id'] = $image->getId();
+            $result[$id]['name'] = $image->getName();
+            $result[$id]['url'] = '/'.$prefix.$image->getName();
+        }
+        return new JsonResponse($result);
     }
 
 
@@ -82,6 +82,7 @@ class ImageController extends AbstractController
      */
     public function delete(Image $image, FileUploader $fileUploader): Response
     {
+        $this->em->
         $fileUploader->delete($image->getName());
         $this->em->remove($image);
         $this->em->flush();

@@ -1,71 +1,75 @@
 {% extends 'base.html.twig' %}
 {% import "macro/video.html.twig" as videoMacro %}
-
+{% import "macro/image.html.twig" as imageMacro %}
 
 {% block title %}Editer une trick{% endblock %}
 
 {% block body %}
+    {{ imageMacro.picker(imageForm) }}
     {{ form_start(form) }}
-        <div id="single_thumbnail" class="pt-md-4 position-relative">
-            <div class="row position-relative">
-                {% if trick.thumbnail.name is defined %}
-                    <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}">
-                {% else %}
-                    <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}">
-                {% endif %}
-                <div class="absolute_center pt-md-4">
-                    <div class="position-relative">
-                        {{ form_widget(form.name, {'attr': {'class': 'input_trick_title'} }) }}
-                    </div>
-                </div>
-                {% if form %}
-                    <div class="edit_single pt-md-4">
-                        <a class="edit" href="{{ path('trick.edit', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
-                    </div>
-                {% endif %}
-            </div>
-
-            {{ form_errors(form) }}
-
-            <div class="media">
-    {#            <div id="videos">
-                    {{ form_widget(form.videos) }}
-                    <div>+</div>
-                </div>#}
-                <div id="images">
-    {#                {% for image in form.images %}
-                        {{ form_row(image.name) }}
-                        #}{#<img class="img_responsive" src="{{ asset(asset_media~'') }}">#}{#
-                    {% endfor %}#}
-                    {{ form_widget(form.images, {'attr': {'style': 'display: block;'} }) }}
-                    <i onclick="media('{{ path('image') }}', '{{ form.images.vars.id }}')" class="fas fa-plus"></i>
+    <div id="single_thumbnail" class="pt-md-4 position-relative">
+        <div class="row position-relative">
+            {% if trick.thumbnail.name is defined %}
+                <img class="img_responsive edit_thumbnail" src="{{ asset(asset_media~trick.thumbnail.name) }}">
+            {% else %}
+                <img class="img_responsive edit_thumbnail" src="{{ asset("image/default_thumbnail.jpg") }}">
+            {% endif %}
+            <div class="absolute_center">
+                <div class="position-relative">
+                    {{ form_widget(form.name, {'attr': {'class': 'input_trick_title'} }) }}
                 </div>
             </div>
-
-            {% for video in trick.videos %}
-                <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                    {{ videoMacro.show(video.videoId) }}
+            {% if form %}
+                <div class="edit_single">
+                    <i onclick="imagePicker('{{ form.thumbnail.vars.id }}', false)" class="fas fa-edit"></i>
+                    {{ imageMacro.select(form.thumbnail, trick.thumbnail) }}
                 </div>
-            {% endfor %}
-
-            {% for image in trick.images %}
-                <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                    <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
-                </div>
-            {% endfor %}
-
-            {{ form_row(form.description) }}
-            {{ form_row(form.thumbnail) }}
-            {{ form_row(form.tag) }}
-
-
-
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            {% endif %}
         </div>
-    {{ form_end(form) }}
 
-    <form method="post" action="{{ path('trick.delete', {'id': app.request.get('id')}) }}">
-        <button type="submit" class="btn btn-danger">Supprimer</button>
+        {{ form_errors(form) }}
+
+        <div class="">
+            {#            <div id="videos">
+                            {{ form_widget(form.videos) }}
+                            <div>+</div>
+                        </div>#}
+            <div id="images">
+                {{ imageMacro.select(form.images, trick.images) }}
+
+                <i onclick="imagePicker('{{ form.images.vars.id }}', true)" class="fas fa-plus"></i>
+            </div>
+        </div>
+
+        {% for video in trick.videos %}
+            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
+                {{ videoMacro.show(video.videoId) }}
+            </div>
+        {% endfor %}
+
+        {% for image in trick.images %}
+            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
+                <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
+            </div>
+        {% endfor %}
+
+        {{ form_row(form.description) }}
+        {{ form_row(form.tag) }}
+
+
+
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+    {{ form_end(form, {'render_rest': false}) }}
+
+
+    <form
+            method="post"
+            action="{{ path('trick.delete', {'id': app.request.get('id')}) }}"
+            swa-title="Êtes vous sur ?"
+            swa-text="Après validation il est impossible de revenire en arrière"
+    >
+        <button type="submit" class="btn btn-danger swa-confirm">Supprimer</button>
         <input type="hidden" name="_method" value="DELETE">
     </form>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% macro show(trick) %}
     <div class="col-12 col-sm-6 col-md-4 col-xl-3 tricks_card">
-        <a href="{{ path('trick.single', {'id': trick.id}) }}">
+        <a href="{{ path('trick.single', {'name': trick.name}) }}">
             {% if trick.thumbnail.name is defined %}
                 <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}">
             {% else %}
@@ -8,7 +8,7 @@
             {% endif %}
         </a>
         <div class="align-items-center d-flex justify-content-around pt-2 tricks_card_body">
-            <a href="{{ path('trick.single', {'id': trick.id}) }}">
+            <a href="{{ path('trick.single', {'name': trick.name}) }}">
                 <h5 class="text-center">{{ trick.name }}</h5>
             </a>
             {% if app.user %}

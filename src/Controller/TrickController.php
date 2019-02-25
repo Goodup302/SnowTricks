@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Image;
 use App\Entity\Trick;
+use App\Form\ImageType;
 use App\Form\TrickType;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
@@ -49,7 +51,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/{id}", name="trick.single", methods="GET")
+     * @Route("/trick/{name}", name="trick.single", methods="GET")
      * @param Trick $trick
      * @return Response
      */
@@ -66,19 +68,30 @@ class TrickController extends AbstractController
      */
     public function edit(Trick $trick, Request $request): Response
     {
+        //var_dump($trick->getThumbnail()->relation());
+
+        //Upload Image form
+        $image = new Image();
+        $imageForm = $this->createForm(ImageType::class, $image);
+        //Trick form
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             //date_default_timezone_set('Europe/Paris');
+            /** @var Trick $trick */
             $trick = $form->getData();
             $date = new \DateTime();
             $date->format('Y-m-d H:i:s');
             $trick->setLastEdit($date);
             $this->em->persist($trick);
             $this->em->flush();
-            return $this->redirect("/trick/{$trick->getId()}");
+            return $this->redirect("/trick/{$trick->getName()}");
         }
-        return $this->render('trick/edit.html.twig', ['form' => $form->createView(), 'trick' => $trick]);
+        return $this->render('trick/edit.html.twig', [
+            'form' => $form->createView(),
+            'imageForm' =>$imageForm->createView(),
+            'trick' => $trick
+        ]);
     }
 
     /**
