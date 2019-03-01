@@ -3,7 +3,7 @@
             name="{{ formValue.vars.full_name }}"
             {% if formValue.vars.multiple == true %} multiple {% endif %}
             {% if formValue.vars.required == true %} required {% endif %}
-            style="display: block;"
+            style="display: none;"
             target_item="{{ target }}"
     >
         {% for item in formValue.vars.choices %}
@@ -32,6 +32,10 @@
             <div class="col-12" style="height: 10%">
                 {{ form_start(form) }}
                     {{ form_widget(form.files) }}
+                    <script>
+                        var inputId = '{{ form.files.vars.id }}';
+                        var inputName = '{{ form.files.vars.full_name }}';
+                    </script>
                 {{ form_end(form) }}
             </div>
             <div id="media_items" class="card-columns" style="height: 80%">
@@ -43,4 +47,8 @@
             </div>
         </div>
     </div>
+    <script>
+        var urlImageList = '{{ path('image') }}';
+        var urlImageAdd = '{{ path('image.add') }}';
+    </script>
 {% endmacro %}

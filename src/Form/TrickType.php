@@ -27,6 +27,9 @@ class TrickType extends AbstractType
                 'class' => Image::class,
                 'multiple' => false,
                 'required' => false,
+                'attr' => [
+                    'style' => 'display: none;'
+                ]
             ])
             ->add('name')
 /*            ->add('videos', CollectionType::class, [

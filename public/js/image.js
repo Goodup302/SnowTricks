@@ -1,21 +1,28 @@
+//////////////
+// VARIABLE //
+//////////////
+
 var waitingMedia = false;
 var media_picker = $('#media_picker');
 var mediaItems = $('#media_items');
 var loader = $('#ajax_loader');
 
-var inputId = 'image_files';
-var inputName = 'image[files][]';
 var selectedImage = '.media_item.selected';
+var selectedClass = 'selected';
 
 var validationButton = $('.close_media[save=true]');
 var cancelButton = $('.close_media[save=false]');
 
 var isMultiple = false;
 var isRequired = false;
+var currentSelectValue = [];
 
-////////////////////////////
-///////// FUNCTION /////////
-////////////////////////////
+
+
+
+//////////////
+// FUNCTION //
+//////////////
 
 //Open media picker
 function imagePicker(id, multiple, required) {
@@ -25,12 +32,18 @@ function imagePicker(id, multiple, required) {
         media_picker.attr('target', id);
         isMultiple = multiple;
         isRequired = required;
-        $.post('/image', {}).done(function( images ) {
-            console.log(images);
+        $.post(urlImageList, {}).done(function( images ) {
             mediaItems.html('');
+
+
+            currentSelectValue = $('#'+id).val() != null ? $('#'+id).val() : [];
+            console.log(currentSelectValue);
             images.forEach(function(image) {
-                mediaItems.append('<img class="media_item card" name="'+image.name+'" id="'+image.id+'" src="'+image.url+'">');
+                console.log(image.id);
+                select = currentSelectValue.includes(''+image.id+'') === true ? selectedClass : '';
+                mediaItems.append('<img class="media_item card '+select+'" name="'+image.name+'" id="'+image.id+'" src="'+image.url+'">');
             });
+
             refrechImage();
             hideLoader();
             showImagePicker();
@@ -50,7 +63,7 @@ function imagePicker(id, multiple, required) {
 /* Show Loader */
 function showLoader() {
     loader.css('display', 'flex');
-    loader.css('opacity', '1');
+    setTimeout(function(){ loader.css('opacity', '1'); }, 10);
 }
 function hideLoader() {
     loader.css('display', 'none');
@@ -84,15 +97,14 @@ function getImages() {
 
 function refrechImage() {
     $(".media_item").click(function (){
-        if (!isMultiple && $(".media_item").length > 0) {
-            var current = $(this);
-            $(".media_item").each(function() {
-                if ($( this ) != current) {
-                    $( this ).removeClass('selected');
-                }
-            });
+        if (!isMultiple) {
+            var has = $(this).hasClass(selectedClass);
+            $('.media_item').removeClass(selectedClass);
+            if (!has || isRequired) {
+                $(this).addClass(selectedClass);
+            }
         } else {
-            $(this).toggleClass('selected');
+            $(this).toggleClass(selectedClass);
         }
 
 
@@ -108,11 +120,11 @@ function refrechImage() {
 
 
 
+///////////
+// EVENT //
+///////////
 
-/////////////////////////
-///////// EVENT /////////
-/////////////////////////
-
+//Close Picker
 $(".close_media").click(function (){
     targetInput = $('#'+media_picker.attr('target'));
     if ($(this).attr('save') == "true") {
@@ -125,8 +137,10 @@ $(".close_media").click(function (){
     hideImagePicker()
 });
 
+
+//Upload Image
 $('#'+inputId+':file').change(function(){
-    $(this).prop('disabled', true);
+    showLoader();
     var input = $(this);
     var formData = new FormData(document.getElementsByName('media')[0]);
     var files = document.getElementById(inputId).files;
@@ -141,20 +155,19 @@ $('#'+inputId+':file').change(function(){
                 'Seulement les images .jpg et .jpeg sont acceptées',
                 'error'
             );
-            input.prop('disabled', false);
+            hideLoader();
             return;
         }
     }
-    console.log(formData.getAll(inputName));
+    //console.log(formData.getAll(inputName));
     $.ajax({
         type: "POST",
-        url: '/image/add',
+        url: urlImageAdd,
         data: formData,
         processData: false,
         contentType: false,
         error: function(jqXHR, textStatus, errorMessage) {
-            console.log(errorMessage);
-            input.prop('disabled', false);
+            hideLoader();
             Swal.fire({
                 type: 'error',
                 title: 'Oops...',
@@ -164,12 +177,13 @@ $('#'+inputId+':file').change(function(){
         success: function(data) {
             console.log(data);
             mediaItems.append(data);
-            input.prop('disabled', false);
-            refrechImage()
+            hideLoader();
+            refrechImage();
         }
     });
 });
 
+//Delete Image
 $(".media_item .delete").click(function(){
     var item = $(this).parent();
     var id = $(this).attr('itemid');
@@ -186,12 +200,19 @@ $(".media_item .delete").click(function(){
             Swal.fire({
                 type: 'error',
                 title: 'Oops...',
-                text: "Suppression impossible (Réessayer plus tard) !"
+                text: "Une erreur est survenue (Réessayer plus tard) !"
             })
         },
-        success: function(data) {
-            item.remove();
-            refrechImage()
+        success: function(success) {
+            if (success) {
+                item.remove()
+            } else {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: "Cette image est utilisée !"
+                })
+            }
         }
     });
 });

@@ -49,19 +49,19 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Image")
-     */
-    private $images;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Video")
      */
     private $videos;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Image")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Image", inversedBy="tricks")
      */
     private $thumbnail;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Image", inversedBy="tricks")
+     */
+    private $images;
 
     public function __construct()
     {
@@ -167,32 +167,6 @@ class Trick
     }
 
     /**
-     * @return Collection|Image[]
-     */
-    public function getImages(): Collection
-    {
-        return $this->images;
-    }
-
-    public function addImage(Image $image): self
-    {
-        if (!$this->images->contains($image)) {
-            $this->images[] = $image;
-        }
-
-        return $this;
-    }
-
-    public function removeImage(Image $image): self
-    {
-        if ($this->images->contains($image)) {
-            $this->images->removeElement($image);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Video[]
      */
     public function getVideos(): Collection
@@ -226,6 +200,32 @@ class Trick
     public function setThumbnail(?Image $thumbnail): self
     {
         $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+        }
 
         return $this;
     }

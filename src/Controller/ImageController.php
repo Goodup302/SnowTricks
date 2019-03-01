@@ -69,6 +69,8 @@ class ImageController extends AbstractController
                 $uploadMedia[$i]->setName($uploadedFile);
                 $this->em->persist($uploadMedia[$i]);
             }
+            $this->em->flush();
+            dump($uploadMedia);
             return new JsonResponse($uploadMedia);
         }
         return new JsonResponse(false);
@@ -82,10 +84,12 @@ class ImageController extends AbstractController
      */
     public function delete(Image $image, FileUploader $fileUploader): Response
     {
-        $this->em->
-        $fileUploader->delete($image->getName());
-        $this->em->remove($image);
-        $this->em->flush();
-        return new JsonResponse(true);
+        if (sizeof($image->getUsers()) == 0 && sizeof($image->getTricks()) == 0) {
+            $fileUploader->delete($image->getName());
+            $this->em->remove($image);
+            $this->em->flush();
+            return new JsonResponse(true);
+        }
+        return new JsonResponse(false);
     }
 }

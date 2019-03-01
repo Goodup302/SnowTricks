@@ -12,6 +12,8 @@ class Video
     const YOUTUBE_TYPE = 0;
     const DAILYMOTION_TYPE = 1;
 
+    const YOUTUBE = "YouTube";
+    const DAILYMOTION = "Dailymotion";
 
     /**
      * @ORM\Id()
