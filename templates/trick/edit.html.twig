@@ -21,8 +21,8 @@
             </div>
             {% if form %}
                 <div class="edit_single">
-                    <i onclick="imagePicker('{{ form.thumbnail.vars.id }}', false)" class="fas fa-edit"></i>
-                    {{ imageMacro.select(form.thumbnail, trick.thumbnail) }}
+                    <i onclick="imagePicker('{{ form.thumbnail.vars.id }}', false, false)" class="fas fa-edit"></i>
+                    {{ imageMacro.select(form.thumbnail, trick.thumbnail, '.edit_thumbnail') }}
                 </div>
             {% endif %}
         </div>
@@ -36,8 +36,7 @@
                         </div>#}
             <div id="images">
                 {{ imageMacro.select(form.images, trick.images) }}
-
-                <i onclick="imagePicker('{{ form.images.vars.id }}', true)" class="fas fa-plus"></i>
+                <i onclick="imagePicker('{{ form.images.vars.id }}', true, false)" class="fas fa-plus"></i>
             </div>
         </div>
 

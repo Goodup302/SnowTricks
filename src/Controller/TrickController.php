@@ -138,4 +138,19 @@ class TrickController extends AbstractController
         $this->em->flush();
         return $this->redirectToRoute('home');
     }
+
+    /**
+     * @Route("/add_tag", name="add.tag", methods="POST")
+     * @param Trick $trick
+     * @return Response
+     */
+    public function addTag(Trick $trick): Response
+    {
+        foreach ($trick->getComments() as $comment) {
+            $this->em->remove($comment);
+        }
+        $this->em->remove($trick);
+        $this->em->flush();
+        return $this->redirectToRoute('home');
+    }
 }

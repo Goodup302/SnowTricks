@@ -1,20 +1,21 @@
-{% macro select(formValue, data) %}
+{% macro select(formValue, data, target) %}
     <select id="{{ formValue.vars.id }}"
             name="{{ formValue.vars.full_name }}"
             {% if formValue.vars.multiple == true %} multiple {% endif %}
             {% if formValue.vars.required == true %} required {% endif %}
             style="display: block;"
+            target_item="{{ target }}"
     >
         {% for item in formValue.vars.choices %}
             {% if data is iterable %}
-                a
                 {% if item.data in data %}
                     <option value="{{ item.value }}" selected="selected">{{ item.label }}</option>
                 {% endif %}
             {% else %}
-                b
-                {% if item.data.id == data.id %}
-                    <option value="{{ item.value }}" selected="selected">{{ item.label }}</option>
+                {% if data.id is defined %}
+                    {% if item.data.id == data.id %}
+                        <option value="{{ item.value }}" selected="selected">{{ item.label }}</option>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         {% endfor %}
@@ -22,6 +23,10 @@
 {% endmacro %}
 
 {% macro picker(form) %}
+    <div id="ajax_loader">
+        <i class="spinner-border text-primary" role="status"></i>
+    </div>
+
     <div id="media_picker" style="display: none;">
         <div id="media_content" class="row">
             <div class="col-12" style="height: 10%">

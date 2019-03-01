@@ -25,22 +25,19 @@ class TrickType extends AbstractType
             ->add('thumbnail', EntityType::class, [
                 'choice_label' => 'name',
                 'class' => Image::class,
-                'multiple' => false
+                'multiple' => false,
+                'required' => false,
             ])
             ->add('name')
 /*            ->add('videos', CollectionType::class, [
                 'entry_type' => ImageType::class,
                 'entry_options' => ['label' => false],
             ])*/
-/*            ->add('images', CollectionType::class, [
-                'entry_type' => ImageType::class,
-                'entry_options' => ['label' => false],
-                'allow_add' => true,
-            ])*/
             ->add('images', EntityType::class, [
                 'class'        => Image::class,
                 'choice_label' => 'name',
                 'multiple'     => true,
+                'required' => false,
             ])
             ->add('tag', EntityType::class, [
                 'choice_label' => 'name',
