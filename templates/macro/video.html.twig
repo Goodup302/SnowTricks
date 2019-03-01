@@ -1,9 +1,20 @@
-{% macro show(id) %}
-<iframe
-        class="media"
-        src="https://www.youtube.com/embed/{{ id }}"
-        frameborder="0"
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-></iframe>
+{% macro show(video) %}
+    {% if video.platform == 0 %}
+        <iframe
+                class="media"
+                src="https://www.youtube.com/embed/{{ video.videoId }}"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+        ></iframe>
+    {% elseif video.platform == 1 %}
+        <iframe
+                class="media"
+                frameborder="0"
+                src="//www.dailymotion.com/embed/video/{{ video.videoId }}"
+                allowfullscreen allow="autoplay">
+        </iframe>
+    {% endif %}
+
+
 {% endmacro %}

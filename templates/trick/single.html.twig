@@ -35,7 +35,7 @@
 
         {% for video in trick.videos %}
             <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                {{ videoMacro.show(video.videoId) }}
+                {{ videoMacro.show(video) }}
             </div>
         {% endfor %}
 
@@ -63,6 +63,16 @@
                     {{ trick.lastEdit|date('Y-m-d') }}
                 </div>
             {% endif %}
+        </div>
+
+        <div class="row">
+            {% for comment in trick.comments %}
+                <div class="comment_item col-12">
+                    <img src="{{ comment.user.profileImage }}" alt="Avatar de {{ comment.user.username }}">
+                    <span>{{ comment.publishDate|date("Y-m-d H:i:s", "Europe/Paris") }}</span>
+                    <p>{{ comment.content }}</p>
+                </div>
+            {% endfor %}
         </div>
     </div>
 
