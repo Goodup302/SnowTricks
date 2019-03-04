@@ -12,12 +12,15 @@ use App\Repository\TrickRepository;
 use App\Service\GenerateData;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TrickController extends AbstractController
 {
+    const UNKNOWN_ERROR = 'Une erreur inconnue est survenue';
+
     /**
      * @var TrickRepository
      */
@@ -131,12 +134,23 @@ class TrickController extends AbstractController
      */
     public function delete(Trick $trick): Response
     {
-        foreach ($trick->getComments() as $comment) {
-            $this->em->remove($comment);
+        try {
+            foreach ($trick->getComments() as $comment) {
+                $this->em->remove($comment);
+            }
+            $this->em->remove($trick);
+            $this->em->flush();
+            return new JsonResponse(array(
+                'success' => true,
+                'url' => $this->generateUrl('home'),
+            ));
+        } catch (\Exception $e) {
+            return new JsonResponse(array(
+                'success' => false,
+                'url' => $this->generateUrl('home'),
+                'message' => self::UNKNOWN_ERROR,
+            ));
         }
-        $this->em->remove($trick);
-        $this->em->flush();
-        return $this->redirectToRoute('home');
     }
 
     /**

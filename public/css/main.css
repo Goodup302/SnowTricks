@@ -140,12 +140,13 @@ a.current {
 .tricks_card {
     margin-bottom: 15px;
     margin-top: 15px;
+    transition: 0.2s;
+    top: 0;
 }
 .tricks_card a{
     transition: 0.1s ease-in;
 }
-.tricks_card a:hover,
-.tricks_card button:hover{
+.tricks_card:hover{
     transform: scale(1.1);
 }
 .tricks_card h5{
@@ -334,6 +335,9 @@ img.img_responsive {
 }
 .delete:focus {
     outline: none;
+}
+.delete:hover {
+    color: #e20000;
 }
 
 

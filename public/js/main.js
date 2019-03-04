@@ -76,9 +76,52 @@ $(".swa-confirm").on("click", function(e) {
         confirmButtonText: 'Supprimer',
         cancelButtonText: 'Annuler'
     }).then(function (result) {
-        console.log(result);
         if (result.value) {
             form.submit();
+        }
+    });
+});
+
+//Delete a trick
+
+function deleteTrick(trick, time) {
+    trick.css('transition', time+'ms');
+    trick.css('opacity', '0');
+    trick.css('top', '-150px');
+    setTimeout(function(){
+        trick.remove();
+    }, time);
+}
+
+$('form[type="DELETE"]').submit(function (e) {
+    e.preventDefault();
+    var form = $(this);
+    var redirect = (form.attr('redirect') === 'true');
+    $.ajax({
+        type: "POST",
+        url: form.attr('action'),
+        data: form.serialize(),
+        success: function(data, textStatus, request){
+            contentType = request.getResponseHeader('Content-Type');
+            if (contentType == "application/json") {
+                console.log(data);
+                console.log(redirect);
+                if (data.success === true) {
+                    if (data.url != null && redirect === true) {
+                        window.location.replace(data.url);
+                    } else {
+                        deleteTrick(form.parents('.tricks_card'), 400);
+                    }
+                }
+                if (data.message != null) {
+                    Swal.fire('', data.message, 'error');
+                }
+            } else {
+                alert('error');
+            }
+        },
+        error: function (request, textStatus, errorThrown) {
+            alert('error');
         }
     });
 });
