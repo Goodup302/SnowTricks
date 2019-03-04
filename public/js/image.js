@@ -5,7 +5,6 @@
 var waitingMedia = false;
 var media_picker = $('#media_picker');
 var mediaItems = $('#media_items');
-var loader = $('#ajax_loader');
 
 var selectedImage = '.media_item.selected';
 var selectedClass = 'selected';
@@ -58,16 +57,6 @@ function imagePicker(id, multiple, required) {
             )
         });
     }
-}
-
-/* Show Loader */
-function showLoader() {
-    loader.css('display', 'flex');
-    setTimeout(function(){ loader.css('opacity', '1'); }, 10);
-}
-function hideLoader() {
-    loader.css('display', 'none');
-    loader.css('opacity', '0');
 }
 
 /* Show Picker */

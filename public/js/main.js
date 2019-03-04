@@ -3,6 +3,8 @@ var breakpoint_md = 768;
 var breakpoint_lg = 992;
 var breakpoint_xl = 1200;
 
+var loader = $('#ajax_loader');
+
 $(document).ready(function() {
 
     //Init Page
@@ -83,7 +85,6 @@ $(".swa-confirm").on("click", function(e) {
 });
 
 //Delete a trick
-
 function deleteTrick(trick, time) {
     trick.css('transition', time+'ms');
     trick.css('opacity', '0');
@@ -92,11 +93,11 @@ function deleteTrick(trick, time) {
         trick.remove();
     }, time);
 }
-
 $('form[type="DELETE"]').submit(function (e) {
     e.preventDefault();
     var form = $(this);
     var redirect = (form.attr('redirect') === 'true');
+    showLoader();
     $.ajax({
         type: "POST",
         url: form.attr('action'),
@@ -119,9 +120,21 @@ $('form[type="DELETE"]').submit(function (e) {
             } else {
                 alert('error');
             }
+            hideLoader();
         },
         error: function (request, textStatus, errorThrown) {
+            hideLoader();
             alert('error');
         }
     });
 });
+
+/* Loader */
+function showLoader() {
+    loader.css('display', 'flex');
+    setTimeout(function(){ loader.css('opacity', '1'); }, 10);
+}
+function hideLoader() {
+    loader.css('display', 'none');
+    loader.css('opacity', '0');
+}
