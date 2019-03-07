@@ -7,9 +7,9 @@
 
 {% block body %}
     {{ imageMacro.picker(imageForm) }}
+    <div class="row">
     {{ form_start(form) }}
-    <div id="single_thumbnail" class="pt-md-4 position-relative">
-        <div class="row position-relative">
+        <div id="single_thumbnail" class="w-100 pt-md-4 position-relative">
             {% if trick.thumbnail.name is defined %}
                 <img class="img_responsive edit_thumbnail" src="{{ asset(asset_media~trick.thumbnail.name) }}">
             {% else %}
@@ -21,9 +21,10 @@
                 </div>
             </div>
             {% if form %}
-                <div class="edit_single">
-                    <i onclick="imagePicker('{{ form.thumbnail.vars.id }}', false, false)" class="fas fa-edit"></i>
+                <div class="edit_single pt-md-4">
+                    <a><i onclick="imagePicker('{{ form.thumbnail.vars.id }}', false, false)" class="fas fa-edit button_icon"></i></a>
                     {{ imageMacro.select(form.thumbnail, trick.thumbnail, '.edit_thumbnail') }}
+                    <i class="fas fa-trash-alt button_icon"></i>
                 </div>
             {% endif %}
         </div>
@@ -40,6 +41,11 @@
                 <i onclick="imagePicker('{{ form.images.vars.id }}', true, false)" class="fas fa-plus"></i>
             </div>
         </div>
+        {% for image in trick.images %}
+            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
+                <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
+            </div>
+        {% endfor %}
 
         {% for video in trick.videos %}
             <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
@@ -47,11 +53,7 @@
             </div>
         {% endfor %}
 
-        {% for image in trick.images %}
-            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
-            </div>
-        {% endfor %}
+
 
         {{ form_row(form.description) }}
         {{ form_row(form.tag) }}

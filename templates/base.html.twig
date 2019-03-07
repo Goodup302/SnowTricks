@@ -13,7 +13,17 @@
         {% endblock %}
         {% block seo %}{% endblock %}
     </head>
+
     <body>
+        <script>
+            //Loader
+/*            document.body.style.display = 'none';
+            window.addEventListener("load", function(e) {
+                console.log("Load");
+                document.body.style.display = 'unset';
+            });*/
+        </script>
+
         {#LOADER AJAX#}
         <div id="ajax_loader">
             <i class="spinner-border text-primary" role="status"></i>

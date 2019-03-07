@@ -300,41 +300,6 @@ a.current {
     padding: 10px;
 }
 
-/*Other*/
-
-img.img_responsive {
-    object-fit: cover;
-    width: 100%;
-}
-.absolute_center {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-}
-.delete{
-    color: red;
-    margin: 0;
-    padding: 0;
-    border: none;
-    cursor: pointer;
-    background: transparent;
-}
-.delete:focus {
-    outline: none;
-}
-.delete:hover {
-    color: #e20000;
-}
-
-
 /*************
 * EDIT TRICK *
 *************/
@@ -374,4 +339,47 @@ img.img_responsive {
 #ajax_loader [role="status"]{
     width: 80px;
     height: 80px;
+}
+
+/**********
+*  OTHER  *
+**********/
+
+img.img_responsive {
+    object-fit: cover;
+    width: 100%;
+}
+.absolute_center {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+}
+
+.button_icon {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    transition: 250ms;
+    cursor: pointer;
+}
+.button_icon:focus {
+    outline: none;
+}
+.button_icon:hover {
+    filter: contrast(0.3);
+}
+.button_icon.fa-trash-alt{
+    color: red;
+}
+.button_icon.fa-edit {
+    color: #007bff;
 }

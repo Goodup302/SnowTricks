@@ -19,7 +19,7 @@
             </div>
             {% if app.user %}
                 <div class="edit_single pt-md-4">
-                    <a class="edit" href="{{ path('trick.edit', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
+                    <a class="edit" href="{{ path('trick.edit', {'id': trick.id}) }}"><i class="fas fa-edit button_icon"></i></a>
                     <form
                             method="post"
                             action="{{ path('trick.delete', {'id': trick.id}) }}"
@@ -28,12 +28,17 @@
                             type="DELETE"
                             redirect="true"
                     >
-                        <button class="fas fa-trash-alt delete swa-confirm"></button>
+                        <button class="fas fa-trash-alt button_icon delete swa-confirm"></button>
                         <input type="hidden" name="_method" value="DELETE">
                     </form>
                 </div>
             {% endif %}
         </div>
+        {% for image in trick.images %}
+            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
+                <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
+            </div>
+        {% endfor %}
 
         {% for video in trick.videos %}
             <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
@@ -41,11 +46,7 @@
             </div>
         {% endfor %}
 
-        {% for image in trick.images %}
-            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
-            </div>
-        {% endfor %}
+
 
         <div class="col-12 py-3">
             {{ trick.description|raw }}
