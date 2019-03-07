@@ -13,6 +13,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Trick
 {
     /**
+     * @var Image
+     */
+    private $thumbnail;
+
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -50,31 +55,26 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Video")
-     */
-    private $videos;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Image", inversedBy="tricks")
-     */
-    private $thumbnail;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Image", inversedBy="tricks")
-     */
-    private $images;
-
-    /**
      * @ORM\Column(type="string", length=255)
      * @Gedmo\Slug(fields={"name"})
      */
     private $slug;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="trick")
+     */
+    private $images;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick")
+     */
+    private $videos;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-        $this->videos = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -173,40 +173,14 @@ class Trick
         return $this;
     }
 
-    /**
-     * @return Collection|Video[]
-     */
-    public function getVideos(): Collection
+    public function getSlug(): ?string
     {
-        return $this->videos;
+        return $this->slug;
     }
 
-    public function addVideo(Video $video): self
+    public function setSlug(string $slug): self
     {
-        if (!$this->videos->contains($video)) {
-            $this->videos[] = $video;
-        }
-
-        return $this;
-    }
-
-    public function removeVideo(Video $video): self
-    {
-        if ($this->videos->contains($video)) {
-            $this->videos->removeElement($video);
-        }
-
-        return $this;
-    }
-
-    public function getThumbnail(): ?Image
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail(?Image $thumbnail): self
-    {
-        $this->thumbnail = $thumbnail;
+        $this->slug = $slug;
 
         return $this;
     }
@@ -223,6 +197,7 @@ class Trick
     {
         if (!$this->images->contains($image)) {
             $this->images[] = $image;
+            $image->setTrick($this);
         }
 
         return $this;
@@ -232,19 +207,55 @@ class Trick
     {
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getTrick() === $this) {
+                $image->setTrick(null);
+            }
         }
 
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getThumbnail(): ?Image
     {
-        return $this->slug;
+        if (is_null($this->thumbnail)) {
+            foreach ($this->images as $image) {
+                /** @var Image $image */
+                if ($image->getThumbnail()) {
+                    $this->thumbnail = $image;
+                }
+            }
+        }
+        return $this->thumbnail;
     }
 
-    public function setSlug(string $slug): self
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
     {
-        $this->slug = $slug;
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->contains($video)) {
+            $this->videos->removeElement($video);
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
+        }
 
         return $this;
     }

@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Image
 {
+    private $files;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -19,21 +21,24 @@ class Image
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $name;
-
-    private $files;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="thumbnail")
-     */
-    private $tricks;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="profileImage")
      */
     private $users;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="images")
+     */
+    private $trick;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $thumbnail = false;
 
     public function __construct()
     {
@@ -78,37 +83,6 @@ class Image
     }
 
     /**
-     * @return Collection|Trick[]
-     */
-    public function getTricks(): Collection
-    {
-        return $this->tricks;
-    }
-
-    public function addTrick(Trick $trick): self
-    {
-        if (!$this->tricks->contains($trick)) {
-            $this->tricks[] = $trick;
-            $trick->setThumbnail($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTrick(Trick $trick): self
-    {
-        if ($this->tricks->contains($trick)) {
-            $this->tricks->removeElement($trick);
-            // set the owning side to null (unless already changed)
-            if ($trick->getThumbnail() === $this) {
-                $trick->setThumbnail(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|User[]
      */
     public function getUsers(): Collection
@@ -135,6 +109,30 @@ class Image
                 $user->setProfileImage(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): self
+    {
+        $this->trick = $trick;
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?bool
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(bool $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }

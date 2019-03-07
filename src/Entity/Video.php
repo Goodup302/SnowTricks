@@ -32,6 +32,11 @@ class Video
      */
     private $videoId;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="videos")
+     */
+    private $trick;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -57,6 +62,18 @@ class Video
     public function setVideoId(string $videoId): self
     {
         $this->videoId = $videoId;
+
+        return $this;
+    }
+
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): self
+    {
+        $this->trick = $trick;
 
         return $this;
     }

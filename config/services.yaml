@@ -31,3 +31,4 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%media_directory%'
+            $uploadFolder: '%asset_media_directory%'

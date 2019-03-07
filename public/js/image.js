@@ -33,16 +33,11 @@ function imagePicker(id, multiple, required) {
         isRequired = required;
         $.post(urlImageList, {}).done(function( images ) {
             mediaItems.html('');
-
-
             currentSelectValue = $('#'+id).val() != null ? $('#'+id).val() : [];
-            console.log(currentSelectValue);
             images.forEach(function(image) {
-                console.log(image.id);
                 select = currentSelectValue.includes(''+image.id+'') === true ? selectedClass : '';
-                mediaItems.append('<img class="media_item card '+select+'" name="'+image.name+'" id="'+image.id+'" src="'+image.url+'">');
+                addImage(image, select);
             });
-
             refrechImage();
             hideLoader();
             showImagePicker();
@@ -72,6 +67,10 @@ function hideImagePicker() {
     waitingMedia = false;
 }
 
+function addImage(image, select) {
+    mediaItems.append('<img class="media_item card '+select+'" name="'+image.name+'" id="'+image.id+'" src="'+image.url+'">');
+}
+
 function getImages() {
     var images = [];
     $(selectedImage).each(function( index ) {
@@ -85,6 +84,7 @@ function getImages() {
 }
 
 function refrechImage() {
+    //On select an image
     $(".media_item").click(function (){
         if (!isMultiple) {
             var has = $(this).hasClass(selectedClass);
@@ -95,8 +95,6 @@ function refrechImage() {
         } else {
             $(this).toggleClass(selectedClass);
         }
-
-
         if (isRequired) {
             if ($(selectedImage).length === 0) {
                 validationButton.prop( "disabled", true );
@@ -119,7 +117,7 @@ $(".close_media").click(function (){
     if ($(this).attr('save') == "true") {
         targetInput.html('');
         getImages().forEach(function(image) {
-            targetInput.append('<option value="'+image.id+'" selected="selected">'+image.name+'</option>');
+            targetInput.append('<option value="'+image.id+'" selected="selected"></option>');
         });
     }
     mediaItems.html('');
@@ -165,7 +163,9 @@ $('#'+inputId+':file').change(function(){
         },
         success: function(data) {
             console.log(data);
-            mediaItems.append(data);
+            data.forEach(function(image) {
+                addImage(image)
+            });
             hideLoader();
             refrechImage();
         }

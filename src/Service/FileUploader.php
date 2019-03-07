@@ -8,10 +8,12 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class FileUploader
 {
     private $targetDirectory;
+    private $uploadFolder;
 
-    public function __construct($targetDirectory)
+    public function __construct($targetDirectory, $uploadFolder)
     {
         $this->targetDirectory = $targetDirectory;
+        $this->uploadFolder = '/'.$uploadFolder;
     }
 
     public function upload(UploadedFile $file)
@@ -33,6 +35,11 @@ class FileUploader
     public function getTargetDirectory()
     {
         return $this->targetDirectory;
+    }
+
+    public function getUploadFolder()
+    {
+        return $this->uploadFolder;
     }
 
     public function getPath($fileName) {

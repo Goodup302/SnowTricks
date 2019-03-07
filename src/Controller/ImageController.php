@@ -26,10 +26,13 @@ class ImageController extends AbstractController
      */
     private $em;
 
-    public function __construct(ImageRepository $repository, EntityManagerInterface $em)
+    private $fileUploader;
+
+    public function __construct(ImageRepository $repository, EntityManagerInterface $em, FileUploader $fileUploader)
     {
         $this->repository = $repository;
         $this->em = $em;
+        $this->fileUploader = $fileUploader;
     }
 
     /**
@@ -39,11 +42,10 @@ class ImageController extends AbstractController
     public function list(Request $request): Response
     {
         $images = $this->repository->findAll();
-        $prefix = $this->getParameter('asset_media_directory');
         foreach ($images as $id => $image) {
             $result[$id]['id'] = $image->getId();
             $result[$id]['name'] = $image->getName();
-            $result[$id]['url'] = '/'.$prefix.$image->getName();
+            $result[$id]['url'] = $this->fileUploader->getUploadFolder().$image->getName();
         }
         return new JsonResponse($result);
     }
@@ -60,18 +62,25 @@ class ImageController extends AbstractController
         $image = new Image();
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
-        if (true) {
+        if ($form->isValid() && $form->isSubmitted()) {
             $files = $image->getFiles();
-            $uploadMedia = array();
+            /** @var Image[] $images */
+            $images = array();
+            $jsonImage = array();
             foreach ($files as $i => $file){
-                $uploadMedia[$i] = new Image();
-                $uploadedFile = $fileUploader->upload($file);
-                $uploadMedia[$i]->setName($uploadedFile);
-                $this->em->persist($uploadMedia[$i]);
+                $images[$i] = (new Image())->setName($fileUploader->upload($file));
+                $this->em->persist($images[$i]);
             }
             $this->em->flush();
-            dump($uploadMedia);
-            return new JsonResponse($uploadMedia);
+            //
+            foreach($images as $image) {
+                $jsonImage[] = [
+                    'name' => $image->getName(),
+                    'id' => $image->getId(),
+                    'url' => $this->fileUploader->getUploadFolder().$image->getName(),
+                ];
+            }
+            return new JsonResponse($jsonImage);
         }
         return new JsonResponse(false);
     }

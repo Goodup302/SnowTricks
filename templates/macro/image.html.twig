@@ -1,12 +1,12 @@
-{% macro select(formValue, data, target) %}
-    <select id="{{ formValue.vars.id }}"
-            name="{{ formValue.vars.full_name }}"
-            {% if formValue.vars.multiple == true %} multiple {% endif %}
-            {% if formValue.vars.required == true %} required {% endif %}
+{% macro select(form, data, target) %}
+    <select id="{{ form.vars.id }}"
+            name="{{ form.vars.full_name }}"
+            {% if form.vars.multiple == true %} multiple {% endif %}
+            {% if form.vars.required == true %} required {% endif %}
             style="display: none;"
             target_item="{{ target }}"
     >
-        {% for item in formValue.vars.choices %}
+        {% for item in form.vars.choices %}
             {% if data is iterable %}
                 {% if item.data in data %}
                     <option value="{{ item.value }}" selected="selected">{{ item.label }}</option>
@@ -24,17 +24,15 @@
 
 {% macro picker(form) %}
     <div id="media_picker" style="display: none;">
-        <div id="media_content" class="row">
-            <div class="col-12" style="height: 10%">
-                {{ form_start(form) }}
-                    {{ form_widget(form.files) }}
-                    <script>
-                        var inputId = '{{ form.files.vars.id }}';
-                        var inputName = '{{ form.files.vars.full_name }}';
-                    </script>
-                {{ form_end(form) }}
-            </div>
-            <div id="media_items" class="card-columns" style="height: 80%">
+        <div id="media_content">
+            {{ form_start(form) }}
+                {{ form_widget(form.files) }}
+                <script>
+                    var inputId = '{{ form.files.vars.id }}';
+                    var inputName = '{{ form.files.vars.full_name }}';
+                </script>
+            {{ form_end(form, {'render_rest': false}) }}
+            <div id="media_items" class="card-columns">
 
             </div>
             <div class="col-12" style="height: 10%">

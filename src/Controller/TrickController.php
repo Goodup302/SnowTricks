@@ -88,7 +88,7 @@ class TrickController extends AbstractController
             $trick->setLastEdit($date);
             $this->em->persist($trick);
             $this->em->flush();
-            return $this->redirect("/trick/{$trick->getName()}");
+            return $this->redirectToRoute('trick.single', ['slug' => $trick->getSlug()]);
         }
         return $this->render('trick/edit.html.twig', [
             'form' => $form->createView(),

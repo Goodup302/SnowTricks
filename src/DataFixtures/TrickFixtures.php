@@ -9,7 +9,6 @@ use App\Entity\Video;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Faker\Generator;
 
 class TrickFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -21,18 +20,31 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $date->format('Y-m-d H:i:s');
 
         for ($i = 0; $i < 20; $i++) {
+            //Images
+            $images[$i][] = (new Image())->setName('wallpaper.jpg')->setThumbnail(true);
+            $images[$i][] = (new Image())->setName('wallpaper2.jpg');
+            foreach ($images[$i] as $id => $image) {
+                $manager->persist($image);
+            }
+            //Videos
+            $videos[$i][] = (new Video())->setPlatform(Video::YOUTUBE_TYPE)->setVideoId('ZmEd0MGE4Mo');
+            $videos[$i][] = (new Video())->setPlatform(Video::DAILYMOTION_TYPE)->setVideoId('x72qupe');
+            foreach ($videos[$i] as $id => $video) {
+                $manager->persist($video);
+            }
+            //Trick
             $trick = new Trick();
-            $trick->setName($this->faker->text(30));
-            $trick->setDescription($this->faker->realText(900));
-            $trick->setPublishDate($date);
-            $trick->setThumbnail($this->getReference(Image::class.'0'));
-            $trick->setTag($this->getReference(Tag::class.'0'));
-            //
-            $trick->addVideo($this->getReference(Video::class.'0'));
-            $trick->addVideo($this->getReference(Video::class.'1'));
-            //
-            $trick->addImage($this->getReference(Image::class.'0'));
-            $trick->addImage($this->getReference(Image::class.'1'));
+            $trick
+                ->setName($this->faker->text(30))
+                ->setDescription($this->faker->realText(900))
+                ->setPublishDate($date)
+                ->setTag($this->getReference(Tag::class.'0'))
+                //
+                ->addVideo($videos[$i][0])
+                ->addVideo($videos[$i][1])
+                ->addImage($images[$i][0])
+                ->addImage($images[$i][1])
+            ;
 
             $this->addReference(Trick::class.$i, $trick);
             $manager->persist($trick);
@@ -44,8 +56,8 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return array(
-            VideoFixtures::class,
-            ImageFixtures::class,
+            //VideoFixtures::class,
+            //ImageFixtures::class,
             TagFixtures::class,
         );
     }
