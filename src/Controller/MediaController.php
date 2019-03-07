@@ -3,18 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Image;
+use App\Entity\Trick;
 use App\Form\ImageType;
 use App\Repository\ImageRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ImageController extends AbstractController
+class MediaController extends AbstractController
 {
     /**
      * @var ImageRepository
@@ -52,12 +52,12 @@ class ImageController extends AbstractController
 
 
     /**
-     * @Route("/image/add", name="image.add", methods="POST|GET")
+     * @Route("/image/add/{id}", name="image.add", methods="POST|GET")
      * @param Request $request
      * @param FileUploader $fileUploader
      * @return Response
      */
-    public function add(Request $request, FileUploader $fileUploader): Response
+    public function add(Request $request, FileUploader $fileUploader, Trick $trick): Response
     {
         $image = new Image();
         $form = $this->createForm(ImageType::class, $image);
@@ -70,6 +70,7 @@ class ImageController extends AbstractController
             foreach ($files as $i => $file){
                 $images[$i] = (new Image())->setName($fileUploader->upload($file));
                 $this->em->persist($images[$i]);
+                $trick->addImage($images[$i]);
             }
             $this->em->flush();
             //
@@ -93,12 +94,13 @@ class ImageController extends AbstractController
      */
     public function delete(Image $image, FileUploader $fileUploader): Response
     {
-        if (sizeof($image->getUsers()) == 0 && sizeof($image->getTricks()) == 0) {
+        try {
             $fileUploader->delete($image->getName());
             $this->em->remove($image);
             $this->em->flush();
             return new JsonResponse(true);
+        } catch (\Exception $e) {
+            return new JsonResponse(false);
         }
-        return new JsonResponse(false);
     }
 }

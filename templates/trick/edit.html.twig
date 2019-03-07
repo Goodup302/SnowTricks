@@ -6,9 +6,9 @@
 {% block title %}Editer une trick{% endblock %}
 
 {% block body %}
-    {{ imageMacro.picker(imageForm) }}
-    <div class="row">
-    {{ form_start(form) }}
+    {{ form_widget(imageForm.files) }}
+    {{ form_errors(form) }}
+    {{ form_start(form, {'attr': {'class': 'row'}}) }}
         <div id="single_thumbnail" class="w-100 pt-md-4 position-relative">
             {% if trick.thumbnail.name is defined %}
                 <img class="img_responsive edit_thumbnail" src="{{ asset(asset_media~trick.thumbnail.name) }}">
@@ -29,41 +29,103 @@
             {% endif %}
         </div>
 
-        {{ form_errors(form) }}
+        <div class="row">
+            {% for image in trick.images %}
+                <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
+                    <div class="media position-relative">
+                        <img class="img_responsive h-100" src="{{ asset(asset_media ~ image.name)}}" alt="">
+                        <div class="edit_single">
+                        <span
+                                method="post"
+                                action="{{ path('image.delete', {'id': image.id}) }}"
+                                type="DELETE"
+                                redirect="false"
+                        >
+                            <button class="fas fa-trash-alt button_icon delete"></button>
+                            <input type="hidden" name="_method" value="DELETE">
+                        </span>
+                            <span
+                                    method="post"
+                                    action="{{ path('image.delete', {'id': image.id}) }}"
+                                    type="DELETE"
+                                    redirect="false"
+                            >
+                            <button class="fas fa-trash-alt button_icon delete"></button>
+                            <input type="hidden" name="_method" value="DELETE">
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
 
-        <div class="">
-            {#            <div id="videos">
-                            {{ form_widget(form.videos) }}
-                            <div>+</div>
-                        </div>#}
-            <div id="images">
-                {{ imageMacro.select(form.images, trick.images) }}
-                <i onclick="imagePicker('{{ form.images.vars.id }}', true, false)" class="fas fa-plus"></i>
+            {% for video in trick.videos %}
+                <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
+                    {{ videoMacro.show(video) }}
+                </div>
+            {% endfor %}
+
+            {#Add Media#}
+            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center align-items-center">
+                <div class="media p-3">
+                    {#{{ imageMacro.select(form.images, trick.images) }}#}
+                    {#<i onclick="imagePicker('{{ form.images.vars.id }}', true, false)" class="fas fa-plus button_icon add_media"></i>#}
+                    <div tabindex="0" class="add_media" data-toggle="popover" data-html="true" data-placement="top"
+                         data-content='
+                        <div class="position-relative">
+                            <label for="test" class="input_file btn btn-dark">Ajouter des images</label>
+                            <input id="test" type="file" data-toggle="modal" target="#create_doctor_modal"
+                                form-open="{{ path('home', {'id': trick.id}) }}"
+                                data-target="#edit_doctor_modal" multiple>
+                            </div>
+                        </div>
+                        <div class="p-2"></div>
+                        <div class="btn btn-dark w-100" data-toggle="modal" href="#link_doctor_modal"
+                            id="url_link_doctor_modal" form-open="{{ path('home', {'id': trick.id}) }}"
+                            data-target="#video_modal">
+                            Ajouter une vidéo
+                        </div>
+                    '>
+                        <i class="fas fa-plus absolute_center"></i>
+                    </div>
+                </div>
             </div>
         </div>
-        {% for image in trick.images %}
-            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
+
+
+        <div class="col-12">
+            {{ form_widget(form.description) }}
+        </div>
+
+        <div class="col-12 col-md-6">
+                {{ form_row(form.tag) }}
+        </div>
+        <div class="col-12 col-md-6 position-relative">
+            <div class="absolute_center">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
-        {% endfor %}
+        </div>
 
-        {% for video in trick.videos %}
-            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                {{ videoMacro.show(video) }}
-            </div>
-        {% endfor %}
-
-
-
-        {{ form_row(form.description) }}
-        {{ form_row(form.tag) }}
-
-
-
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-    </div>
     {{ form_end(form, {'render_rest': false}) }}
 
+    {#MODAL ADD VIDEO#}
+    <div id="video_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_video_label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal_video_label">Ajout d'une entreprise</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <form
             method="post"
@@ -94,6 +156,13 @@
         });
         $(document).ready(function() {
             $('.input_trick_title').removeClass('form-control');
+            $('*[data-toggle="popover"]').popover({
+                trigger: 'focus'
+            })
         })
     </script>
+    <div class="tooltip" role="tooltip">
+        <div class="arrow"></div>
+        <div class="tooltip-inner"></div>
+    </div>
 {% endblock %}

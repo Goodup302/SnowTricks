@@ -358,17 +358,21 @@ img.img_responsive {
     text-align: center;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) !important;
     width: 100%;
     height: 100%;
 }
+
+/***********
+*  BUTTON  *
+***********/
 
 .button_icon {
     margin: 0;
     padding: 0;
     border: none;
     background: transparent;
-    transition: 250ms;
+    transition: 150ms;
     cursor: pointer;
 }
 .button_icon:focus {
@@ -377,9 +381,43 @@ img.img_responsive {
 .button_icon:hover {
     filter: contrast(0.3);
 }
+/*delete button*/
 .button_icon.fa-trash-alt{
     color: red;
 }
+/*edit button*/
 .button_icon.fa-edit {
     color: #007bff;
+}
+/*add media button*/
+.button_icon.add_media {
+    font-size: 35px;
+}
+
+/*add media div*/
+.add_media {
+    border: black 2px solid;
+    border-radius: 3px;
+    width: 100%;
+    height: 100%;
+    transition: 150ms;
+    cursor: pointer;
+    opacity: 0.5;
+    font-size: 35px;
+}
+.add_media:hover,
+.add_media:focus{
+    transform: scale(1.1);
+    opacity: 1;
+    outline: none;
+}
+
+/*custom file input*/
+.input_file {
+    width: 100%;
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    z-index: 1;
 }
