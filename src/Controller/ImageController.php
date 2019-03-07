@@ -8,6 +8,7 @@ use App\Repository\ImageRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,22 +26,28 @@ class ImageController extends AbstractController
      */
     private $em;
 
-    public function __construct(ImageRepository $repository, EntityManagerInterface $em)
+    private $fileUploader;
+
+    public function __construct(ImageRepository $repository, EntityManagerInterface $em, FileUploader $fileUploader)
     {
         $this->repository = $repository;
         $this->em = $em;
+        $this->fileUploader = $fileUploader;
     }
 
     /**
      * @Route("/image", name="image", methods="POST|GET")
      * @return Response
      */
-    public function list(): Response
+    public function list(Request $request): Response
     {
-        $image = new Image();
-        $form = $this->createForm(ImageType::class, $image);
         $images = $this->repository->findAll();
-        return $this->render('media/index.html.twig', ['medias' => $images, 'form' => $form->createView()]);
+        foreach ($images as $id => $image) {
+            $result[$id]['id'] = $image->getId();
+            $result[$id]['name'] = $image->getName();
+            $result[$id]['url'] = $this->fileUploader->getUploadFolder().$image->getName();
+        }
+        return new JsonResponse($result);
     }
 
 
@@ -55,17 +62,25 @@ class ImageController extends AbstractController
         $image = new Image();
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
-        if (true) {
+        if ($form->isValid() && $form->isSubmitted()) {
             $files = $image->getFiles();
-            $uploadMedia = array();
+            /** @var Image[] $images */
+            $images = array();
+            $jsonImage = array();
             foreach ($files as $i => $file){
-                $uploadMedia[$i] = new Image();
-                $uploadedFile = $fileUploader->upload($file);
-                $uploadMedia[$i]->setName($uploadedFile);
-                $this->em->persist($uploadMedia[$i]);
+                $images[$i] = (new Image())->setName($fileUploader->upload($file));
+                $this->em->persist($images[$i]);
             }
             $this->em->flush();
-            return $this->render('media/item.html.twig', ['medias' => $uploadMedia]);
+            //
+            foreach($images as $image) {
+                $jsonImage[] = [
+                    'name' => $image->getName(),
+                    'id' => $image->getId(),
+                    'url' => $this->fileUploader->getUploadFolder().$image->getName(),
+                ];
+            }
+            return new JsonResponse($jsonImage);
         }
         return new JsonResponse(false);
     }
@@ -78,9 +93,12 @@ class ImageController extends AbstractController
      */
     public function delete(Image $image, FileUploader $fileUploader): Response
     {
-        $fileUploader->delete($image->getName());
-        $this->em->remove($image);
-        $this->em->flush();
-        return new JsonResponse(true);
+        if (sizeof($image->getUsers()) == 0 && sizeof($image->getTricks()) == 0) {
+            $fileUploader->delete($image->getName());
+            $this->em->remove($image);
+            $this->em->flush();
+            return new JsonResponse(true);
+        }
+        return new JsonResponse(false);
     }
 }

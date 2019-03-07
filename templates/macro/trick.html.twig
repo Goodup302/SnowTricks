@@ -1,28 +1,32 @@
-{% macro show(figure) %}
+{% macro show(trick) %}
     <div class="col-12 col-sm-6 col-md-4 col-xl-3 tricks_card">
-        <a href="{{ path('figure.single', {'id': figure.id}) }}">
-            {% if figure.thumbnail.name is defined %}
-                <img class="img_responsive" src="{{ asset(asset_media~figure.thumbnail.name) }}">
+        <a href="{{ path('trick.single', {'slug': trick.slug}) }}">
+            {% if trick.thumbnail.name is defined %}
+                <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}">
             {% else %}
                 <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}">
             {% endif %}
         </a>
         <div class="align-items-center d-flex justify-content-around pt-2 tricks_card_body">
-            <a href="{{ path('figure.single', {'id': figure.id}) }}">
-                <h5 class="text-center">{{ figure.name }}</h5>
+            <a href="{{ path('trick.single', {'slug': trick.slug}) }}">
+                <h5 class="text-center">{{ trick.name }}</h5>
             </a>
             {% if app.user %}
-                <a class="edit" href="{{ path('figure.edit', {'id': figure.id}) }}"><i class="fas fa-edit"></i></a>
-                <form
-                    method="post"
-                    action="{{ path('figure.delete', {'id': figure.id}) }}"
-                    swa-title="Êtes vous sur ?"
-                    swa-text="Après validation il est impossible de revenire en arrière"
-                >
-                    <button class="fas fa-trash-alt delete swa-confirm"></button>
-                    <input type="hidden" name="_method" value="DELETE">
-                </form>
+                <div class="edit_single" style="padding-right: 15px;">
+                    <a class="edit" href="{{ path('trick.edit', {'id': trick.id}) }}"><i class="fas fa-edit"></i></a>
+                    <form
+                        method="post"
+                        action="{{ path('trick.delete', {'id': trick.id}) }}"
+                        swa-title="Êtes vous sur ?"
+                        swa-text="Après validation il est impossible de revenire en arrière"
+                        type="DELETE"
+                    >
+                        <button class="fas fa-trash-alt delete swa-confirm"></button>
+                        <input type="hidden" name="_method" value="DELETE">
+                    </form>
+                </div>
             {% endif %}
+
         </div>
     </div>
 {% endmacro %}

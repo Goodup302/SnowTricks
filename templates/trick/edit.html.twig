@@ -1,31 +1,97 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Editer une figure{% endblock %}
+{% import "macro/video.html.twig" as videoMacro %}
+{% import "macro/image.html.twig" as imageMacro %}
+
+{% block title %}Editer une trick{% endblock %}
 
 {% block body %}
-    <div id="single_thumbnail" class="pt-md-4 position-relative">
+    {{ imageMacro.picker(imageForm) }}
     {{ form_start(form) }}
-        {{ form_errors(form) }}
-        <i onclick="media('{{ path('media') }}')" class="fas fa-pen"></i>
+    <div id="single_thumbnail" class="pt-md-4 position-relative">
         <div class="row position-relative">
-            <img class="img_responsive" src="{{ asset(asset_media~figure.thumbnail.name) }}">
-            <div class="absolute_center pt-md-4">
+            {% if trick.thumbnail.name is defined %}
+                <img class="img_responsive edit_thumbnail" src="{{ asset(asset_media~trick.thumbnail.name) }}">
+            {% else %}
+                <img class="img_responsive edit_thumbnail" src="{{ asset("image/default_thumbnail.jpg") }}">
+            {% endif %}
+            <div class="absolute_center">
                 <div class="position-relative">
-                    <h1>{{ figure.name }}</h1>
+                    {{ form_widget(form.name, {'attr': {'class': 'input_trick_title'} }) }}
                 </div>
             </div>
+            {% if form %}
+                <div class="edit_single">
+                    <i onclick="imagePicker('{{ form.thumbnail.vars.id }}', false, false)" class="fas fa-edit"></i>
+                    {{ imageMacro.select(form.thumbnail, trick.thumbnail, '.edit_thumbnail') }}
+                </div>
+            {% endif %}
         </div>
-        {{ form_row(form.name) }}
+
+        {{ form_errors(form) }}
+
+        <div class="">
+            {#            <div id="videos">
+                            {{ form_widget(form.videos) }}
+                            <div>+</div>
+                        </div>#}
+            <div id="images">
+                {{ imageMacro.select(form.images, trick.images) }}
+                <i onclick="imagePicker('{{ form.images.vars.id }}', true, false)" class="fas fa-plus"></i>
+            </div>
+        </div>
+
+        {% for video in trick.videos %}
+            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
+                {{ videoMacro.show(video) }}
+            </div>
+        {% endfor %}
+
+        {% for image in trick.images %}
+            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
+                <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
+            </div>
+        {% endfor %}
+
         {{ form_row(form.description) }}
         {{ form_row(form.tag) }}
-        <button type="submit" class="btn btn-primary">Modifier</button>
-    {{ form_end(form) }}
+
+
+
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
     </div>
+    {{ form_end(form, {'render_rest': false}) }}
 
-    <a href="{{ path('figure.single', {'id': app.request.get('id')}) }}" class="btn btn-success">Voir</a>
 
-    <form method="post" action="{{ path('figure.delete', {'id': app.request.get('id')}) }}">
-        <button type="submit" class="btn btn-danger">Supprimer</button>
+    <form
+            method="post"
+            action="{{ path('trick.delete', {'id': app.request.get('id')}) }}"
+            swa-title="Êtes vous sur ?"
+            swa-text="Après validation il est impossible de revenire en arrière"
+    >
+        <button type="submit" class="btn btn-danger swa-confirm">Supprimer</button>
         <input type="hidden" name="_method" value="DELETE">
     </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/image.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.0.1/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: "#trick_description",
+            setup: function (editor) {
+                editor.on('change', function () {
+                    tinymce.triggerSave();
+                });
+                editor.on('blur', function() {
+                    editor.save();
+                });
+            }
+        });
+        $(document).ready(function() {
+            $('.input_trick_title').removeClass('form-control');
+        })
+    </script>
 {% endblock %}

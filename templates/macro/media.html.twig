@@ -1,9 +1,0 @@
-{% macro image(media) %}
-    <div class="media_item col-4 media_item">
-        <img class="" src="{{ asset(asset_media ~ media.name) }}">
-        <i action="{{ path('media.delete', {'id': media.id}) }}"
-           itemid="{{ media.id }}"
-           class="fas fa-trash-alt delete">
-        </i>
-    </div>
-{% endmacro %}

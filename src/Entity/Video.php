@@ -9,6 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Video
 {
+    const YOUTUBE_TYPE = 0;
+    const DAILYMOTION_TYPE = 1;
+
+    const YOUTUBE = "YouTube";
+    const DAILYMOTION = "Dailymotion";
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -22,9 +28,14 @@ class Video
     private $platform;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
      */
     private $videoId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="videos")
+     */
+    private $trick;
 
     public function getId(): ?int
     {
@@ -43,14 +54,26 @@ class Video
         return $this;
     }
 
-    public function getVideoId(): ?int
+    public function getVideoId(): ?string
     {
         return $this->videoId;
     }
 
-    public function setVideoId(int $videoId): self
+    public function setVideoId(string $videoId): self
     {
         $this->videoId = $videoId;
+
+        return $this;
+    }
+
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): self
+    {
+        $this->trick = $trick;
 
         return $this;
     }

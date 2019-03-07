@@ -6,9 +6,11 @@
 {% block wallpaper %}
     <div id="wallpaper">
         <img src="{{ asset('image/snowboard-wallpaper.jpg') }}">
-        <div class="wallpaper_body">
-            <h2>Bienvenue sur la communauté SnowTricks</h2>
-        </div>
+        <a href="#content">
+            <div class="wallpaper_body">
+                <h2>Bienvenue sur la communauté SnowTricks</h2>
+            </div>
+        </a>
         <a href="#content"><i class="arrow_down fas fa-angle-down"></i></a>
     </div>
 {% endblock %}
@@ -18,14 +20,14 @@
         <i class="fas fa-angle-up"></i>
     </a>
     {% if app.user %}
-        <a class="button_new" href="{{ path('figure.new') }}">
+        <a class="button_new" href="{{ path('trick.new') }}">
             <i class="fas fa-plus"></i>
-            <span>Ajouter une figure</span>
+            <span>Ajouter une trick</span>
         </a>
     {% endif %}
     <div id="tricks" class="row">
-        {% for figure in figures %}
-            {{ figure_card.show(figure) }}
+        {% for trick in tricks %}
+            {{ figure_card.show(trick) }}
         {% endfor %}
     </div>
 {% endblock %}

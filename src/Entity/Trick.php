@@ -5,12 +5,18 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  */
 class Trick
 {
+    /**
+     * @var Image
+     */
+    private $thumbnail;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -49,25 +55,26 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Image", cascade={"persist", "remove"})
+     * @ORM\Column(type="string", length=255)
+     * @Gedmo\Slug(fields={"name"})
      */
-    private $thumbnail;
+    private $slug;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Image")
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="trick")
      */
     private $images;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Video")
+     * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick")
      */
     private $videos;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-        $this->videos = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -166,14 +173,14 @@ class Trick
         return $this;
     }
 
-    public function getThumbnail(): ?Image
+    public function getSlug(): ?string
     {
-        return $this->thumbnail;
+        return $this->slug;
     }
 
-    public function setThumbnail(?Image $thumbnail): self
+    public function setSlug(string $slug): self
     {
-        $this->thumbnail = $thumbnail;
+        $this->slug = $slug;
 
         return $this;
     }
@@ -190,6 +197,7 @@ class Trick
     {
         if (!$this->images->contains($image)) {
             $this->images[] = $image;
+            $image->setTrick($this);
         }
 
         return $this;
@@ -199,9 +207,26 @@ class Trick
     {
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getTrick() === $this) {
+                $image->setTrick(null);
+            }
         }
 
         return $this;
+    }
+
+    public function getThumbnail(): ?Image
+    {
+        if (is_null($this->thumbnail)) {
+            foreach ($this->images as $image) {
+                /** @var Image $image */
+                if ($image->getThumbnail()) {
+                    $this->thumbnail = $image;
+                }
+            }
+        }
+        return $this->thumbnail;
     }
 
     /**
@@ -216,6 +241,7 @@ class Trick
     {
         if (!$this->videos->contains($video)) {
             $this->videos[] = $video;
+            $video->setTrick($this);
         }
 
         return $this;
@@ -225,6 +251,10 @@ class Trick
     {
         if ($this->videos->contains($video)) {
             $this->videos->removeElement($video);
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
         }
 
         return $this;

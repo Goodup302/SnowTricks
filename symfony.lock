@@ -1,4 +1,10 @@
 {
+    "behat/transliterator": {
+        "version": "v1.2.0"
+    },
+    "composer/ca-bundle": {
+        "version": "1.1.4"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -17,6 +23,9 @@
     "doctrine/common": {
         "version": "v2.10.0"
     },
+    "doctrine/data-fixtures": {
+        "version": "v1.3.1"
+    },
     "doctrine/dbal": {
         "version": "v2.9.2"
     },
@@ -31,6 +40,15 @@
     },
     "doctrine/doctrine-cache-bundle": {
         "version": "1.3.5"
+    },
+    "doctrine/doctrine-fixtures-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "fc52d86631a6dfd9fdf3381d0b7e3df2069e51b3"
+        }
     },
     "doctrine/doctrine-migrations-bundle": {
         "version": "1.2",
@@ -86,6 +104,9 @@
     "fzaninotto/faker": {
         "version": "v1.8.0"
     },
+    "gedmo/doctrine-extensions": {
+        "version": "v2.4.36"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -129,6 +150,24 @@
             "branch": "master",
             "version": "5.2",
             "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        }
+    },
+    "sensiolabs/security-checker": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "05daf6b214e54aed4089f3480f944a67ac3a7889"
+        }
+    },
+    "stof/doctrine-extensions-bundle": {
+        "version": "1.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.2",
+            "ref": "6c1ceb662f8997085f739cd089bfbef67f245983"
         }
     },
     "swiftmailer/swiftmailer": {

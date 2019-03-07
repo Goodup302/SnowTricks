@@ -3,6 +3,8 @@ var breakpoint_md = 768;
 var breakpoint_lg = 992;
 var breakpoint_xl = 1200;
 
+var loader = $('#ajax_loader');
+
 $(document).ready(function() {
 
     //Init Page
@@ -62,19 +64,6 @@ $(document).ready(function() {
     });
 });
 
-//Open media picker
-var waitingMedia = false;
-function media(path) {
-    if (!waitingMedia) {
-        waitingMedia = true;
-        $.post(path, {})
-            .done(function( data ) {
-                $('body').prepend(data);
-                waitingMedia = false;
-            });
-    }
-}
-
 //SwalAlert2 confirm submit form
 $(".swa-confirm").on("click", function(e) {
     e.preventDefault();
@@ -89,9 +78,63 @@ $(".swa-confirm").on("click", function(e) {
         confirmButtonText: 'Supprimer',
         cancelButtonText: 'Annuler'
     }).then(function (result) {
-        console.log(result);
         if (result.value) {
             form.submit();
         }
     });
 });
+
+//Delete a trick
+function deleteTrick(trick, time) {
+    trick.css('transition', time+'ms');
+    trick.css('opacity', '0');
+    trick.css('top', '-150px');
+    setTimeout(function(){
+        trick.remove();
+    }, time);
+}
+$('form[type="DELETE"]').submit(function (e) {
+    e.preventDefault();
+    var form = $(this);
+    var redirect = (form.attr('redirect') === 'true');
+    showLoader();
+    $.ajax({
+        type: "POST",
+        url: form.attr('action'),
+        data: form.serialize(),
+        success: function(data, textStatus, request){
+            contentType = request.getResponseHeader('Content-Type');
+            if (contentType == "application/json") {
+                console.log(data);
+                console.log(redirect);
+                if (data.success === true) {
+                    if (data.url != null && redirect === true) {
+                        window.location.replace(data.url);
+                    } else {
+                        deleteTrick(form.parents('.tricks_card'), 400);
+                    }
+                }
+                if (data.message != null) {
+                    Swal.fire('', data.message, 'error');
+                }
+            } else {
+                alert('error');
+            }
+            hideLoader();
+        },
+        error: function (request, textStatus, errorThrown) {
+            hideLoader();
+            alert('error');
+        }
+    });
+});
+
+/* Loader */
+function showLoader() {
+    loader.css('display', 'flex');
+    setTimeout(function(){ loader.css('opacity', '1'); }, 10);
+}
+function hideLoader() {
+    loader.css('display', 'none');
+    loader.css('opacity', '0');
+}

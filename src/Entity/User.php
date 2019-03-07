@@ -50,7 +50,7 @@ class User implements UserInterface, \Serializable
     private $comments;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Image", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Image", inversedBy="users")
      */
     private $profileImage;
 
@@ -127,18 +127,6 @@ class User implements UserInterface, \Serializable
                 $comment->setUser(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getProfileImage(): ?Image
-    {
-        return $this->profileImage;
-    }
-
-    public function setProfileImage(?Image $profileImage): self
-    {
-        $this->profileImage = $profileImage;
 
         return $this;
     }
@@ -243,5 +231,17 @@ class User implements UserInterface, \Serializable
             $this->username,
             $this->password
             ) = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+    public function getProfileImage(): ?Image
+    {
+        return $this->profileImage;
+    }
+
+    public function setProfileImage(?Image $profileImage): self
+    {
+        $this->profileImage = $profileImage;
+
+        return $this;
     }
 }
