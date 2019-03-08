@@ -128,7 +128,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="trick.delete", methods="DELETE")
+     * @Route("/delete/{id}", name="trick.delete") //methods="DELETE"
      * @param Trick $trick
      * @return Response
      */
@@ -137,6 +137,12 @@ class TrickController extends AbstractController
         try {
             foreach ($trick->getComments() as $comment) {
                 $this->em->remove($comment);
+            }
+            foreach ($trick->getImages() as $image) {
+                $this->em->remove($image);
+            }
+            foreach ($trick->getVideos() as $video) {
+                $this->em->remove($video);
             }
             $this->em->remove($trick);
             $this->em->flush();
@@ -149,6 +155,7 @@ class TrickController extends AbstractController
                 'success' => false,
                 'url' => $this->generateUrl('home'),
                 'message' => self::UNKNOWN_ERROR,
+                'error' => $e->getMessage(),
             ));
         }
     }
