@@ -11,10 +11,11 @@ var mediaIsShow = false;
 $(document).ready(function() {
 
     //Init Page
-    //$('.sf-toolbar').remove();
     refreshHeader();
     refreshArrowUp();
     refreshEditMedia();
+
+    $('.toast').toast('show');
 
     //Link smooth scroll
     $("a[href*='#']:not([href='#'])").click(function() {
@@ -80,11 +81,11 @@ $(document).ready(function() {
     });
     seeMedia.click(function() {
         if (media.is(":hidden")) {
-            media.show(400);
+            media.slideDown(400);
             seeMedia.html('Cacher les médias');
             mediaIsShow = true;
         } else {
-            media.hide(400);
+            media.slideUp(400);
             seeMedia.html('Voir les médias');
             mediaIsShow = false;
         }

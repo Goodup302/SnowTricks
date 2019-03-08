@@ -363,6 +363,20 @@ img.img_responsive {
     height: 100%;
 }
 
+.fixed_popup {
+    position: fixed;
+    text-align: center;
+    z-index: 5;
+    font-size: 20px;
+    background-color: rgba(255,255,255,.95);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+.fixed_popup.fade {
+    transition: opacity 400ms !important;
+}
 /***********
 *  BUTTON  *
 ***********/
@@ -419,5 +433,5 @@ img.img_responsive {
     right: 0;
     left: 0;
     top: 0;
-    z-index: 1;
+    z-index: 2;
 }

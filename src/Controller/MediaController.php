@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Image;
 use App\Entity\Trick;
+use App\Entity\Video;
 use App\Form\ImageType;
+use App\Form\VideoType;
 use App\Repository\ImageRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,7 +51,6 @@ class MediaController extends AbstractController
         }
         return new JsonResponse($result);
     }
-
 
     /**
      * @Route("/image/add/{id}", name="image.add", methods="POST|GET")
@@ -103,5 +104,26 @@ class MediaController extends AbstractController
         } catch (\Exception $e) {
             return new JsonResponse(false);
         }
+    }
+
+    /**
+     * @Route("/addvideoto/{id}", name="video.add", methods="POST|GET")
+     */
+    public function addVideoToTrick(Request $request, Trick $trick): Response
+    {
+        $video = new Video();
+        $form = $this->createForm(VideoType::class, $video);
+        $form->handleRequest($request);
+        if ($form->isValid() && $form->isSubmitted()) {
+            $video->setTrick($trick);
+            $this->em->persist($trick);
+            $this->em->flush();
+            return new JsonResponse([
+                'id' => $video->getId(),
+                'videoId' => $video->getVideoId(),
+                'platform' => $video->getPlatform(),
+            ]);
+        }
+        return new JsonResponse(false);
     }
 }

@@ -22,6 +22,7 @@ var currentSelectValue = [];
 //////////////
 // FUNCTION //
 //////////////
+/*
 
 //Open media picker
 function imagePicker(id, multiple, required) {
@@ -54,7 +55,7 @@ function imagePicker(id, multiple, required) {
     }
 }
 
-/* Show Picker */
+/!* Show Picker *!/
 function showImagePicker() {
     waitingMedia = true;
     validationButton.prop( "disabled", false );
@@ -123,10 +124,11 @@ $(".close_media").click(function (){
     mediaItems.html('');
     hideImagePicker()
 });
+*/
 
 
 //Upload Image
-$('#'+inputId+':file').change(function(){
+$('input.upload_image').change(function(){
     showLoader();
     var input = $(this);
     var formData = new FormData(document.getElementsByName('media')[0]);

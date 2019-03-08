@@ -6,7 +6,12 @@
 {% block title %}Editer une trick{% endblock %}
 
 {% block body %}
-    {{ form_widget(imageForm.files, {'attr': {'class': ''}}) }}
+{#    {{ form_label(imageForm.files) }}
+    {{ form_widget(imageForm.files) }}#}
+
+    {{ form_row(imageForm.files) }}
+
+
     {{ form_errors(form) }}
     {{ form_start(form, {'attr': {'class': 'row'}}) }}
         <div id="single_thumbnail" class="w-100 pt-md-4 position-relative">
@@ -28,7 +33,7 @@
                 </div>
             {% endif %}
         </div>
-        <div class="col-12 d-flex justify-content-center">
+        <div class="col-12 d-flex justify-content-center mb-3">
             <span id="seemedia" class="btn btn-primary" style="display: none">Voir les médias</span>
         </div>
         <div id="media" class="row" style="display: none">
@@ -59,9 +64,10 @@
                     <div tabindex="0" class="add_media" data-toggle="popover" data-html="true" data-placement="top"
                          data-content='
                         <div class="position-relative">
-                            <label for="test" class="input_file btn btn-dark">Ajouter des images</label>
-                            <input id="test" type="file" multiple>
-                            </div>
+                            {{ form_label(imageForm.files) }}
+                            <input type="file" class="upload_image" accept="image/JPEG" multiple
+                                id="{{ imageForm.files.vars.id }}"
+                                name="{{ imageForm.files.vars.full_name }}">
                         </div>
                         <div class="p-2"></div>
                         <div class="btn btn-dark w-100" data-toggle="modal" href="#link_doctor_modal"
@@ -96,27 +102,23 @@
     <div id="video_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_video_label" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal_video_label">Ajout d'une entreprise</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
                 <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    {{ form_start(videoForm) }}
+                        {{ form_rest(videoForm) }}
+                        <div class="text-center">
+                            <button type="submit" class="btn-primary btn">Ajouter</button>
+                        </div>
+                    {{  form_end(videoForm) }}
                 </div>
             </div>
         </div>
     </div>
 
     <form
-            method="post"
-            action="{{ path('trick.delete', {'id': app.request.get('id')}) }}"
-            swa-title="Êtes vous sur ?"
-            swa-text="Après validation il est impossible de revenire en arrière"
+        method="post"
+        action="{{ path('trick.delete', {'id': app.request.get('id')}) }}"
+        swa-title="Êtes vous sur ?"
+        swa-text="Après validation il est impossible de revenire en arrière"
     >
         <button type="submit" class="btn btn-danger swa-confirm">Supprimer</button>
         <input type="hidden" name="_method" value="DELETE">
@@ -126,7 +128,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/image.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.0.1/tinymce.min.js"></script>
+    <script src="https://cloud.tinymce.com/5/tinymce.min.js"></script>
     <script>
         tinymce.init({
             selector: "#trick_description",
@@ -142,7 +144,7 @@
         $(document).ready(function() {
             $('.input_trick_title').removeClass('form-control');
             $('*[data-toggle="popover"]').popover({
-                trigger: 'focus'
+                //trigger: 'focus'
             })
         })
     </script>

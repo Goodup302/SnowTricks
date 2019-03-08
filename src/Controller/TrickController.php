@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Comment;
 use App\Entity\Image;
 use App\Entity\Tag;
 use App\Entity\Trick;
@@ -11,10 +10,10 @@ use App\Form\ImageType;
 use App\Form\TagType;
 use App\Form\TrickType;
 use App\Form\VideoType;
-use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
-use App\Service\GenerateData;
+use App\Service\Utils;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpParser\Node\Scalar\String_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,9 +50,8 @@ class TrickController extends AbstractController
      * @param TrickRepository $repository
      * @return Response
      */
-    public function home(TrickRepository $repository, GenerateData $data): Response
+    public function home(TrickRepository $repository): Response
     {
-        $data->add(0);
         return $this->render('index.html.twig', ['tricks' => $repository->findAll()]);
     }
 
@@ -75,9 +73,14 @@ class TrickController extends AbstractController
      */
     public function edit(Trick $trick, Request $request): Response
     {
-        //Upload Image form
+        //Upload Video form
         $video = new Video();
-        $videoForm = $this->createForm(VideoType::class, $video);
+        $videoOption = [
+            'attr' => [
+                'action' => $this->generateUrl('video.add', ['id' => $trick->getId()])
+            ]
+        ];
+        $videoForm = $this->createForm(VideoType::class, $video, $videoOption);
         //Upload Image form
         $image = new Image();
         $imageForm = $this->createForm(ImageType::class, $image);
@@ -85,12 +88,14 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            //date_default_timezone_set('Europe/Paris');
             /** @var Trick $trick */
             $trick = $form->getData();
-            $date = new \DateTime();
-            $date->format('Y-m-d H:i:s');
-            $trick->setLastEdit($date);
+            if (is_null($trick->getPublishDate())) {
+                $trick->setPublishDate(Utils::getCurrentDateTime());
+                $trick->setSlug(Utils::slugify($trick->getName()));
+            } else {
+                $trick->setLastEdit(Utils::getCurrentDateTime());
+            }
             $this->em->persist($trick);
             $this->em->flush();
             return $this->redirectToRoute('trick.single', ['slug' => $trick->getSlug()]);
@@ -98,6 +103,7 @@ class TrickController extends AbstractController
         return $this->render('trick/edit.html.twig', [
             'form' => $form->createView(),
             'imageForm' =>$imageForm->createView(),
+            'videoForm' =>$videoForm->createView(),
             'trick' => $trick
         ]);
     }
@@ -109,27 +115,18 @@ class TrickController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $trick = new Trick();
-        $form = $this->createForm(TrickType::class, $trick);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-
-
-            $trick = $form->getData();
-
-            //Publish Date
-            //date_default_timezone_set('Europe/Paris');
-            $date = new \DateTime();
-            $date->format('Y-m-d H:i:s');
-            $trick->setPublishDate($date);
-
+        $name = $request->request->get('name');
+        if ($name != null) {
+            $trick = new Trick();
+            $trick->setName($name);
             $this->em->persist($trick);
             $this->em->flush();
-            $this->addFlash('success', 'Figure ajoutée avec succès');
-
             return $this->redirectToRoute("trick.edit", ['id' => $trick->getId()]);
+        } else {
+            $this->addFlash('error', 'Le nom saisi est déjà utilisé !');
+            return $this->redirectToRoute("home");
         }
-        return $this->render('trick/edit.html.twig', ['form' => $form->createView()]);
+
     }
 
     /**
