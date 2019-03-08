@@ -6,7 +6,7 @@
 {% block title %}Editer une trick{% endblock %}
 
 {% block body %}
-    {{ form_widget(imageForm.files) }}
+    {{ form_widget(imageForm.files, {'attr': {'class': ''}}) }}
     {{ form_errors(form) }}
     {{ form_start(form, {'attr': {'class': 'row'}}) }}
         <div id="single_thumbnail" class="w-100 pt-md-4 position-relative">
@@ -28,31 +28,18 @@
                 </div>
             {% endif %}
         </div>
-
-        <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <span id="seemedia" class="btn btn-primary" style="display: none">Voir les médias</span>
+        </div>
+        <div id="media" class="row" style="display: none">
             {% for image in trick.images %}
                 <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
                     <div class="media position-relative">
                         <img class="img_responsive h-100" src="{{ asset(asset_media ~ image.name)}}" alt="">
                         <div class="edit_single">
-                        <span
-                                method="post"
+                            <div class="fas fa-trash-alt button_icon delete"
                                 action="{{ path('image.delete', {'id': image.id}) }}"
-                                type="DELETE"
-                                redirect="false"
-                        >
-                            <button class="fas fa-trash-alt button_icon delete"></button>
-                            <input type="hidden" name="_method" value="DELETE">
-                        </span>
-                            <span
-                                    method="post"
-                                    action="{{ path('image.delete', {'id': image.id}) }}"
-                                    type="DELETE"
-                                    redirect="false"
-                            >
-                            <button class="fas fa-trash-alt button_icon delete"></button>
-                            <input type="hidden" name="_method" value="DELETE">
-                        </span>
+                            ></div>
                         </div>
                     </div>
                 </div>
@@ -73,9 +60,7 @@
                          data-content='
                         <div class="position-relative">
                             <label for="test" class="input_file btn btn-dark">Ajouter des images</label>
-                            <input id="test" type="file" data-toggle="modal" target="#create_doctor_modal"
-                                form-open="{{ path('home', {'id': trick.id}) }}"
-                                data-target="#edit_doctor_modal" multiple>
+                            <input id="test" type="file" multiple>
                             </div>
                         </div>
                         <div class="p-2"></div>

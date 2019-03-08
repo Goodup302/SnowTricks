@@ -4,9 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Image;
+use App\Entity\Tag;
 use App\Entity\Trick;
+use App\Entity\Video;
 use App\Form\ImageType;
+use App\Form\TagType;
 use App\Form\TrickType;
+use App\Form\VideoType;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use App\Service\GenerateData;
@@ -71,8 +75,9 @@ class TrickController extends AbstractController
      */
     public function edit(Trick $trick, Request $request): Response
     {
-        //var_dump($trick->getThumbnail()->relation());
-
+        //Upload Image form
+        $video = new Video();
+        $videoForm = $this->createForm(VideoType::class, $video);
         //Upload Image form
         $image = new Image();
         $imageForm = $this->createForm(ImageType::class, $image);
@@ -165,13 +170,35 @@ class TrickController extends AbstractController
      * @param Trick $trick
      * @return Response
      */
-    public function addTag(Trick $trick): Response
+    public function addTag(Request $request): Response
     {
-        foreach ($trick->getComments() as $comment) {
-            $this->em->remove($comment);
+        $tag = new Tag();
+        $form = $this->createForm(TagType::class, $tag);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $trick = $form->getData();
+            $this->em->persist($trick);
+            $this->em->flush();
+
         }
-        $this->em->remove($trick);
-        $this->em->flush();
-        return $this->redirectToRoute('home');
+
+
+
+        try {
+
+            $this->em->persist($trick);
+            $this->em->flush();
+            return new JsonResponse(array(
+                'success' => true,
+                'url' => $this->generateUrl('home'),
+            ));
+        } catch (\Exception $e) {
+            return new JsonResponse(array(
+                'success' => false,
+                'url' => $this->generateUrl('home'),
+                'message' => self::UNKNOWN_ERROR,
+                'error' => $e->getMessage(),
+            ));
+        }
     }
 }

@@ -34,17 +34,24 @@
                 </div>
             {% endif %}
         </div>
-        {% for image in trick.images %}
-            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
-            </div>
-        {% endfor %}
 
-        {% for video in trick.videos %}
-            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                {{ videoMacro.show(video) }}
-            </div>
-        {% endfor %}
+        <div class="col-12 d-flex justify-content-center">
+            <span id="seemedia" class="btn btn-primary" style="display: none">Voir les médias</span>
+        </div>
+        <div id="media" class="row" style="display: none">
+            {% for image in trick.images %}
+                <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
+                    <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
+                </div>
+            {% endfor %}
+
+            {% for video in trick.videos %}
+                <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
+                    {{ videoMacro.show(video) }}
+                </div>
+            {% endfor %}
+        </div>
+
 
 
 

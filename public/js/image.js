@@ -173,7 +173,7 @@ $('#'+inputId+':file').change(function(){
 });
 
 //Delete Image
-$(".media_item .delete").click(function(){
+$(".media .delete").click(function(){
     var item = $(this).parent();
     var id = $(this).attr('itemid');
     var url = $(this).attr('action');

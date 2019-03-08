@@ -4,6 +4,9 @@ var breakpoint_lg = 992;
 var breakpoint_xl = 1200;
 
 var loader = $('#ajax_loader');
+var seeMedia = $('#seemedia');
+var media = $('#media');
+var mediaIsShow = false;
 
 $(document).ready(function() {
 
@@ -11,6 +14,7 @@ $(document).ready(function() {
     //$('.sf-toolbar').remove();
     refreshHeader();
     refreshArrowUp();
+    refreshEditMedia();
 
     //Link smooth scroll
     $("a[href*='#']:not([href='#'])").click(function() {
@@ -52,15 +56,38 @@ $(document).ready(function() {
                 $("#arrow_up").hide();
             }
         }
-
     }
+
+    //See media button on edit trick page
+    function refreshEditMedia() {
+        if ($(window).width() >= breakpoint_md) {
+            seeMedia.hide();
+            media.show();
+        } else {
+            if (!mediaIsShow) {media.hide();}
+            seeMedia.show();
+        }
+    }
+
     //Event
-    $( window ).resize(function() {
+    $(window).resize(function() {
         refreshHeader();
         refreshArrowUp();
+        refreshEditMedia();
     });
-    $( window ).scroll(function() {
+    $( window).scroll(function() {
         refreshArrowUp();
+    });
+    seeMedia.click(function() {
+        if (media.is(":hidden")) {
+            media.show(400);
+            seeMedia.html('Cacher les médias');
+            mediaIsShow = true;
+        } else {
+            media.hide(400);
+            seeMedia.html('Voir les médias');
+            mediaIsShow = false;
+        }
     });
 });
 

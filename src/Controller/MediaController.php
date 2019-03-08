@@ -39,7 +39,7 @@ class MediaController extends AbstractController
      * @Route("/image", name="image", methods="POST|GET")
      * @return Response
      */
-    public function list(Request $request): Response
+    public function listImage(): Response
     {
         $images = $this->repository->findAll();
         foreach ($images as $id => $image) {
@@ -79,6 +79,7 @@ class MediaController extends AbstractController
                     'name' => $image->getName(),
                     'id' => $image->getId(),
                     'url' => $this->fileUploader->getUploadFolder().$image->getName(),
+                    'thumbnail' => $image->getThumbnail(),
                 ];
             }
             return new JsonResponse($jsonImage);
