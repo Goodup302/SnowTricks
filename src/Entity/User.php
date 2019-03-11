@@ -12,6 +12,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, \Serializable
 {
+    const ROLE_AMDIN = 'ROLE_ADMIN';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -151,7 +153,7 @@ class User implements UserInterface, \Serializable
      */
     public function getRoles(): array
     {
-        return ['ROLE_ADMIN'];
+        return [self::ROLE_AMDIN];
     }
 
     /**

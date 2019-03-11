@@ -29,12 +29,12 @@ class Trick
     private $name;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $publishDate;
 
@@ -54,7 +54,7 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $slug;
 
@@ -256,5 +256,13 @@ class Trick
         }
 
         return $this;
+    }
+
+    public function isCreated(): bool
+    {
+        if (is_null($this->publishDate)) {
+            return false;
+        }
+        return true;
     }
 }

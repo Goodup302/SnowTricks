@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Trick;
+use App\Service\Utils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,32 +20,32 @@ class TrickRepository extends ServiceEntityRepository
         parent::__construct($registry, Trick::class);
     }
 
-    // /**
-    //  * @return Trick[] Returns an array of Trick objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Trick[]|null
+     */
+    public function getAll()
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('t.publishDate IS NOT NULL')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Trick
+    /**
+     * @return boolean
+     */
+    public function exist($name)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
+        return boolval($this->createQueryBuilder('t')
+            ->select('COUNT(t.id)')
+            ->where('t.slug = :slug')
+            ->orWhere('t.name = :name')
+            ->setParameter('slug', Utils::slugify($name))
+            ->setParameter('name', $name)
+            ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getSingleScalarResult()
+        );
     }
-    */
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Image;
 use App\Entity\Tag;
 use App\Entity\Trick;
+use App\Entity\User;
 use App\Entity\Video;
 use App\Form\ImageType;
 use App\Form\TagType;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class TrickController extends AbstractController
 {
@@ -27,7 +29,7 @@ class TrickController extends AbstractController
     /**
      * @var TrickRepository
      */
-    private $repository;
+    private $trickRepository;
 
     /**
      * @var EntityManagerInterface
@@ -41,18 +43,21 @@ class TrickController extends AbstractController
      */
     public function __construct(TrickRepository $repository, EntityManagerInterface $em)
     {
-        $this->repository = $repository;
+        $this->trickRepository = $repository;
         $this->em = $em;
     }
 
     /**
      * @Route("/", name="home")
-     * @param TrickRepository $repository
+     * @param AuthorizationCheckerInterface $authChecker
      * @return Response
      */
-    public function home(TrickRepository $repository): Response
+    public function home(AuthorizationCheckerInterface $authChecker): Response
     {
-        return $this->render('index.html.twig', ['tricks' => $repository->findAll()]);
+        if ($authChecker->isGranted(User::ROLE_AMDIN)) {
+            return $this->render('index.html.twig', ['tricks' => $this->trickRepository->findAll()]);
+        }
+        return $this->render('index.html.twig', ['tricks' => $this->trickRepository->getAll()]);
     }
 
     /**
@@ -62,7 +67,10 @@ class TrickController extends AbstractController
      */
     public function single(Trick $trick): Response
     {
-        return $this->render('trick/single.html.twig', ['trick' => $trick]);
+        if ($trick->isCreated()) {
+            return $this->render('trick/single.html.twig', ['trick' => $trick]);
+        }
+        return $this->redirectToRoute("home");
     }
 
     /**
@@ -90,11 +98,10 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Trick $trick */
             $trick = $form->getData();
-            if (is_null($trick->getPublishDate())) {
-                $trick->setPublishDate(Utils::getCurrentDateTime());
-                $trick->setSlug(Utils::slugify($trick->getName()));
-            } else {
+            if ($trick->isCreated()) {
                 $trick->setLastEdit(Utils::getCurrentDateTime());
+            } else {
+                $trick->setPublishDate(Utils::getCurrentDateTime());
             }
             $this->em->persist($trick);
             $this->em->flush();
@@ -117,16 +124,19 @@ class TrickController extends AbstractController
     {
         $name = $request->request->get('name');
         if ($name != null) {
-            $trick = new Trick();
-            $trick->setName($name);
-            $this->em->persist($trick);
-            $this->em->flush();
-            return $this->redirectToRoute("trick.edit", ['id' => $trick->getId()]);
-        } else {
-            $this->addFlash('error', 'Le nom saisi est déjà utilisé !');
-            return $this->redirectToRoute("home");
+            if (!$this->trickRepository->exist($name)) {
+                $trick = new Trick();
+                $trick->setName($name);
+                $trick->setSlug(Utils::slugify($trick->getName()));
+                $this->em->persist($trick);
+                $this->em->flush();
+                return $this->redirectToRoute("trick.edit", ['id' => $trick->getId()]);
+            } else {
+                $this->addFlash('error', 'Le nom saisi est déjà utilisé !');
+                return $this->redirectToRoute("home");
+            }
         }
-
+        return $this->redirectToRoute("home");
     }
 
     /**
@@ -179,10 +189,7 @@ class TrickController extends AbstractController
 
         }
 
-
-
         try {
-
             $this->em->persist($trick);
             $this->em->flush();
             return new JsonResponse(array(

@@ -158,15 +158,16 @@ a.current {
 
 /* Add new button */
 .button_new {
-    color: green;
+    color: limegreen;
     font-size: 20px;
     text-align: center;
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
-
 
 /* Arrow up */
 #arrow_up {

@@ -14,7 +14,6 @@ $(document).ready(function() {
     refreshHeader();
     refreshArrowUp();
     refreshEditMedia();
-
     $('.toast').toast('show');
 
     //Link smooth scroll
