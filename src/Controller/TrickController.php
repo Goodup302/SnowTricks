@@ -74,7 +74,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/edit/{id}", name="trick.edit", methods="GET|POST")
+     * @Route("/edit/{slug}", name="trick.edit", methods="GET|POST")
      * @param Trick $trick
      * @param Request $request
      * @return Response
@@ -103,6 +103,7 @@ class TrickController extends AbstractController
             } else {
                 $trick->setPublishDate(Utils::getCurrentDateTime());
             }
+            $trick->setSlug(Utils::slugify($trick->getName()));
             $this->em->persist($trick);
             $this->em->flush();
             return $this->redirectToRoute('trick.single', ['slug' => $trick->getSlug()]);
@@ -124,13 +125,13 @@ class TrickController extends AbstractController
     {
         $name = $request->request->get('name');
         if ($name != null) {
-            if (!$this->trickRepository->exist($name)) {
+            if (true) {
                 $trick = new Trick();
                 $trick->setName($name);
                 $trick->setSlug(Utils::slugify($trick->getName()));
                 $this->em->persist($trick);
                 $this->em->flush();
-                return $this->redirectToRoute("trick.edit", ['id' => $trick->getId()]);
+                return $this->redirectToRoute("trick.edit", ['slug' => $trick->getSlug()]);
             } else {
                 $this->addFlash('error', 'Le nom saisi est déjà utilisé !');
                 return $this->redirectToRoute("home");

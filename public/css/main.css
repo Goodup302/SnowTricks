@@ -419,6 +419,7 @@ img.img_responsive {
     cursor: pointer;
     opacity: 0.5;
     font-size: 35px;
+    position: relative;
 }
 .add_media:hover,
 .add_media:focus{

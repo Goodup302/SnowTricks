@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% import "macro/trick.html.twig" as figure_card %}
+{% import "macro.html.twig" as macro %}
 
 {% block title %}Accueil{% endblock %}
 
@@ -50,7 +50,7 @@
     {#Liste Des trick#}
     <div id="tricks" class="row">
         {% for trick in tricks %}
-            {{ figure_card.show(trick) }}
+            {{ macro.trick(trick) }}
         {% endfor %}
     </div>
 

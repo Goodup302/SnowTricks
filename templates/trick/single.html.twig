@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% import "macro/video.html.twig" as videoMacro %}
+{% import "macro.html.twig" as macro %}
 
 {% block title %}Figure{% endblock %}
 
@@ -19,7 +19,7 @@
             </div>
             {% if app.user %}
                 <div class="edit_single pt-md-4">
-                    <a class="edit" href="{{ path('trick.edit', {'id': trick.id}) }}"><i class="fas fa-edit button_icon"></i></a>
+                    <a class="edit" href="{{ path('trick.edit', {'slug': trick.slug}) }}"><i class="fas fa-edit button_icon"></i></a>
                     <form
                             method="post"
                             action="{{ path('trick.delete', {'id': trick.id}) }}"
@@ -47,7 +47,7 @@
 
             {% for video in trick.videos %}
                 <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                    {{ videoMacro.show(video) }}
+                    {{ macro.video(video) }}
                 </div>
             {% endfor %}
         </div>

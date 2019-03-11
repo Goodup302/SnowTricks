@@ -17,7 +17,7 @@ class ImageType extends AbstractType
                 //'data_class' => null,
                 'label' => 'Ajouter des images',
                 'attr' => ['accept' => 'image/JPEG'],
-                'label_attr' => ['class' => 'input_file btn btn-dark'],
+                'label_attr' => ['class' => 'btn btn-dark'],
                 'multiple' => true
             ))
         ;

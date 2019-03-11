@@ -112,12 +112,12 @@ $(".swa-confirm").on("click", function(e) {
 });
 
 //Delete a trick
-function deleteTrick(trick, time) {
-    trick.css('transition', time+'ms');
-    trick.css('opacity', '0');
-    trick.css('top', '-150px');
+function deleteItem(item, time) {
+    item.css('transition', time+'ms');
+    item.css('opacity', '0');
+    item.css('top', '-150px');
     setTimeout(function(){
-        trick.remove();
+        item.remove();
     }, time);
 }
 $('form[type="DELETE"]').submit(function (e) {
@@ -138,7 +138,7 @@ $('form[type="DELETE"]').submit(function (e) {
                     if (data.url != null && redirect === true) {
                         window.location.replace(data.url);
                     } else {
-                        deleteTrick(form.parents('.tricks_card'), 400);
+                        deleteItem(form.parents('.tricks_card'), 400);
                     }
                 }
                 if (data.message != null) {

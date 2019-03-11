@@ -31,21 +31,4 @@ class TrickRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-
-    /**
-     * @return boolean
-     */
-    public function exist($name)
-    {
-        return boolval($this->createQueryBuilder('t')
-            ->select('COUNT(t.id)')
-            ->where('t.slug = :slug')
-            ->orWhere('t.name = :name')
-            ->setParameter('slug', Utils::slugify($name))
-            ->setParameter('name', $name)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getSingleScalarResult()
-        );
-    }
 }

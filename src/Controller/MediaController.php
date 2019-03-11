@@ -52,13 +52,15 @@ class MediaController extends AbstractController
         return new JsonResponse($result);
     }
 
+
     /**
      * @Route("/image/add/{id}", name="image.add", methods="POST|GET")
      * @param Request $request
      * @param FileUploader $fileUploader
      * @return Response
+     * @throws \Exception
      */
-    public function add(Request $request, FileUploader $fileUploader, Trick $trick): Response
+    public function addImage(Request $request, FileUploader $fileUploader, Trick $trick): Response
     {
         $image = new Image();
         $form = $this->createForm(ImageType::class, $image);
@@ -67,25 +69,15 @@ class MediaController extends AbstractController
             $files = $image->getFiles();
             /** @var Image[] $images */
             $images = array();
-            $jsonImage = array();
             foreach ($files as $i => $file){
                 $images[$i] = (new Image())->setName($fileUploader->upload($file));
                 $this->em->persist($images[$i]);
                 $trick->addImage($images[$i]);
             }
             $this->em->flush();
-            //
-            foreach($images as $image) {
-                $jsonImage[] = [
-                    'name' => $image->getName(),
-                    'id' => $image->getId(),
-                    'url' => $this->fileUploader->getUploadFolder().$image->getName(),
-                    'thumbnail' => $image->getThumbnail(),
-                ];
-            }
-            return new JsonResponse($jsonImage);
+            return $this->render('ajax/image.html.twig', ['images' => $images]);
         }
-        return new JsonResponse(false);
+        throw new \Exception('File data is not valid');
     }
 
     /**
@@ -94,7 +86,7 @@ class MediaController extends AbstractController
      * @param FileUploader $fileUploader
      * @return Response
      */
-    public function delete(Image $image, FileUploader $fileUploader): Response
+    public function deleteImage(Image $image, FileUploader $fileUploader): Response
     {
         try {
             $fileUploader->delete($image->getName());
@@ -106,6 +98,8 @@ class MediaController extends AbstractController
         }
     }
 
+
+
     /**
      * @Route("/addvideoto/{id}", name="video.add", methods="POST|GET")
      */
@@ -116,14 +110,24 @@ class MediaController extends AbstractController
         $form->handleRequest($request);
         if ($form->isValid() && $form->isSubmitted()) {
             $video->setTrick($trick);
-            $this->em->persist($trick);
+            $this->em->persist($video);
             $this->em->flush();
-            return new JsonResponse([
-                'id' => $video->getId(),
-                'videoId' => $video->getVideoId(),
-                'platform' => $video->getPlatform(),
-            ]);
+            return $this->render('ajax/video.html.twig', ['video' => $video]);
         }
         return new JsonResponse(false);
+    }
+
+    /**
+     * @Route("/video/delete/{id}", name="video.delete", methods="POST|GET|DELETE")
+     */
+    public function deleteVideo(Video $video): Response
+    {
+        try {
+            $this->em->remove($video);
+            $this->em->flush();
+            return new JsonResponse(true);
+        } catch (\Exception $e) {
+            return new JsonResponse(false);
+        }
     }
 }
