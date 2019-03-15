@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VideoRepository")
@@ -24,6 +25,7 @@ class Video
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(min=0, max=1)
      */
     private $platform;
 

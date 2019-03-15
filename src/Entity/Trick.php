@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @UniqueEntity("name")
+ * @UniqueEntity("slug")
  */
 class Trick
 {
@@ -26,7 +27,7 @@ class Trick
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", unique=true, length=255)
      */
     private $name;
 
@@ -56,7 +57,7 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", unique=true, length=255, nullable=true)
      */
     private $slug;
 

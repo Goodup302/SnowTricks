@@ -26,9 +26,6 @@ class CommentType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Comment::class,
-/*            'attr' => [
-                'class' => 'col-10',
-            ]*/
         ]);
     }
 }
