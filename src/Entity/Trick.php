@@ -219,15 +219,15 @@ class Trick
 
     public function getThumbnail(): ?Image
     {
-        if (is_null($this->thumbnail)) {
-            foreach ($this->images as $image) {
-                /** @var Image $image */
-                if ($image->getThumbnail()) {
-                    $this->thumbnail = $image;
-                }
+        if (isset($this->thumbnail)) return $this->thumbnail;
+        foreach ($this->images as $image) {
+            /** @var Image $image */
+            if ($image->getThumbnail()) {
+                $this->thumbnail = $image;
+                return $this->thumbnail;
             }
         }
-        return $this->thumbnail;
+        return null;
     }
 
     /**

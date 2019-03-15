@@ -26,6 +26,10 @@ class CommentType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Comment::class,
+            'attr' => [
+                'action' => '#comment',
+                'id' => 'comment',
+            ]
         ]);
     }
 }

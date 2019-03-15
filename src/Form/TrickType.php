@@ -27,9 +27,7 @@ class TrickType extends AbstractType
                 'class' => Image::class,
                 'multiple' => false,
                 'required' => false,
-                'attr' => [
-                    'style' => 'display: none;'
-                ]
+                'attr' => ['style' => 'display: none;']
             ])
             ->add('name')
             ->add('images', EntityType::class, [
@@ -44,7 +42,7 @@ class TrickType extends AbstractType
                 'class' => Tag::class,
                 'attr' => [
                     'class' => 'custom-select',
-                    'data-size' => '4',
+                    'data-size' => '4'
                 ],
             ])
             /*->add('Modifier', SubmitType::class)*/

@@ -38,22 +38,6 @@ class MediaController extends AbstractController
     }
 
     /**
-     * @Route("/image", name="image", methods="POST|GET")
-     * @return Response
-     */
-    public function listImage(): Response
-    {
-        $images = $this->repository->findAll();
-        foreach ($images as $id => $image) {
-            $result[$id]['id'] = $image->getId();
-            $result[$id]['name'] = $image->getName();
-            $result[$id]['url'] = $this->fileUploader->getUploadFolder().$image->getName();
-        }
-        return new JsonResponse($result);
-    }
-
-
-    /**
      * @Route("/image/add/{id}", name="image.add", methods="POST|GET")
      * @param Request $request
      * @param FileUploader $fileUploader
@@ -97,8 +81,6 @@ class MediaController extends AbstractController
             return new JsonResponse(false);
         }
     }
-
-
 
     /**
      * @Route("/addvideoto/{id}", name="video.add", methods="POST|GET")

@@ -71,31 +71,25 @@ class TrickController extends AbstractController
      */
     public function single(Trick $trick, Request $request, Date $date): Response
     {
-        $user = $this->getUser();
-        dump($user);
-        if ($trick->isCreated() || $this->isGranted(User::ROLE_AMDIN)) {
-            //FORM
-            $comment = new Comment();
-            $form = $this->createForm(CommentType::class, $comment);
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                if ($user != null) {
-                    $comment
-                        ->setTrick($trick)
-                        ->setUser($user)
-                        ->setPublishDate($date->currentDateTime());
-                    $this->em->persist($comment);
-                    $this->em->flush();
-                } else {
-                    $this->addFlash('error', self::NOT_CONNECTED);
-                }
+        if ($trick->isCreated() == false) return $this->redirectToRoute("home");
+        //FORM
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            if ($user != null) {
+                $comment->setTrick($trick);
+                $comment->setUser($user);
+                $comment->setPublishDate($date->currentDateTime());
+                $this->em->persist($comment);
+                $this->em->flush();
             }
-            return $this->render('trick/single.html.twig', [
-                'trick' => $trick,
-                'commentForm' => $form->createView(),
-            ]);
         }
-        return $this->redirectToRoute("home");
+        return $this->render('trick/single.html.twig', [
+            'trick' => $trick,
+            'commentForm' => $form->createView(),
+        ]);
     }
 
     /**
@@ -108,11 +102,9 @@ class TrickController extends AbstractController
     {
         //Upload Video form
         $video = new Video();
-        $videoOption = [
-            'attr' => [
-                'action' => $this->generateUrl('video.add', ['id' => $trick->getId()])
-            ]
-        ];
+        $videoOption = ['attr' => [
+            'action' => $this->generateUrl('video.add', ['id' => $trick->getId()])
+        ]];
         $videoForm = $this->createForm(VideoType::class, $video, $videoOption);
         //Upload Image form
         $image = new Image();
@@ -122,7 +114,6 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Trick $trick */
-            $trick = $form->getData();
             if ($trick->isCreated()) {
                 $trick->setLastEdit($date->currentDateTime());
             } else {
