@@ -93,7 +93,6 @@ function addMedia(type, html) {
     }
 }
 
-
 //Popup on ajax error
 function ajaxError() {
     hideLoader();

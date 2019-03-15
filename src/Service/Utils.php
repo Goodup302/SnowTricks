@@ -30,12 +30,4 @@ class Utils
 
         return $text;
     }
-
-    public static function getCurrentDateTime()
-    {
-        date_default_timezone_set('Europe/Paris');
-        $date = new \DateTime();
-        $date->format('Y-m-d H:i:s');
-        return $date;
-    }
 }

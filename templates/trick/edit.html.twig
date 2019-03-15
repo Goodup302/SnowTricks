@@ -13,7 +13,7 @@
                 <img class="img_responsive edit_thumbnail" src="{{ asset("image/default_thumbnail.jpg") }}">
             {% endif %}
             <div class="absolute_center">
-                <div class="position-relative">
+                <div class="position-relative w-100">
                     {{ form_widget(form.name, {'attr': {'class': 'input_trick_title'} }) }}
                 </div>
             </div>
@@ -111,6 +111,7 @@
     <script src="{{ asset('js/media.js') }}"></script>
     <script src="https://cloud.tinymce.com/5/tinymce.min.js"></script>
     <script>
+        /*tinymce*/
         tinymce.init({
             selector: "#trick_description",
             setup: function (editor) {
@@ -122,12 +123,21 @@
                 });
             }
         });
+        var tinyCreditInterval = setInterval(removeTinyCredit, 100);
+        function removeTinyCredit() {
+            var credit = $('.tox.tox-silver-sink.tox-tinymce-aux');
+            if (credit.length > 0) {
+                credit.remove();
+                clearInterval(tinyCreditInterval);
+            }
+        }
+
         $(document).ready(function() {
             $('.input_trick_title').removeClass('form-control');
             $('*[data-toggle="popover"]').popover({
                 trigger: 'focus',
                 container: 'body'
-            })
+            });
         })
     </script>
 {% endblock %}

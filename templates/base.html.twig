@@ -24,6 +24,21 @@
             });*/
         </script>
 
+        {#POPUP MESSAGE#}
+        {% for message in app.flashes('error') %}
+            <div class="fixed_popup toast" data-delay="5000" data-animation="true" data-autohide="true" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="mr-auto">Erreur</strong>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    <span style="color: red">{{ message }}</span>
+                </div>
+            </div>
+        {% endfor %}
+
         {#LOADER AJAX#}
         <div id="ajax_loader">
             <i class="spinner-border text-primary" role="status"></i>
@@ -60,6 +75,21 @@
         </div>
 
         <div id="mobile_bottom"></div>
+
+        <footer class="mt-4">
+            <div class="row h-100">
+                <div class="align-items-center col-lg-6 col-12 d-flex justify-content-center">
+                    <a href="https://openclassrooms.com/fr/projects/42/assignment">
+                        OpenClassrooms - Développez de A à Z le site communautaire SnowTricks
+                    </a>
+                </div>
+                <div class="align-items-center col-lg-6 col-12 d-flex justify-content-center">
+                    <a href="http://goodup302.fr/">
+                        © Julien FERNANDES. Tous les droits sont réservés.
+                    </a>
+                </div>
+            </div>
+        </footer>
 
         {% block javascripts %}
             <script src="{{ asset('library/jQuery-3.3.1/jquery-3.3.1.min.js') }}"></script>

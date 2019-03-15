@@ -71,3 +71,18 @@
         </div>
     </div>
 {% endmacro %}
+
+{% macro comment(comment) %}
+    <div class="comment d-flex py-3">
+        {% if comment.user.profileImage.name is defined %}
+            <img src="{{ asset(asset_media ~ comment.user.profileImage.name)}}" class="mr-3 comment_avatar" alt="Avatar de {{ comment.user.username }}">
+        {% else %}
+            <img src="{{ asset('image/default_user.jpg') }}" class="mr-3 comment_avatar" alt="Avatar par default">
+        {% endif %}
+        <div class="media-body">
+            <h5 class="mt-0" style="display: inline-flex;">{{ comment.user.username }}</h5>
+            <span class="pl-3">{{ comment.publishDate|date("Y-m-d H:i") }}</span>
+            <p>{{ comment.content }}</p>
+        </div>
+    </div>
+{% endmacro %}

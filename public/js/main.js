@@ -35,11 +35,13 @@ $(document).ready(function() {
         if ($(window).width() >= breakpoint_md) {
             $("#nav_mobile").hide();
             $("#nav_desktop").show();
+            $("footer").show();
             $('#wallpaper img').css('height', 'calc(100vh - '+$('#nav_desktop').height()+'px)');
             $('#mobile_bottom').css('height', '0');
         } else {
             $("#nav_desktop").hide();
             $("#nav_mobile").show();
+            $("footer").hide();
             $('#mobile_bottom').css('height', $("#nav_mobile").height());
             $('#wallpaper img').css('height', 'calc(100vh - '+$('#nav_mobile').height()+'px)');
         }

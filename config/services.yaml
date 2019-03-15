@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'fr'
+    default_timezone: 'Europe/Paris'
     media_directory: '%kernel.project_dir%/public/uploads'
     asset_media_directory: 'uploads/'
 
@@ -32,3 +33,6 @@ services:
         arguments:
             $targetDirectory: '%media_directory%'
             $uploadFolder: '%asset_media_directory%'
+    App\Service\Date:
+        arguments:
+            $timezone: '%default_timezone%'

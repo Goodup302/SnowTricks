@@ -437,3 +437,33 @@ img.img_responsive {
     top: 0;
     z-index: 2;
 }
+
+/************
+*  COMMENT  *
+************/
+
+.comment_avatar {
+    height: 65px;
+    width: 65px;
+    object-fit: cover;
+    border-radius: 100%;
+}
+
+
+/***********
+*  FOOTER  *
+***********/
+footer {
+    background: #585b62;
+    box-shadow: 0 -2px 3px black;
+    padding-left: 30px;
+    padding-right: 30px;
+    display: none;
+}
+footer a{
+    font-size: 16px;
+    color: white !important;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}

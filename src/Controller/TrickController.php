@@ -2,16 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Image;
 use App\Entity\Tag;
 use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Video;
+use App\Form\CommentType;
 use App\Form\ImageType;
 use App\Form\TagType;
 use App\Form\TrickType;
 use App\Form\VideoType;
 use App\Repository\TrickRepository;
+use App\Service\Date;
 use App\Service\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Node\Scalar\String_;
@@ -25,6 +28,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class TrickController extends AbstractController
 {
     const UNKNOWN_ERROR = 'Une erreur inconnue est survenue';
+    const NOT_CONNECTED = "Vous devez ètre connecté pour poster des commentaires";
 
     /**
      * @var TrickRepository
@@ -61,14 +65,35 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/{slug}", name="trick.single", methods="GET")
+     * @Route("/trick/{slug}", name="trick.single", methods="GET|POST")
      * @param Trick $trick
      * @return Response
      */
-    public function single(Trick $trick): Response
+    public function single(Trick $trick, Request $request, Date $date): Response
     {
-        if ($trick->isCreated()) {
-            return $this->render('trick/single.html.twig', ['trick' => $trick]);
+        $user = $this->getUser();
+        dump($user);
+        if ($trick->isCreated() || $this->isGranted(User::ROLE_AMDIN)) {
+            //FORM
+            $comment = new Comment();
+            $form = $this->createForm(CommentType::class, $comment);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                if ($user != null) {
+                    $comment
+                        ->setTrick($trick)
+                        ->setUser($user)
+                        ->setPublishDate($date->currentDateTime());
+                    $this->em->persist($comment);
+                    $this->em->flush();
+                } else {
+                    $this->addFlash('error', self::NOT_CONNECTED);
+                }
+            }
+            return $this->render('trick/single.html.twig', [
+                'trick' => $trick,
+                'commentForm' => $form->createView(),
+            ]);
         }
         return $this->redirectToRoute("home");
     }
@@ -79,7 +104,7 @@ class TrickController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function edit(Trick $trick, Request $request): Response
+    public function edit(Trick $trick, Request $request, Date $date): Response
     {
         //Upload Video form
         $video = new Video();
@@ -99,9 +124,9 @@ class TrickController extends AbstractController
             /** @var Trick $trick */
             $trick = $form->getData();
             if ($trick->isCreated()) {
-                $trick->setLastEdit(Utils::getCurrentDateTime());
+                $trick->setLastEdit($date->currentDateTime());
             } else {
-                $trick->setPublishDate(Utils::getCurrentDateTime());
+                $trick->setPublishDate($date->currentDateTime());
             }
             $trick->setSlug(Utils::slugify($trick->getName()));
             $this->em->persist($trick);
@@ -173,9 +198,9 @@ class TrickController extends AbstractController
         }
     }
 
+
     /**
-     * @Route("/add_tag", name="add.tag", methods="POST")
-     * @param Trick $trick
+     * @param Request $request
      * @return Response
      */
     public function addTag(Request $request): Response
@@ -189,7 +214,6 @@ class TrickController extends AbstractController
             $this->em->flush();
 
         }
-
         try {
             $this->em->persist($trick);
             $this->em->flush();

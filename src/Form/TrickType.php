@@ -32,24 +32,20 @@ class TrickType extends AbstractType
                 ]
             ])
             ->add('name')
-/*            ->add('videos', CollectionType::class, [
-                'entry_type' => ImageType::class,
-                'entry_options' => ['label' => false],
-            ])*/
             ->add('images', EntityType::class, [
                 'class'        => Image::class,
                 'choice_label' => 'name',
                 'multiple'     => true,
                 'required' => false,
             ])
-            ->add('tag', EntityType::class, [
-                'choice_label' => 'name',
-                'class' => Tag::class,
-            ])
             ->add('description')
             ->add('tag', EntityType::class, [
                 'choice_label' => 'name',
                 'class' => Tag::class,
+                'attr' => [
+                    'class' => 'custom-select',
+                    'data-size' => '4',
+                ],
             ])
             /*->add('Modifier', SubmitType::class)*/
         ;
