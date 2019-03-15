@@ -64,9 +64,12 @@
         <div class="media position-relative">
             <img class="img_responsive h-100" src="{{ asset(asset_media ~ image.name)}}">
             <div class="edit_single">
+                <div class="fas fa-image button_icon thumbnail_button"
+                     data-id="{{ image.id }}" data-name="{{ image.name }}">
+                </div>
                 <div class="fas fa-trash-alt button_icon delete"
-                     action="{{ path('image.delete', {'id': image.id}) }}"
-                ></div>
+                     action="{{ path('image.delete', {'id': image.id}) }}">
+                </div>
             </div>
         </div>
     </div>

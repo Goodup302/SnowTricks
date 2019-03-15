@@ -217,6 +217,15 @@ class Trick
         return $this;
     }
 
+    public function setThumbnail(Image $thumbnail): self
+    {
+        /* @var Image $image */
+        foreach ($this->getImages() as $image) $image->setThumbnail(false);
+        $thumbnail->setThumbnail(true);
+
+        return $this;
+    }
+
     public function getThumbnail(): ?Image
     {
         if (isset($this->thumbnail)) return $this->thumbnail;

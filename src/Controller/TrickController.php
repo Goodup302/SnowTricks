@@ -108,14 +108,17 @@ class TrickController extends AbstractController
         //Upload Image form
         $image = new Image();
         $imageForm = $this->createForm(ImageType::class, $image);
+
         //Trick form
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var Trick $trick */
             if ($trick->isCreated()) $trick->setLastEdit($date->currentDateTime());
             if (!$trick->isCreated()) $trick->setPublishDate($date->currentDateTime());
             $trick->setSlug(Utils::slugify($trick->getName()));
+            dump($form->get('thumbnail')->getData());
+            $trick->setThumbnail($form->get('thumbnail')->getData());
+            foreach ($trick->getImages() as $img) $this->em->persist($img);
             $this->em->persist($trick);
             $this->em->flush();
             return $this->redirectToRoute('trick.single', ['slug' => $trick->getSlug()]);
@@ -153,7 +156,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="trick.delete") //methods="DELETE"
+     * @Route("/delete/{id}", name="trick.delete", methods="DELETE")
      * @param Trick $trick
      * @return Response
      */
@@ -186,6 +189,7 @@ class TrickController extends AbstractController
     }
 
     /**
+     * @Route("/addtag", name="trick.delete", methods="POST|GET")
      * @param Request $request
      * @return Response
      */

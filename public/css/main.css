@@ -408,6 +408,10 @@ img.img_responsive {
 .button_icon.add_media {
     font-size: 35px;
 }
+/*thumbnail button*/
+.button_icon.fa-image{
+    color: green;
+}
 
 /*add media div*/
 .add_media {

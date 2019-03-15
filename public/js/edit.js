@@ -1,4 +1,6 @@
 var deletableElement;
+var thumbnailElement;
+
 $(document).ready(function() {
     updateItem();
 });
@@ -57,6 +59,15 @@ $('#'+fileInputId).change(function(){
     });
 });
 
+//Delete thumbnail of trick
+$('#single_thumbnail').change(function(){
+    fileThumbnail.append();
+    showLoader();
+    var formData = new FormData();
+    var url = $(this).attr('action');
+    var files = document.getElementById($(this).attr('id')).files;
+});
+
 //Delete Item (Image/video)
 function updateItem() {
     if (deletableElement) {deletableElement.off()}
@@ -80,6 +91,21 @@ function updateItem() {
                 hideLoader();
             }
         });
+    }));
+
+    //Define thumbnail of trick
+    if (thumbnailElement) {thumbnailElement.off()}
+    thumbnailElement = $(".media .thumbnail_button");
+    thumbnailElement.bind('click', (function (e){
+        var id = $(this).attr('data-id');
+        var name = $(this).attr('data-name');
+        var imageSrc = $(this).parent().parent().find('img').attr('src');
+        //
+        select = $('#'+fileThumbnailId);
+        select.html('');
+        select.append('<option value="'+id+'" selected="selected">'+name+'</option>');
+        //
+        $('img.edit_thumbnail').attr('src', imageSrc)
     }));
 }
 

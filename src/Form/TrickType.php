@@ -25,6 +25,12 @@ class TrickType extends AbstractType
             ->add('thumbnail', EntityType::class, [
                 'choice_label' => 'name',
                 'class' => Image::class,
+/*                'query_builder' => function (ImageRepository $repository) {
+                    return $repository->createQueryBuilder('i')
+                        ->setMaxResults(1);
+                        //->where('i.id = :id')
+                        //->setParameter('id', 0);
+                },*/
                 'multiple' => false,
                 'required' => false,
                 'attr' => ['style' => 'display: none;']
@@ -39,6 +45,7 @@ class TrickType extends AbstractType
             ->add('description')
             ->add('tag', EntityType::class, [
                 'choice_label' => 'name',
+                'label' => 'Group',
                 'class' => Tag::class,
                 'attr' => [
                     'class' => 'custom-select',
