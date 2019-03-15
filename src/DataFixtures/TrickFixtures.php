@@ -21,8 +21,8 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $date->format('Y-m-d H:i:s');
         for ($i = 0; $i < 20; $i++) {
             //Images
-            $images[$i][] = (new Image())->setName('wallpaper.jpg'.$i)->setThumbnail(true);
-            $images[$i][] = (new Image())->setName('wallpaper2.jpg'.$i);
+            $images[$i][] = (new Image())->setName("wallpaper$i.jpg")->setThumbnail(true);
+            $images[$i][] = (new Image())->setName("image{$i}.jpg");
             foreach ($images[$i] as $id => $image) $manager->persist($image);
             //Videos
             $videos[$i][] = (new Video())->setPlatform(Video::YOUTUBE_TYPE)->setVideoId('ZmEd0MGE4Mo');

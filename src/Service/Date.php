@@ -16,31 +16,36 @@ class Date
         date_default_timezone_set($timezone);
     }
 
-    public function currentDateTime(): \DateTime {
+    public function currentDateTime(): \DateTime
+    {
         $date = new \DateTime();
         $date->format(self::DATETIME_FORMAT);
         return $date;
     }
 
-    public function currentDateTimeISO(): \DateTime {
+    public function currentDateTimeISO(): \DateTime
+    {
         $date = new \DateTime();
         $date->format('c');
         return $date;
     }
 
-    public function timeSlot($hour, $minute = 0): \DateTime {
+    public function timeSlot($hour, $minute = 0): \DateTime
+    {
         $time = new \DateTime();
         $time->setTime($hour, $minute)->format(self::TIME_FORMAT);
         return $time;
     }
 
-    public function stringToDateTime($string): \DateTime {
+    public function stringToDateTime($string): \DateTime
+    {
         $date = \DateTime::createFromFormat(self::DATE_FORMAT, $string);
         $date->setTime(0, 0);
         return $date;
     }
 
-    public function stringToTime($string): \DateTime {
+    public function stringToTime($string): \DateTime
+    {
         $date = \DateTime::createFromFormat(self::TIME_FORMAT, $string.':00');
         $date->setDate(1, 1, 1);
         return $date;

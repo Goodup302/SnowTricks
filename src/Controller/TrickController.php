@@ -17,7 +17,6 @@ use App\Repository\TrickRepository;
 use App\Service\Date;
 use App\Service\Utils;
 use Doctrine\ORM\EntityManagerInterface;
-use PhpParser\Node\Scalar\String_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -114,11 +113,8 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Trick $trick */
-            if ($trick->isCreated()) {
-                $trick->setLastEdit($date->currentDateTime());
-            } else {
-                $trick->setPublishDate($date->currentDateTime());
-            }
+            if ($trick->isCreated()) $trick->setLastEdit($date->currentDateTime());
+            if (!$trick->isCreated()) $trick->setPublishDate($date->currentDateTime());
             $trick->setSlug(Utils::slugify($trick->getName()));
             $this->em->persist($trick);
             $this->em->flush();
@@ -189,7 +185,6 @@ class TrickController extends AbstractController
         }
     }
 
-
     /**
      * @param Request $request
      * @return Response
@@ -203,7 +198,6 @@ class TrickController extends AbstractController
             $trick = $form->getData();
             $this->em->persist($trick);
             $this->em->flush();
-
         }
         try {
             $this->em->persist($trick);
