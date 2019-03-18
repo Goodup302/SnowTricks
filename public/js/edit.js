@@ -1,5 +1,14 @@
+//Event list
 var deletableElement;
 var thumbnailElement;
+//
+var selectThumbnail = $('#'+fileThumbnailId);
+var currentThumbnailId;
+
+
+/********
+* EVENT *
+********/
 
 $(document).ready(function() {
     updateItem();
@@ -30,6 +39,13 @@ $('#'+fileInputId).change(function(){
     var formData = new FormData();
     var url = $(this).attr('action');
     var files = document.getElementById($(this).attr('id')).files;
+    if (files.length > 10) {
+        hideLoader();
+        Swal.fire({type: 'error', title: 'Oops...',
+            text: "Vous ne pouvez pas ajouter autant d'image"
+        });
+        return;
+    }
     //Add All File
     for (var i = 0; i < files.length; i++) {
         var file = files[i];
@@ -43,7 +59,6 @@ $('#'+fileInputId).change(function(){
             return;
         }
     }
-    //Ajax request
     $.ajax({
         type: "POST",
         url: url,
@@ -59,34 +74,33 @@ $('#'+fileInputId).change(function(){
     });
 });
 
-//Delete thumbnail of trick
-$('#single_thumbnail').change(function(){
-    fileThumbnail.append();
-    showLoader();
-    var formData = new FormData();
-    var url = $(this).attr('action');
-    var files = document.getElementById($(this).attr('id')).files;
-});
-
-//Delete Item (Image/video)
 function updateItem() {
+
+    //Delete Item (Image/video)
     if (deletableElement) {deletableElement.off()}
     deletableElement = $(".media .delete");
-    deletableElement.bind('click', (function (e){
+    deletableElement.bind('click', (function (e) {
         showLoader();
         var item = $(this).parent().parent().parent();
+        var type = item.attr('mediatype');
+        var id = $(this).attr('data-id');
         var url = $(this).attr('action');
         //Ajax request
         $.ajax({
             type: "POST",
             url: url,
-            data: {
-                _method: "DELETE"
-            },
+            data: {_method: "DELETE"},
             error: function(jqXHR, textStatus, errorMessage) {ajaxError()},
             success: function(success) {
                 if (success) {
-                    deleteItem(item)
+                    deleteItem(item);
+                    if (type == 'image') {
+                        var option = getThumbnailOption(id);
+                        if (option.val() == currentThumbnailId) {
+                            resetThumbnailImg();
+                        }
+                        option.remove();
+                    }
                 }
                 hideLoader();
             }
@@ -99,14 +113,48 @@ function updateItem() {
     thumbnailElement.bind('click', (function (e){
         var id = $(this).attr('data-id');
         var name = $(this).attr('data-name');
-        var imageSrc = $(this).parent().parent().find('img').attr('src');
-        //
-        select = $('#'+fileThumbnailId);
-        select.html('');
-        select.append('<option value="'+id+'" selected="selected">'+name+'</option>');
-        //
-        $('img.edit_thumbnail').attr('src', imageSrc)
+        if (getThumbnailOption(id).length === 0) {
+            selectThumbnail.append('<option value="'+id+'">'+name+'</option>');
+        }
+        setThumbnail($(this).attr('data-id'))
     }));
+}
+
+//Delete thumbnail of trick
+$('#single_thumbnail .delete').click(function(){
+    setThumbnail(0)
+});
+
+
+
+/*************
+*  FUNCTION  *
+*************/
+
+//Add html ajax response
+function setThumbnail(id) {
+    selectThumbnail.find('option').each(function(){
+        $(this).removeAttr("selected");
+    });
+    if (id > 0) {
+        option = getThumbnailOption(id);
+        option.attr('selected', 'selected');
+        currentThumbnailId = id;
+        $('img.edit_thumbnail').attr('src', uploadImageUrl+option.html())
+    } else {
+        resetThumbnailImg()
+    }
+}
+
+//set img of thumbnail to default image
+function resetThumbnailImg() {
+    $('img.edit_thumbnail').attr('src', emptyImageUrl);
+    currentThumbnailId = 0;
+}
+
+//get option of thumbnail select by id
+function getThumbnailOption(id) {
+    return selectThumbnail.find('option[value='+id+']');
 }
 
 //Add html ajax response
@@ -117,14 +165,4 @@ function addMedia(type, html) {
     } else {
         $('div[mediatype="new"]').before(html);
     }
-}
-
-//Popup on ajax error
-function ajaxError() {
-    hideLoader();
-    Swal.fire({
-        type: 'error',
-        title: 'Oops...',
-        text: "Une erreur est survenue (Réessayer plus tard) !"
-    })
 }

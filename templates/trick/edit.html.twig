@@ -28,12 +28,12 @@
         <div id="media" class="row" style="display: none">
             {#Images List#}
             {% for image in trick.images %}
-                {{ macro.image(image) }}
+                {{ macro.image(image, true) }}
             {% endfor %}
 
             {#Videos list#}
             {% for video in trick.videos %}
-                {{ macro.video(video) }}
+                {{ macro.video(video, true) }}
             {% endfor %}
 
             {#Add Media Boutton#}
@@ -60,6 +60,9 @@
                 var fileInputId = '{{ imageForm.files.vars.id }}';
                 var fileInputName = '{{ imageForm.files.vars.full_name }}';
                 var fileThumbnailId = '{{ form.thumbnail.vars.id }}';
+                var uploadImageUrl = '{{ asset(asset_media) }}';
+                var emptyImageUrl = '{{ asset("image/default_thumbnail.jpg") }}';
+                var currentThumbnailId = {{ (trick.thumbnail.id is defined) ? trick.thumbnail.id : 0 }};
             </script>
         </div>
 
@@ -111,10 +114,12 @@
 
     {#DELETE TRICK FORM#}
     <form
-        method="post"
-        action="{{ path('trick.delete', {'id': trick.slug}) }}"
-        swa-title="Êtes vous sur ?"
-        swa-text="Après validation il est impossible de revenire en arrière"
+            method="post"
+            action="{{ path('trick.delete', {'id': trick.id}) }}"
+            swa-title="Êtes vous sur ?"
+            swa-text="Après validation il est impossible de revenire en arrière"
+            type="DELETE"
+            redirect="true"
     >
         <button type="submit" class="btn btn-danger swa-confirm">Supprimer</button>
         <input type="hidden" name="_method" value="DELETE">

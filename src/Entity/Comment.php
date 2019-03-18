@@ -20,6 +20,7 @@ class Comment
     /**
      * @ORM\Column(type="text")
      * @Assert\Length(min=10, max=1000)
+     * @Assert\NotBlank()
      */
     private $content;
 

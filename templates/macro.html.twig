@@ -31,7 +31,7 @@
     </div>
 {% endmacro %}
 
-{% macro video(video) %}
+{% macro video(video, edit) %}
     <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center" mediatype="video">
         <div class="media position-relative">
             {% if video.platform == 0 %}
@@ -50,27 +50,31 @@
                         allowfullscreen allow="autoplay">
                 </iframe>
             {% endif %}
-            <div class="edit_single">
-                <div class="fas fa-trash-alt button_icon delete"
-                     action="{{ path('video.delete', {'id': video.id}) }}"
-                ></div>
-            </div>
+            {% if edit %}
+                <div class="edit_single">
+                    <div class="fas fa-trash-alt button_icon delete" data-id="{{ video.id }}"
+                         action="{{ path('video.delete', {'id': video.id}) }}"
+                    ></div>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endmacro %}
 
-{% macro image(image) %}
+{% macro image(image, edit) %}
     <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center" mediatype="image">
         <div class="media position-relative">
             <img class="img_responsive h-100" src="{{ asset(asset_media ~ image.name)}}">
-            <div class="edit_single">
-                <div class="fas fa-image button_icon thumbnail_button"
-                     data-id="{{ image.id }}" data-name="{{ image.name }}">
+            {% if edit %}
+                <div class="edit_single">
+                    <div class="fas fa-image button_icon thumbnail_button"
+                         data-id="{{ image.id }}" data-name="{{ image.name }}">
+                    </div>
+                    <div class="fas fa-trash-alt button_icon delete" data-id="{{ image.id }}"
+                         action="{{ path('image.delete', {'id': image.id}) }}">
+                    </div>
                 </div>
-                <div class="fas fa-trash-alt button_icon delete"
-                     action="{{ path('image.delete', {'id': image.id}) }}">
-                </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 {% endmacro %}

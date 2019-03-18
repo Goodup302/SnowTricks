@@ -26,11 +26,14 @@ class Video
     /**
      * @ORM\Column(type="integer")
      * @Assert\Range(min=0, max=1)
+     * @Assert\NotBlank()
      */
     private $platform;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max=20)
+     * @Assert\NotBlank()
      */
     private $videoId;
 

@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
@@ -28,11 +29,14 @@ class Trick
 
     /**
      * @ORM\Column(type="string", unique=true, length=255)
+     * @Assert\Length(max=50)
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank()
      */
     private $description;
 
@@ -62,7 +66,7 @@ class Trick
     private $slug;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="trick")
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="trick", cascade={"persist"})
      */
     private $images;
 
@@ -217,12 +221,17 @@ class Trick
         return $this;
     }
 
-    public function setThumbnail(Image $thumbnail): self
+    public function setThumbnail(Image $thumbnail = null): self
     {
         /* @var Image $image */
-        foreach ($this->getImages() as $image) $image->setThumbnail(false);
-        $thumbnail->setThumbnail(true);
-
+        foreach ($this->getImages() as $image) {
+            if ($image->getThumbnail()) {
+                $image->setThumbnail(false);
+            }
+        }
+        if ($thumbnail != null) {
+            $thumbnail->setThumbnail(true);
+        }
         return $this;
     }
 

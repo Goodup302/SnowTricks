@@ -151,10 +151,7 @@ $('form[type="DELETE"]').submit(function (e) {
             }
             hideLoader();
         },
-        error: function (request, textStatus, errorThrown) {
-            hideLoader();
-            alert('error');
-        }
+        error: function(jqXHR, textStatus, errorMessage) {ajaxError()}
     });
 });
 
@@ -166,4 +163,14 @@ function showLoader() {
 function hideLoader() {
     loader.css('display', 'none');
     loader.css('opacity', '0');
+}
+
+//Popup on ajax error
+function ajaxError() {
+    hideLoader();
+    Swal.fire({
+        type: 'error',
+        title: 'Oops...',
+        text: "Une erreur est survenue !"
+    })
 }
