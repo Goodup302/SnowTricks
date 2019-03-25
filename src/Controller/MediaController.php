@@ -11,6 +11,7 @@ use App\Repository\ImageRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,11 +51,13 @@ class MediaController extends AbstractController
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
         if ($form->isValid() && $form->isSubmitted()) {
+            /** @var UploadedFile[] $files */
             $files = $image->getFiles();
             /** @var Image[] $images */
             $images = array();
             foreach ($files as $i => $file){
                 $images[$i] = (new Image())->setName($fileUploader->upload($file));
+                $images[$i] = (new Image())->setAlt($file->getClientOriginalName());
                 $this->em->persist($images[$i]);
                 $trick->addImage($images[$i]);
             }

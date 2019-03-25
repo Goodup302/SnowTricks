@@ -44,6 +44,11 @@ class Image
      */
     private $thumbnail = false;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $alt;
+
     public function __construct()
     {
         $this->files = new ArrayCollection();
@@ -137,6 +142,18 @@ class Image
     public function setThumbnail(bool $thumbnail): self
     {
         $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    public function getAlt(): ?string
+    {
+        return $this->alt;
+    }
+
+    public function setAlt(string $alt): self
+    {
+        $this->alt = $alt;
 
         return $this;
     }

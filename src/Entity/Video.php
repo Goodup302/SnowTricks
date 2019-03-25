@@ -16,6 +16,8 @@ class Video
     const YOUTUBE = "YouTube";
     const DAILYMOTION = "Dailymotion";
 
+    const ACCEPTS = [Video::YOUTUBE_TYPE, Video::DAILYMOTION_TYPE];
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -32,8 +34,7 @@ class Video
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max=20)
-     * @Assert\NotBlank()
+     * @Assert\Choice(choices=Video::ACCEPTS)
      */
     private $videoId;
 

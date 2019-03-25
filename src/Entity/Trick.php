@@ -36,7 +36,6 @@ class Trick
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Assert\NotBlank()
      */
     private $description;
 

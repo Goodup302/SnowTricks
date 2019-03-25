@@ -17,6 +17,7 @@ use App\Repository\TrickRepository;
 use App\Service\Date;
 use App\Service\Utils;
 use Doctrine\ORM\EntityManagerInterface;
+use Faker\Provider\ka_GE\DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,7 +69,7 @@ class TrickController extends AbstractController
      * @param Trick $trick
      * @return Response
      */
-    public function single(Trick $trick, Request $request, Date $date): Response
+    public function single(Trick $trick, Request $request): Response
     {
         if ($trick->isCreated() == false) return $this->redirectToRoute("home");
         //FORM
@@ -80,7 +81,7 @@ class TrickController extends AbstractController
             if ($user != null) {
                 $comment->setTrick($trick);
                 $comment->setUser($user);
-                $comment->setPublishDate($date->currentDateTime());
+                $comment->setPublishDate(new \DateTime());
                 $this->em->persist($comment);
                 $this->em->flush();
             }
@@ -97,7 +98,7 @@ class TrickController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function edit(Trick $trick, Request $request, Date $date): Response
+    public function edit(Trick $trick, Request $request): Response
     {
         //Upload Video form
         $video = new Video();
@@ -112,8 +113,8 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick, ['attr' => [TrickType::TRICK => $trick->getId()]]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($trick->isCreated()) $trick->setLastEdit($date->currentDateTime());
-            if (!$trick->isCreated()) $trick->setPublishDate($date->currentDateTime());
+            if ($trick->isCreated()) $trick->setLastEdit(new \DateTime());
+            if (!$trick->isCreated()) $trick->setPublishDate(new \DateTime());
             $trick->setSlug(Utils::slugify($trick->getName()));
             $this->em->persist($trick);
             $this->em->flush();
