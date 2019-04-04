@@ -14,6 +14,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
+    const REGISTER_SUCCESS = "Le compte vient d'ètre créé avec succès, nous vous invitons à l'activer via le mail qui vous a été envoyé.";
+
     /**
      * @var EntityManagerInterface
      */
@@ -59,14 +61,12 @@ class SecurityController extends AbstractController
             $user = $form->getData();
             $user->setPassword($encoder->encodePassword($user, $form->getData()->getPassword()));
             $user->createToken();
-
+            //
             $this->em->persist($user);
             $this->em->flush();
-
-            $this->addFlash('success', 'Compte créé');
-            return $this->redirectToRoute('login');
+            //
+            $this->addFlash('success', self::REGISTER_SUCCESS);
         }
-
         return $this->render('security/register.html.twig', ['form' => $form->createView()]);
     }
 }

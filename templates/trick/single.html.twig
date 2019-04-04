@@ -94,7 +94,7 @@
         {#COMMENT LIST#}
         <div class="justify-content-center row">
             <div class="col-12 col-lg-10">
-                {% for comment in trick.comments %}
+                {% for comment in trick.comments|reverse %}
                     {{ macro.comment(comment) }}
                 {% endfor %}
             </div>

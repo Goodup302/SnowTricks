@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -12,12 +14,16 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username')
-            ->add('password')
+            ->add('username', null,[
+                'label' => 'Pseudo'
+            ])
+            ->add('password', RepeatedType::class,[
+                'label' => 'Répéter mot de passe',
+                'type' => PasswordType::class,
+                'first_options'  => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Répéter mot de passe'],
+            ])
             ->add('email')
-            //->add('token')
-            //->add('activate')
-            //->add('profileImage')
         ;
     }
 

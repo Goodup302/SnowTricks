@@ -80,6 +80,34 @@ class TrickController extends AbstractController
     }
 
     /**
+     * @Route("/comment/{slug}/{page}", name="trick.comments", methods="GET|POST")
+     * @param Trick $trick
+     * @return Response
+     */
+    public function commentByPage(Trick $trick, int $page, Request $request): Response
+    {
+        if ($trick->isCreated() == false) return $this->redirectToRoute("home");
+        //FORM
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            if ($user != null) {
+                $comment->setTrick($trick);
+                $comment->setUser($user);
+                $comment->setPublishDate(new \DateTime());
+                $this->em->persist($comment);
+                $this->em->flush();
+            }
+        }
+        return $this->render('trick/single.html.twig', [
+            'trick' => $trick,
+            'commentForm' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/edit/{slug}", name="trick.edit", methods="GET|POST")
      * @param Trick $trick
      * @param Request $request

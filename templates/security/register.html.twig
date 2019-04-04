@@ -3,29 +3,36 @@
 {% block title %}S'enregistrer{% endblock %}
 
 {% block body %}
-    <form method="post" class="pt-4">
-        {% for label, flashes in app.session.flashbag.all %}
-            {% for flash in flashes %}
-                {% if ( label == 'success' ) %}
-                    <div class="alert alert-success alert-dismissible fade show">
-                        {{ flash }}
-                    </div>
-                {% elseif ( label == 'error' ) %}
-                    <div class="alert alert-danger alert-dismissible fade show">
-                        {{ flash }}
-                    </div>
-                {% endif %}
+    <div class="pt-4 row justify-content-md-center">
+        <div class="px-3">
+            {% for label, flashes in app.session.flashbag.all %}
+                {% for flash in flashes %}
+                    {% if ( label == 'success' ) %}
+                        <div class="alert alert-success fade show">{{ flash }}</div>
+                    {% elseif ( label == 'error' ) %}
+                        <div class="alert alert-danger fade show">{{ flash }}</div>
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
+        </div>
 
-        <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
-        {{ form_start(form) }}
-            {{ form_errors(form) }}
-            {{ form_row(form.username) }}
-            {{ form_row(form.password) }}
-            {{ form_row(form.email) }}
+        <div class="col-12 text-center">
+            <h1 class="font-weight-normal">S'enregistrer</h1>
+            <p>Veuillez remplire les champs suivant pour vous inscrire sur le site</p>
+        </div>
 
-            <button class="btn btn-lg btn-primary" type="submit">S'enregistrer</button>
-        {{ form_end(form) }}
-    </form>
+        <div class="col-md-10 mb-3">
+            <div class="dropdown-divider"></div>
+        </div>
+
+        <div class="col-md-8">
+            {{ form_start(form) }}
+                {{ form_errors(form) }}
+                {{ form_row(form.username) }}
+                {{ form_row(form.password) }}
+                {{ form_row(form.email) }}
+                <button class="btn btn-lg btn-primary" type="submit">S'enregistrer</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}
