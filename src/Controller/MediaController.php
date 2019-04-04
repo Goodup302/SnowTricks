@@ -56,8 +56,9 @@ class MediaController extends AbstractController
             /** @var Image[] $images */
             $images = array();
             foreach ($files as $i => $file){
-                $images[$i] = (new Image())->setName($fileUploader->upload($file));
-                $images[$i] = (new Image())->setAlt($file->getClientOriginalName());
+                $images[$i] = (new Image())
+                    ->setName($fileUploader->upload($file))
+                    ->setAlt($file->getClientOriginalName());
                 $this->em->persist($images[$i]);
                 $trick->addImage($images[$i]);
             }

@@ -8,9 +8,9 @@
     {{ form_start(form) }}
         <div id="single_thumbnail" class="row pt-md-4 position-relative">
             {% if trick.thumbnail.name is defined %}
-                <img class="img_responsive edit_thumbnail" src="{{ asset(asset_media~trick.thumbnail.name) }}">
+                <img class="img_responsive edit_thumbnail" src="{{ asset(asset_media~trick.thumbnail.name) }}" alt="{{ image.alt }}">
             {% else %}
-                <img class="img_responsive edit_thumbnail" src="{{ asset("image/default_thumbnail.jpg") }}">
+                <img class="img_responsive edit_thumbnail" src="{{ asset("image/default_thumbnail.jpg") }}" alt="Image non disponible">
             {% endif %}
             <div class="absolute_center">
                 <div class="position-relative w-100">

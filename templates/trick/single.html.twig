@@ -8,9 +8,9 @@
 
         <div id="single_thumbnail" class="w-100 pt-md-4 position-relative">
             {% if trick.thumbnail.name is defined %}
-                <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}">
+                <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}" alt="{{ image.alt }}">
             {% else %}
-                <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}">
+                <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}" alt="Image non disponible">
             {% endif %}
             <div class="absolute_center pt-md-4">
                 <div class="position-relative">
@@ -41,7 +41,7 @@
         <div id="media" class="row" style="display: none">
             {% for image in trick.images %}
                 <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                    <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
+                    <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="{{ image.alt }}">
                 </div>
             {% endfor %}
 

@@ -2,9 +2,9 @@
     <div class="col-12 col-sm-6 col-md-4 col-xl-3 tricks_card">
         <a href="{{ path('trick.single', {'slug': trick.slug}) }}">
             {% if trick.thumbnail.name is defined %}
-                <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}">
+                <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}" alt="{{ image.alt }}">
             {% else %}
-                <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}">
+                <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}" alt="Image non disponible">
             {% endif %}
         </a>
         <div class="align-items-center d-flex justify-content-around pt-2 tricks_card_body">
@@ -64,7 +64,7 @@
 {% macro image(image, edit) %}
     <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center" mediatype="image">
         <div class="media position-relative">
-            <img class="img_responsive h-100" src="{{ asset(asset_media ~ image.name)}}">
+            <img class="img_responsive h-100" src="{{ asset(asset_media ~ image.name)}}" alt="{{ image.alt }}">
             {% if edit %}
                 <div class="edit_single">
                     <div class="fas fa-image button_icon thumbnail_button"
