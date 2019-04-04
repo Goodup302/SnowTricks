@@ -2,7 +2,7 @@
     <div class="col-12 col-sm-6 col-md-4 col-xl-3 tricks_card">
         <a href="{{ path('trick.single', {'slug': trick.slug}) }}">
             {% if trick.thumbnail.name is defined %}
-                <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}" alt="{{ image.alt }}">
+                <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}" alt="{{ trick.thumbnail.alt }}">
             {% else %}
                 <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}" alt="Image non disponible">
             {% endif %}

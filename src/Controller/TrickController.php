@@ -52,19 +52,6 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/", name="home")
-     * @param AuthorizationCheckerInterface $authChecker
-     * @return Response
-     */
-    public function home(AuthorizationCheckerInterface $authChecker): Response
-    {
-        if ($authChecker->isGranted(User::ROLE_AMDIN)) {
-            return $this->render('index.html.twig', ['tricks' => $this->trickRepository->findAll()]);
-        }
-        return $this->render('index.html.twig', ['tricks' => $this->trickRepository->getAll()]);
-    }
-
-    /**
      * @Route("/trick/{slug}", name="trick.single", methods="GET|POST")
      * @param Trick $trick
      * @return Response
