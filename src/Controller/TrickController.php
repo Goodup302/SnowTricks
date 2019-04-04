@@ -13,8 +13,10 @@ use App\Form\ImageType;
 use App\Form\TagType;
 use App\Form\TrickType;
 use App\Form\VideoType;
+use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use App\Service\Date;
+use App\Service\FileUploader;
 use App\Service\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\ka_GE\DateTime;
@@ -29,6 +31,7 @@ class TrickController extends AbstractController
 {
     const UNKNOWN_ERROR = 'Une erreur inconnue est survenue';
     const NOT_CONNECTED = "Vous devez ètre connecté pour poster des commentaires";
+    const MAX_COMMENT_PER_PAGE = 3;
 
     /**
      * @var TrickRepository
@@ -56,7 +59,7 @@ class TrickController extends AbstractController
      * @param Trick $trick
      * @return Response
      */
-    public function single(Trick $trick, Request $request): Response
+    public function single(Trick $trick, Request $request, CommentRepository $commentRepository): Response
     {
         if ($trick->isCreated() == false) return $this->redirectToRoute("home");
         //FORM
@@ -76,35 +79,24 @@ class TrickController extends AbstractController
         return $this->render('trick/single.html.twig', [
             'trick' => $trick,
             'commentForm' => $form->createView(),
+            'commentPage' => ceil($commentRepository->countByTrick($trick->getId()) / self::MAX_COMMENT_PER_PAGE),
         ]);
     }
 
+
     /**
-     * @Route("/comment/{slug}/{page}", name="trick.comments", methods="GET|POST")
+     * @Route("/comment/{id}", name="trick.comments", methods="GET|POST")
      * @param Trick $trick
+     * @param Request $request
+     * @param CommentRepository $commentRepository
      * @return Response
      */
-    public function commentByPage(Trick $trick, int $page, Request $request): Response
+    public function commentByPage(Trick $trick, Request $request, CommentRepository $commentRepository): Response
     {
-        if ($trick->isCreated() == false) return $this->redirectToRoute("home");
-        //FORM
-        $comment = new Comment();
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->getUser();
-            if ($user != null) {
-                $comment->setTrick($trick);
-                $comment->setUser($user);
-                $comment->setPublishDate(new \DateTime());
-                $this->em->persist($comment);
-                $this->em->flush();
-            }
-        }
-        return $this->render('trick/single.html.twig', [
-            'trick' => $trick,
-            'commentForm' => $form->createView(),
-        ]);
+        $page = intval($request->request->get('page'));
+        $comments = $commentRepository->getPaginate($trick->getId(), $page, self::MAX_COMMENT_PER_PAGE);
+        dump($comments);
+        return $this->render('ajax/comment.html.twig', ['comments' => $comments]);
     }
 
     /**

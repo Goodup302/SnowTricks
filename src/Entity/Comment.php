@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Service\FileUploader;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -91,4 +92,23 @@ class Comment
 
         return $this;
     }
+
+/*    public function toArray(FileUploader $fileUploader, \Symfony\Component\Asset\Packages $assets)
+    {
+        if ($this->getUser()->getProfileImage() != null) {
+            $name = $this->getUser()->getProfileImage()->getName();
+            $folder = $fileUploader->getUploadFolder();
+            $image = $assets->getUrl($folder.$name);
+        } else {
+            $image = $assets->getUrl("/image/default_user.jpg");
+        }
+        $result = [
+            'id' => $this->getId(),
+            'image' => $image,
+            'username' => $this->getUser()->getUsername(),
+            'content' => $this->getContent(),
+            'date' => $this->getPublishDate()->format("Y-m-d H:i"),
+        ];
+        return $result;
+    }*/
 }

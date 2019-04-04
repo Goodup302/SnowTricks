@@ -1,0 +1,4 @@
+{% import "macro.html.twig" as macro %}
+{% for comment in comments %}
+    {{ macro.comment(comment) }}
+{% endfor %}

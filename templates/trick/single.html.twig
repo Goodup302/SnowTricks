@@ -94,12 +94,24 @@
         {#COMMENT LIST#}
         <div class="justify-content-center row">
             <div class="col-12 col-lg-10">
-                {% for comment in trick.comments|reverse %}
-                    {{ macro.comment(comment) }}
-                {% endfor %}
+                <div id="comments"></div>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" action="" href="#comments">Précédent</a></li>
+                        {% for i in 1..commentPage %}
+                            <li class="page-item"><a class="page-link" page="{{ i }}" href="#comments">{{ i }}</a></li>
+                        {% endfor %}
+                        <li class="page-item"><a class="page-link" href="#comments">Suivant</a></li>
+                    </ul>
+                </nav>
             </div>
-
         </div>
     </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>var comments_url = "{{ path('trick.comments', {id: trick.id}) }}"</script>
+    <script src="{{ asset('js/single.js') }}"></script>
 {% endblock %}

@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Comment;
+use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\AST\Join;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -19,32 +21,31 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-    // /**
-    //  * @return Comment[] Returns an array of Comment objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getPaginate(int $trickid, int $page, int $limit): ?array
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+            ->setFirstResult(($page-1) * $limit)
+            ->setMaxResults($limit)
+            ->orderBy('c.publishDate', 'ASC')
+            ->join('c.trick', 't', 'WITH', 't.id = :trickid')
+            ->setParameter('trickid', $trickid)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Comment
+    /**
+     * @param int $trickid
+     * @return int
+     */
+    public function countByTrick(int $trickid): int
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+            ->select('count(c)')
+            ->join('c.trick', 't', 'WITH', 't.id = :trickid')
+            ->setParameter('trickid', $trickid)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getSingleScalarResult()
+            ;
     }
-    */
 }

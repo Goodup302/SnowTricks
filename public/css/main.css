@@ -378,6 +378,10 @@ img.img_responsive {
 .fixed_popup.fade {
     transition: opacity 400ms !important;
 }
+
+template {
+    display: none;
+}
 /***********
 *  BUTTON  *
 ***********/
@@ -452,7 +456,11 @@ img.img_responsive {
     object-fit: cover;
     border-radius: 100%;
 }
-
+/*Pagination*/
+.page-link.clicked{
+    color: white;
+    background: #0061b7c9;
+}
 
 /***********
 *  FOOTER  *

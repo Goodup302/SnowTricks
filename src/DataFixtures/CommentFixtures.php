@@ -19,13 +19,16 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         $date->format('Y-m-d H:i:s');
 
         for ($i = 0; $i < 2; $i++) {
-            $comment = (new Comment())
-                ->setContent($this->faker->realText())
-                ->setPublishDate($date)
-                ->setUser($this->getReference(UserFixtures::MAIN_USER))
-                ->setTrick($this->getReference(Trick::class.$i))
-            ;
-            $manager->persist($comment);
+            for ($ii = 0; $ii < 20; $ii++) {
+                $_date = $date->add(new \DateInterval('P1D'));
+                $comment = (new Comment())
+                    ->setContent("{$ii} - {$this->faker->realText()}")
+                    ->setPublishDate($_date)
+                    ->setUser($this->getReference(UserFixtures::MAIN_USER))
+                    ->setTrick($this->getReference(Trick::class.$i))
+                ;
+                $manager->persist($comment);
+            }
         }
 
         $manager->flush();
