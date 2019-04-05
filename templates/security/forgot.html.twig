@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% extends 'security/template.html.twig' %}
+
+{% block title %}Récupération du mot de pass{% endblock %}
+{% block description %}
+    Veuillez remplire les champs suivant pour faire une demande de récupération de mot de pass
+{% endblock %}
+
+{% block form %}
+    {{ form(form) }}
+{% endblock %}

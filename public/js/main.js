@@ -126,7 +126,6 @@ $('form[type="DELETE"]').submit(function (e) {
     e.preventDefault();
     var form = $(this);
     var redirect = (form.attr('redirect') === 'true');
-    showLoader();
     $.ajax({
         type: "POST",
         url: form.attr('action'),
@@ -149,25 +148,22 @@ $('form[type="DELETE"]').submit(function (e) {
             } else {
                 alert('error');
             }
-            hideLoader();
         },
         error: function(jqXHR, textStatus, errorMessage) {ajaxError()}
     });
 });
 
 /* Loader */
-function showLoader() {
+$(document).bind("ajaxSend", function(){
     loader.css('display', 'flex');
     setTimeout(function(){ loader.css('opacity', '1'); }, 10);
-}
-function hideLoader() {
+}).bind("ajaxComplete", function(){
     loader.css('display', 'none');
     loader.css('opacity', '0');
-}
+});
 
 //Popup on ajax error
 function ajaxError() {
-    hideLoader();
     Swal.fire({
         type: 'error',
         title: 'Oops...',

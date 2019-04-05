@@ -17,7 +17,6 @@ $(document).ready(function() {
 //Add Video
 $('form.video_form').on('submit', (function (e) {
     e.preventDefault();
-    showLoader();
     var form = $(this);
     $.ajax({
         type: "POST",
@@ -28,19 +27,16 @@ $('form.video_form').on('submit', (function (e) {
             $('#video_modal').modal('hide');
             addMedia('video', html);
             updateItem();
-            hideLoader();
         }
     });
 }));
 
 //Add Image
 $('#'+fileInputId).change(function(){
-    showLoader();
     var formData = new FormData();
     var url = $(this).attr('action');
     var files = document.getElementById($(this).attr('id')).files;
     if (files.length > 10) {
-        hideLoader();
         Swal.fire({type: 'error', title: 'Oops...',
             text: "Vous ne pouvez pas ajouter autant d'image"
         });
@@ -52,7 +48,6 @@ $('#'+fileInputId).change(function(){
         if (file.type == 'image/jpeg') {
             formData.append(fileInputName, file, file.name);
         } else {
-            hideLoader();
             Swal.fire({type: 'error', title: 'Oops...',
                 text: "Seulement les images .jpg et .jpeg sont acceptées"
             });
@@ -69,7 +64,6 @@ $('#'+fileInputId).change(function(){
         success: function(html) {
             addMedia('image', html);
             updateItem();
-            hideLoader();
         }
     });
 });
@@ -80,7 +74,6 @@ function updateItem() {
     if (deletableElement) {deletableElement.off()}
     deletableElement = $(".media .delete");
     deletableElement.bind('click', (function (e) {
-        showLoader();
         var item = $(this).parent().parent().parent();
         var type = item.attr('mediatype');
         var id = $(this).attr('data-id');
@@ -102,7 +95,6 @@ function updateItem() {
                         option.remove();
                     }
                 }
-                hideLoader();
             }
         });
     }));

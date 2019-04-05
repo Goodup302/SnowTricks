@@ -22,11 +22,11 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 20; $i++) {
             //Images
             $images[$i][] = (new Image())->setName("wallpaper$i.jpg")->setThumbnail(true)->setAlt($this->faker->text(15));
-            $images[$i][] = (new Image())->setName("image{$i}.jpg")->setAlt($this->faker->text(15));
+            $images[$i][] = (new Image())->setName("image$i.jpg")->setAlt($this->faker->text(15));
             foreach ($images[$i] as $id => $image) $manager->persist($image);
             //Videos
-            $videos[$i][] = (new Video())->setPlatform(Video::YOUTUBE_TYPE)->setVideoId('ZmEd0MGE4Mo');
-            $videos[$i][] = (new Video())->setPlatform(Video::DAILYMOTION_TYPE)->setVideoId('x72qupe');
+            $videos[$i][] = (new Video())->setPlatform(Video::YOUTUBE_TYPE)->setVideoId('SQyTWk7OxSI');
+            $videos[$i][] = (new Video())->setPlatform(Video::DAILYMOTION_TYPE)->setVideoId('x6evv3');
             foreach ($videos[$i] as $id => $video) $manager->persist($video);
             //Trick
             $trick = new Trick();

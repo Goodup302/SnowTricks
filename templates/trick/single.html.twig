@@ -97,11 +97,11 @@
                 <div id="comments"></div>
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
-                        <li class="page-item"><a class="page-link" action="" href="#comments">Précédent</a></li>
+                        <li class="page-item"><a class="page-link" action="prev" href="#comments">Précédent</a></li>
                         {% for i in 1..commentPage %}
                             <li class="page-item"><a class="page-link" page="{{ i }}" href="#comments">{{ i }}</a></li>
                         {% endfor %}
-                        <li class="page-item"><a class="page-link" href="#comments">Suivant</a></li>
+                        <li class="page-item"><a class="page-link" action="next" href="#comments">Suivant</a></li>
                     </ul>
                 </nav>
             </div>
