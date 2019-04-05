@@ -13,8 +13,8 @@
                 <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}" alt="Image non disponible">
             {% endif %}
             <div class="absolute_center pt-md-4">
-                <div class="position-relative">
-                    <h1>{{ trick.name }}</h1>
+                <div class="position-relative w-100">
+                    <h1 class="p-3">{{ trick.name }}</h1>
                 </div>
             </div>
             {% if app.user %}
@@ -94,16 +94,20 @@
         {#COMMENT LIST#}
         <div class="justify-content-center row">
             <div class="col-12 col-lg-10">
-                <div id="comments"></div>
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item"><a class="page-link" action="prev" href="#comments">Précédent</a></li>
-                        {% for i in 1..commentPage %}
-                            <li class="page-item"><a class="page-link" page="{{ i }}" href="#comments">{{ i }}</a></li>
-                        {% endfor %}
-                        <li class="page-item"><a class="page-link" action="next" href="#comments">Suivant</a></li>
-                    </ul>
-                </nav>
+                {% if trick.comments|length > 0 %}
+                    <div id="comments"></div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item"><a class="page-link" action="prev" href="#comments">Précédent</a></li>
+                            {% for i in 1..commentPage %}
+                                <li class="page-item"><a class="page-link" page="{{ i }}" href="#comments">{{ i }}</a></li>
+                            {% endfor %}
+                            <li class="page-item"><a class="page-link" action="next" href="#comments">Suivant</a></li>
+                        </ul>
+                    </nav>
+                {% else %}
+                    <p>dfd</p>
+                {% endif %}
             </div>
         </div>
     </div>

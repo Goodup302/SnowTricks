@@ -4,7 +4,7 @@ $(document).ready(function() {
     paginateElement = $('.pagination');
     commentContainer = $('#comments');
 
-    getComments();
+    if (commentContainer.length) getComments();
 
     function getComments() {
         paginateElement.find('a[page]').each(function(){ $(this).removeClass('clicked') });

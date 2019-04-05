@@ -7,9 +7,9 @@
             {% for label, flashes in app.session.flashbag.all %}
                 {% for flash in flashes %}
                     {% if ( label == 'success' ) %}
-                        <div class="alert alert-success fade show">{{ flash }}</div>
-                    {% elseif ( label == 'error' ) %}
-                        <div class="alert alert-danger fade show">{{ flash }}</div>
+                        <div class="alert alert-success">{{ flash }}</div>
+                    {% elseif ( label == 'failed' ) %}
+                        <div class="alert alert-danger">{{ flash }}</div>
                     {% endif %}
                 {% endfor %}
             {% endfor %}

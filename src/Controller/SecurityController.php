@@ -17,6 +17,11 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     const REGISTER_SUCCESS = "Le compte vient d'ètre créé avec succès, nous vous invitons à l'activer via le mail qui vous a été envoyé.";
+    const LOGIN_ERROR = "Identifiant invalides";
+    const RESET_SUCCESS = "Votre mot de pass à bien été réinitialisé";
+    const ACTIVATE_SUCCESS = "Votre compte vient d'ètre activé";
+    const FORGOT_SUCCESS = "Un mail de récupération de mot de pass vient de vous ètre envoyé";
+    const FORGOT_ERROR = "Ce pseudo est introuvable";
 
     /**
      * @var EntityManagerInterface
@@ -47,7 +52,8 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        $this->addFlash('error', $authenticationUtils->getLastAuthenticationError());
+        $error = $authenticationUtils->getLastAuthenticationError();
+        if ($error) $this->addFlash('failed', self::LOGIN_ERROR);
         $lastUsername = $authenticationUtils->getLastUsername();
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername]);
     }
@@ -57,7 +63,7 @@ class SecurityController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function register(Request $request): Response
+    public function register(Request $request, \Swift_Mailer $mailer): Response
     {
         /** @var User $user */
         $user = new User();
@@ -72,31 +78,61 @@ class SecurityController extends AbstractController
             $this->em->flush();
             //
             $this->addFlash('success', self::REGISTER_SUCCESS);
+            //
+            $mail = (new \Swift_Message('Hello Email'))
+                ->setFrom('send@example.com')
+                ->setTo('contact@snowtricks.fr')
+                ->setBody(
+                    $this->renderView('email/confirm.html.twig', [
+                        'url' => 'test',
+                        'user' => $user,
+                    ]),'text/html')
+            ;
+            $mailer->send($mail);
         }
         return $this->render('security/register.html.twig', ['form' => $form->createView()]);
     }
 
     /**
-     * @Route("/lostpassword", name="lostpassword")
+     * @Route("/mail", name="mail")
+     */
+    public function mail(\Swift_Mailer $mailer): Response
+    {
+        $mail = (new \Swift_Message('Hello Email'))
+            ->setSender('contact@snowtricks.fr')
+            ->setFrom('contact@snowtricks.fr')
+            ->setTo('j.f0471430704@gmail.com')
+            ->setBody(
+                $this->renderView(
+                    'email/confirm.html.twig',
+                    ['url' => 'test', 'user' => $this->getUser()]
+                ),'text/html')
+        ;
+        $mailer->send($mail);
+        return $this->render("email/confirm.html.twig", [
+            'user' => $this->getUser(),
+            'url' => 'google.fr',
+        ]);
+    }
+
+    /**
+     * @Route("/forgotpassword", name="forgotpassword")
      * @return Response
      */
-    public function lostpassword(Request $request): Response
+    public function forgotpassword(Request $request, UserRepository $userRepository): Response
     {
-        /** @var User $user */
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
-            $user->setPassword($this->encoder->encodePassword($user, $form->getData()->getPassword()));
-            $user->createToken();
-            //
-            $this->em->persist($user);
-            $this->em->flush();
-            //
-            $this->addFlash('success', self::REGISTER_SUCCESS);
+        $username =$request->request->get('username');
+        if ($username) {
+            /** @var User $user */
+            $user = $userRepository->findOneBy(['username' => $username]);;
+            if ($user) {
+                //Add send mail
+                $this->addFlash('success', self::FORGOT_SUCCESS);
+            } else {
+                $this->addFlash('failed', self::FORGOT_ERROR);
+            }
         }
-        return $this->render('security/register.html.twig', ['form' => $form->createView()]);
+        return $this->render('security/forgot.html.twig');
     }
 
     /**
@@ -107,63 +143,55 @@ class SecurityController extends AbstractController
     {
         /** @var User $user */
         $user = $userRepository->findOneBy(['token' => $token]);
-        $form = $this->createForm(ResetPasswordType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
-            $user->setPassword($this->encoder->encodePassword($user, $form->getData()->getPassword()));
-            $user->createToken();
-            //
-            $this->em->persist($user);
-            $this->em->flush();
-            //
-            $this->addFlash('success', "Votre mot de pass a bien été réinitialiser");
-            $this->redirectToRoute('home');
+        if ($user) {
+            dump($user);
+            $form = $this->createForm(ResetPasswordType::class, $user);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $password = $form->getData()->getPassword();
+                $user->setPassword($this->encoder->encodePassword($user, $password));
+                $user->setActivate(true);
+                $user->createToken();
+                //
+                $this->em->persist($user);
+                $this->em->flush();
+                //
+                $this->addFlash('success', self::RESET_SUCCESS);
+                return $this->redirectToRoute('login');
+            }
+            return $this->render('security/reset.html.twig', ['form' => $form->createView()]);
+        } else {
+            return $this->redirectToRoute('home');
         }
-        return $this->render('security/reset.html.twig', ['form' => $form->createView()]);
     }
 
     /**
      * @Route("/activate/{token}", name="activate")
      * @return Response
      */
-    public function activate(Request $request, string $token): Response
+    public function activate(string $token, UserRepository $userRepository): Response
     {
         /** @var User $user */
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
-            $user->createToken();
-            //
+        $user = $userRepository->findOneBy(['token' => $token]);
+        if ($user && !$user->getActivate()) {
+            dump($user);
+            $user->setActivate(true)->createToken();
             $this->em->persist($user);
             $this->em->flush();
             //
-            $this->addFlash('success', self::REGISTER_SUCCESS);
+            $this->addFlash('success', self::ACTIVATE_SUCCESS);
+            return $this->redirectToRoute('login');
+        } else {
+            return $this->redirectToRoute('home');
         }
-        return $this->redirectToRoute('home');
     }
 
     /**
      * @Route("/account", name="account")
      * @return Response
      */
-    public function account(Request $request, string $token): Response
+    public function account(Request $request): Response
     {
-        /** @var User $user */
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
-            $user->createToken();
-            //
-            $this->em->persist($user);
-            $this->em->flush();
-            //
-            $this->addFlash('success', self::REGISTER_SUCCESS);
-        }
         return $this->redirectToRoute('home');
     }
 }

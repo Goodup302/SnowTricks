@@ -274,6 +274,7 @@ a.current {
     color: white;
     text-shadow: black 2px 2px 15px;
     margin: 0;
+    word-wrap: break-word;
 }
 #single_thumbnail img{
     height: 400px;
@@ -312,6 +313,7 @@ a.current {
     background-color: #fff0;
     border: 0;
     text-align: center;
+    padding: 1rem;
 }
 .input_trick_title:focus {
     outline: 0;
