@@ -1,0 +1,7 @@
+{% import "macro.html.twig" as macro %}
+{% for trick in tricks %}
+    {{ macro.trick(trick) }}
+{% endfor %}
+<script>
+    if ({{ end }}) $('#more_trick').remove()
+</script>

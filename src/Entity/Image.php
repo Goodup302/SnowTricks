@@ -10,11 +10,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ImageRepository")
- * @UniqueEntity("name")
  */
 class Image
 {
-
     private $files;
 
     /**
@@ -25,7 +23,7 @@ class Image
     private $id;
 
     /**
-     * @ORM\Column(type="string", unique=true, length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $name;
 

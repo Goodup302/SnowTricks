@@ -23,12 +23,23 @@ class TrickRepository extends ServiceEntityRepository
     /**
      * @return Trick[]|null
      */
-    public function getVisible()
+    public function loadMore(int $offset, int $limit = 12)
+    {
+        $query = $this->createQueryBuilder('t')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->orderBy('t.publishDate', 'DESC')
+            ->andWhere('t.publishDate IS NOT NULL')
+        ;
+        return $query->getQuery()->getResult();
+    }
+
+    public function countPublish(): int
     {
         return $this->createQueryBuilder('t')
+            ->select('count(t)')
             ->andWhere('t.publishDate IS NOT NULL')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getSingleScalarResult();
     }
 }

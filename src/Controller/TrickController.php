@@ -32,7 +32,8 @@ class TrickController extends AbstractController
 {
     const UNKNOWN_ERROR = 'Une erreur inconnue est survenue';
     const NOT_CONNECTED = "Vous devez ètre connecté pour poster des commentaires";
-    const MAX_COMMENT_PER_PAGE = 3;
+    const MAX_COMMENT_PER_PAGE = 10;
+    const TRICK_PER_LOAD = 12;
 
     /**
      * @var TrickRepository
@@ -53,6 +54,20 @@ class TrickController extends AbstractController
     {
         $this->trickRepository = $repository;
         $this->em = $em;
+    }
+
+    /**
+     * @Route("/trick_list", name="trick.list", methods="POST")
+     */
+    public function list(Request $request): Response
+    {
+        $offset = intval($request->request->get('offset'));
+        $tricks = $this->trickRepository->loadMore($offset, self::TRICK_PER_LOAD);
+
+        $end = false;
+        if (($offset + sizeof($tricks)) == $this->trickRepository->countPublish()) $end = true;
+
+        return $this->render('ajax/trick.html.twig', ['tricks' => $tricks, 'end' => $end]);
     }
 
     /**

@@ -37,6 +37,9 @@
             {{ macro.trick(trick) }}
         {% endfor %}
     </div>
+    <div class="col-12 justify-content-center d-flex text-center">
+        <button class="btn btn-primary" id="more_trick">Voir plus</button>
+    </div>
 
     {#MODAL ADD Trick#}
     <div id="new_trick_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_video_label" aria-hidden="true">
@@ -61,4 +64,26 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            var trickNumber = {{ tricks|length }};
+            var offsetInterval = {{ tricks|length }};
+
+            function getTricks() {
+                $.post('{{ path('trick.list') }}', {
+                    'offset': trickNumber
+                }, function (data) {
+                    trickNumber += offsetInterval;
+                    $('#tricks').append(data);
+                })
+            }
+            $('#more_trick').on('click', function (e) {
+                getTricks()
+            });
+        });
+    </script>
 {% endblock %}

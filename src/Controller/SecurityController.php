@@ -112,7 +112,7 @@ class SecurityController extends AbstractController
             /** @var User $user */
             $user = $userRepository->findOneBy(['username' => $username]);;
             if ($user) {
-                $view = $this->renderView('email/confirm.html.twig', [
+                $view = $this->renderView('email/forgot.html.twig', [
                     'url' => $this->generateUrl('resetpassword', ['token' => $user->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
                     'user' => $user
                 ]);

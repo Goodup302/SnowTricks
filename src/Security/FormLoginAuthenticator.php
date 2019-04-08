@@ -53,7 +53,7 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
             Security::LAST_USERNAME,
             $credentials['username']
         );
-
+        dd($credentials);
         return $credentials;
     }
 
@@ -72,7 +72,6 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Username could not be found.');
         }
-
         return $user;
     }
 
@@ -87,7 +86,6 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example : return new RedirectResponse($this->router->generate('some_route'));
         throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

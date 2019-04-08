@@ -18,10 +18,8 @@ class MainController extends AbstractController
      */
     public function home(AuthorizationCheckerInterface $authChecker, TrickRepository $repository): Response
     {
-        if ($authChecker->isGranted(User::ROLE_AMDIN)) {
-            return $this->render('page/home.html.twig', ['tricks' => $repository->findAll()]);
-        }
-        return $this->render('page/home.html.twig', ['tricks' => $repository->getVisible()]);
+        $tricks = $repository->loadMore(0, TrickController::TRICK_PER_LOAD);
+        return $this->render('page/home.html.twig', ['tricks' => $tricks]);
     }
 
     /**
