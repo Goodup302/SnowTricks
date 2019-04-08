@@ -1,0 +1,16 @@
+{% extends 'security/template.html.twig' %}
+
+{% block title %}Récupération du mot de passe{% endblock %}
+{% block description %}
+    Veuillez remplire les champs suivant pour faire une demande de récupération de mot de passe
+{% endblock %}
+
+{% block form %}
+    <form method="post">
+        <div class="form-group">
+            <label for="username" class="required">Votre pseudo</label>
+            <input type="text" id="username" name="username" class="form-control" required>
+        </div>
+        <button class="btn btn-lg btn-primary" type="submit">Récupérer</button>
+    </form>
+{% endblock %}

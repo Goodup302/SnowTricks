@@ -5,12 +5,16 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ImageRepository")
+ * @UniqueEntity("name")
  */
 class Image
 {
+
     private $files;
 
     /**
@@ -21,7 +25,7 @@ class Image
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", unique=true, length=255)
      */
     private $name;
 
@@ -39,6 +43,11 @@ class Image
      * @ORM\Column(type="boolean")
      */
     private $thumbnail = false;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $alt;
 
     public function __construct()
     {
@@ -133,6 +142,18 @@ class Image
     public function setThumbnail(bool $thumbnail): self
     {
         $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    public function getAlt(): ?string
+    {
+        return $this->alt;
+    }
+
+    public function setAlt(string $alt): self
+    {
+        $this->alt = $alt;
 
         return $this;
     }

@@ -27,7 +27,8 @@ class FileUploader
         return $fileName;
     }
 
-    public function delete($fileName) {
+    public function delete($fileName)
+    {
         $filesystem = new Filesystem();
         $filesystem->remove($this->getPath($fileName));
     }

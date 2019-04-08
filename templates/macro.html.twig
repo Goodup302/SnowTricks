@@ -1,0 +1,95 @@
+{% macro trick(trick) %}
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 tricks_card">
+        <a href="{{ path('trick.single', {'slug': trick.slug}) }}">
+            {% if trick.thumbnail.name is defined %}
+                <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}" alt="{{ trick.thumbnail.alt }}">
+            {% else %}
+                <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}" alt="Image non disponible">
+            {% endif %}
+        </a>
+        <div class="align-items-center d-flex justify-content-around pt-2 tricks_card_body">
+            <a href="{{ path('trick.single', {'slug': trick.slug}) }}">
+                <h5 class="text-center">{{ trick.name }}</h5>
+            </a>
+            {% if app.user %}
+                <div class="edit_single" style="padding-right: 15px;">
+                    <a class="edit" href="{{ path('trick.edit', {'slug': trick.slug}) }}"><i class="fas fa-edit button_icon"></i></a>
+                    <form
+                            method="post"
+                            action="{{ path('trick.delete', {'id': trick.id}) }}"
+                            swa-title="Êtes vous sur ?"
+                            swa-text="Après validation il est impossible de revenire en arrière"
+                            type="DELETE"
+                    >
+                        <button class="fas fa-trash-alt button_icon delete swa-confirm"></button>
+                        <input type="hidden" name="_method" value="DELETE">
+                    </form>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro video(video, edit) %}
+    <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center" mediatype="video">
+        <div class="media position-relative">
+            {% if video.platform == 0 %}
+                <iframe
+                        class="w-100 h-100"
+                        src="https://www.youtube.com/embed/{{ video.videoId }}"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                ></iframe>
+            {% elseif video.platform == 1 %}
+                <iframe
+                        class="w-100 h-100"
+                        frameborder="0"
+                        src="//www.dailymotion.com/embed/video/{{ video.videoId }}"
+                        allowfullscreen allow="autoplay">
+                </iframe>
+            {% endif %}
+            {% if edit %}
+                <div class="edit_single">
+                    <div class="fas fa-trash-alt button_icon delete" data-id="{{ video.id }}"
+                         action="{{ path('video.delete', {'id': video.id}) }}"
+                    ></div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro image(image, edit) %}
+    <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center" mediatype="image">
+        <div class="media position-relative">
+            <img class="img_responsive h-100" src="{{ asset(asset_media ~ image.name)}}" alt="{{ image.alt }}">
+            {% if edit %}
+                <div class="edit_single">
+                    <div class="fas fa-image button_icon thumbnail_button"
+                         data-id="{{ image.id }}" data-name="{{ image.name }}">
+                    </div>
+                    <div class="fas fa-trash-alt button_icon delete" data-id="{{ image.id }}"
+                         action="{{ path('image.delete', {'id': image.id}) }}">
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro comment(comment) %}
+    <div class="comment d-flex py-3">
+        {% if comment.user.profileImage.name is defined %}
+            <img src="{{ asset(asset_media ~ comment.user.profileImage.name)}}" class="mr-3 comment_avatar" alt="Avatar de {{ comment.user.username }}">
+        {% else %}
+            <img src="{{ asset('image/default_user.jpg') }}" class="mr-3 comment_avatar" alt="Avatar par default">
+        {% endif %}
+        <div class="media-body">
+            <h5 class="mt-0 d-sm-inline-flex">{{ comment.user.username|capitalize }}</h5>
+            <span class="pl-sm-2">{{ comment.publishDate|date("Y-m-d H:i") }}</span>
+            <p>{{ comment.content }}</p>
+        </div>
+    </div>
+{% endmacro %}

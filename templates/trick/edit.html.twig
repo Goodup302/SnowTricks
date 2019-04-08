@@ -1,73 +1,124 @@
 {% extends 'base.html.twig' %}
-
-{% import "macro/video.html.twig" as videoMacro %}
-{% import "macro/image.html.twig" as imageMacro %}
+{% import "macro.html.twig" as macro %}
 
 {% block title %}Editer une trick{% endblock %}
 
 {% block body %}
-    {{ imageMacro.picker(imageForm) }}
+    {{ form_errors(form) }}
     {{ form_start(form) }}
-    <div id="single_thumbnail" class="pt-md-4 position-relative">
-        <div class="row position-relative">
+        <div id="single_thumbnail" class="row pt-md-4 position-relative">
             {% if trick.thumbnail.name is defined %}
-                <img class="img_responsive edit_thumbnail" src="{{ asset(asset_media~trick.thumbnail.name) }}">
+                <img class="img_responsive edit_thumbnail" src="{{ asset(asset_media~trick.thumbnail.name) }}" alt="{{ trick.thumbnail.alt }}">
             {% else %}
-                <img class="img_responsive edit_thumbnail" src="{{ asset("image/default_thumbnail.jpg") }}">
+                <img class="img_responsive edit_thumbnail" src="{{ asset("image/default_thumbnail.jpg") }}" alt="Image non disponible">
             {% endif %}
-            <div class="absolute_center">
-                <div class="position-relative">
+            <div class="absolute_center pt-4">
+                <div class="position-relative w-100">
                     {{ form_widget(form.name, {'attr': {'class': 'input_trick_title'} }) }}
                 </div>
             </div>
-            {% if form %}
-                <div class="edit_single">
-                    <i onclick="imagePicker('{{ form.thumbnail.vars.id }}', false, false)" class="fas fa-edit"></i>
-                    {{ imageMacro.select(form.thumbnail, trick.thumbnail, '.edit_thumbnail') }}
+            <div class="edit_single pt-md-4">
+                {{ form_widget(form.thumbnail) }}
+                <i class="fas fa-trash-alt button_icon delete"></i>
+            </div>
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+            <span id="seemedia" class="btn btn-primary" style="display: none">Voir les médias</span>
+        </div>
+        <div id="media" class="row" style="display: none">
+            {#Images List#}
+            {% for image in trick.images %}
+                {{ macro.image(image, true) }}
+            {% endfor %}
+            {#Videos list#}
+            {% for video in trick.videos %}
+                {{ macro.video(video, true) }}
+            {% endfor %}
+
+            {#Add Media Boutton#}
+            <div class="col-12 col-lg-4 col-md-6 d-flex" mediatype="new">
+                <div class="media p-3">
+                    <div tabindex="0" class="add_media" data-toggle="popover" data-html="true" data-placement="top"
+                         data-container="container: 'body'" data-selector="true"
+                         data-content='
+                            <div>{{ form_label(imageForm.files) }}</div>
+                            <div class="btn btn-dark w-100" data-toggle="modal" href="#link_doctor_modal"
+                                id="url_link_doctor_modal" form-open="{{ path('home', {'id': trick.id}) }}"
+                                data-target="#video_modal">
+                                Ajouter une vidéo
+                            </div>
+                         '>
+                        <i class="fas fa-plus absolute_center"></i>
+                    </div>
                 </div>
-            {% endif %}
+            </div>
+            {#Images input#}
+            <input type="file" style="display: none;" accept="image/JPEG" action="{{ path('image.add', {'id': trick.id}) }}" multiple
+                   id="{{ imageForm.files.vars.id }}" name="{{ imageForm.files.vars.full_name }}">
+            <script>
+                var fileInputId = '{{ imageForm.files.vars.id }}';
+                var fileInputName = '{{ imageForm.files.vars.full_name }}';
+                var fileThumbnailId = '{{ form.thumbnail.vars.id }}';
+                var uploadImageUrl = '{{ asset(asset_media) }}';
+                var emptyImageUrl = '{{ asset("image/default_thumbnail.jpg") }}';
+                var currentThumbnailId = {{ (trick.thumbnail.id is defined) ? trick.thumbnail.id : 0 }};
+            </script>
         </div>
 
-        {{ form_errors(form) }}
+        <div class="row">
+            <div class="col-12 py-3">
+                {{ form_widget(form.description) }}
+            </div>
 
-        <div class="">
-            {#            <div id="videos">
-                            {{ form_widget(form.videos) }}
-                            <div>+</div>
-                        </div>#}
-            <div id="images">
-                {{ imageMacro.select(form.images, trick.images) }}
-                <i onclick="imagePicker('{{ form.images.vars.id }}', true, false)" class="fas fa-plus"></i>
+            <div class="col-12 col-md-6">
+                {{ form_row(form.tag) }}
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
         </div>
 
-        {% for video in trick.videos %}
-            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                {{ videoMacro.show(video) }}
-            </div>
-        {% endfor %}
 
-        {% for image in trick.images %}
-            <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="">
-            </div>
-        {% endfor %}
-
-        {{ form_row(form.description) }}
-        {{ form_row(form.tag) }}
-
-
-
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-    </div>
     {{ form_end(form, {'render_rest': false}) }}
 
+    {#MODAL ADD VIDEO#}
+    <div id="video_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {{ form_start(videoForm, {'attr': {'class': 'video_form'}}) }}
+                        {{ form_rest(videoForm) }}
+                        <div class="text-center">
+                            <button type="submit" class="btn-primary btn">Ajouter</button>
+                        </div>
+                    {{  form_end(videoForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
 
+    {#MODAL ADD Tag#}
+{#    <div id="tag_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {{ form_start(tagForm, {'attr': {'class': 'tag_form'}}) }}
+                    {{ form_rest(tagForm) }}
+                    <div class="text-center">
+                        <button type="submit" class="btn-primary btn">Ajouter</button>
+                    </div>
+                    {{  form_end(tagForm) }}
+                </div>
+            </div>
+        </div>
+    </div>#}
+
+    {#DELETE TRICK FORM#}
     <form
             method="post"
-            action="{{ path('trick.delete', {'id': app.request.get('id')}) }}"
+            action="{{ path('trick.delete', {'id': trick.id}) }}"
             swa-title="Êtes vous sur ?"
             swa-text="Après validation il est impossible de revenire en arrière"
+            type="DELETE"
+            redirect="true"
     >
         <button type="submit" class="btn btn-danger swa-confirm">Supprimer</button>
         <input type="hidden" name="_method" value="DELETE">
@@ -76,9 +127,10 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/image.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.0.1/tinymce.min.js"></script>
+    <script src="{{ asset('js/edit.js') }}"></script>
+    <script src="https://cloud.tinymce.com/5/tinymce.min.js"></script>
     <script>
+        /*tinymce*/
         tinymce.init({
             selector: "#trick_description",
             setup: function (editor) {
@@ -90,8 +142,21 @@
                 });
             }
         });
+        var tinyCreditInterval = setInterval(removeTinyCredit, 100);
+        function removeTinyCredit() {
+            var credit = $('.tox.tox-silver-sink.tox-tinymce-aux');
+            if (credit.length > 0) {
+                credit.remove();
+                clearInterval(tinyCreditInterval);
+            }
+        }
+
         $(document).ready(function() {
             $('.input_trick_title').removeClass('form-control');
+            $('*[data-toggle="popover"]').popover({
+                trigger: 'focus',
+                container: 'body'
+            });
         })
     </script>
 {% endblock %}

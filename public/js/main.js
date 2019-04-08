@@ -4,13 +4,17 @@ var breakpoint_lg = 992;
 var breakpoint_xl = 1200;
 
 var loader = $('#ajax_loader');
+var seeMedia = $('#seemedia');
+var media = $('#media');
+var mediaIsShow = false;
 
 $(document).ready(function() {
 
     //Init Page
-    //$('.sf-toolbar').remove();
     refreshHeader();
     refreshArrowUp();
+    refreshEditMedia();
+    $('.toast').toast('show');
 
     //Link smooth scroll
     $("a[href*='#']:not([href='#'])").click(function() {
@@ -31,11 +35,13 @@ $(document).ready(function() {
         if ($(window).width() >= breakpoint_md) {
             $("#nav_mobile").hide();
             $("#nav_desktop").show();
+            $("footer").show();
             $('#wallpaper img').css('height', 'calc(100vh - '+$('#nav_desktop').height()+'px)');
             $('#mobile_bottom').css('height', '0');
         } else {
             $("#nav_desktop").hide();
             $("#nav_mobile").show();
+            $("footer").hide();
             $('#mobile_bottom').css('height', $("#nav_mobile").height());
             $('#wallpaper img').css('height', 'calc(100vh - '+$('#nav_mobile').height()+'px)');
         }
@@ -52,15 +58,38 @@ $(document).ready(function() {
                 $("#arrow_up").hide();
             }
         }
-
     }
+
+    //See media button on edit trick page
+    function refreshEditMedia() {
+        if ($(window).width() >= breakpoint_md) {
+            seeMedia.hide();
+            media.show();
+        } else {
+            if (!mediaIsShow) {media.hide();}
+            seeMedia.show();
+        }
+    }
+
     //Event
-    $( window ).resize(function() {
+    $(window).resize(function() {
         refreshHeader();
         refreshArrowUp();
+        refreshEditMedia();
     });
-    $( window ).scroll(function() {
+    $( window).scroll(function() {
         refreshArrowUp();
+    });
+    seeMedia.click(function() {
+        if (media.is(":hidden")) {
+            media.slideDown(400);
+            seeMedia.html('Cacher les médias');
+            mediaIsShow = true;
+        } else {
+            media.slideUp(400);
+            seeMedia.html('Voir les médias');
+            mediaIsShow = false;
+        }
     });
 });
 
@@ -85,19 +114,18 @@ $(".swa-confirm").on("click", function(e) {
 });
 
 //Delete a trick
-function deleteTrick(trick, time) {
-    trick.css('transition', time+'ms');
-    trick.css('opacity', '0');
-    trick.css('top', '-150px');
+function deleteItem(item, time) {
+    item.css('transition', time+'ms');
+    item.css('opacity', '0');
+    item.css('top', '-150px');
     setTimeout(function(){
-        trick.remove();
+        item.remove();
     }, time);
 }
 $('form[type="DELETE"]').submit(function (e) {
     e.preventDefault();
     var form = $(this);
     var redirect = (form.attr('redirect') === 'true');
-    showLoader();
     $.ajax({
         type: "POST",
         url: form.attr('action'),
@@ -111,7 +139,7 @@ $('form[type="DELETE"]').submit(function (e) {
                     if (data.url != null && redirect === true) {
                         window.location.replace(data.url);
                     } else {
-                        deleteTrick(form.parents('.tricks_card'), 400);
+                        deleteItem(form.parents('.tricks_card'), 400);
                     }
                 }
                 if (data.message != null) {
@@ -120,21 +148,25 @@ $('form[type="DELETE"]').submit(function (e) {
             } else {
                 alert('error');
             }
-            hideLoader();
         },
-        error: function (request, textStatus, errorThrown) {
-            hideLoader();
-            alert('error');
-        }
+        error: function(jqXHR, textStatus, errorMessage) {ajaxError()}
     });
 });
 
 /* Loader */
-function showLoader() {
+$(document).bind("ajaxSend", function(){
     loader.css('display', 'flex');
     setTimeout(function(){ loader.css('opacity', '1'); }, 10);
-}
-function hideLoader() {
+}).bind("ajaxComplete", function(){
     loader.css('display', 'none');
     loader.css('opacity', '0');
+});
+
+//Popup on ajax error
+function ajaxError() {
+    Swal.fire({
+        type: 'error',
+        title: 'Oops...',
+        text: "Une erreur est survenue !"
+    })
 }

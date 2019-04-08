@@ -15,11 +15,11 @@ class ImageType extends AbstractType
         $builder
             ->add('files', FileType::class, array(
                 //'data_class' => null,
-                'label' => 'Ajouter une image',
-                'attr' => array('accept' => 'image/JPEG'),
+                'label' => 'Ajouter des images',
+                'attr' => ['accept' => 'image/JPEG'],
+                'label_attr' => ['class' => 'btn btn-dark'],
                 'multiple' => true
             ))
-            /*->add('name')*/
         ;
     }
 

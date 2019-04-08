@@ -5,13 +5,19 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity("username")
+ * @UniqueEntity("token")
  */
 class User implements UserInterface, \Serializable
 {
+    const ROLE_AMDIN = 'ROLE_ADMIN';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -21,21 +27,27 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", unique=true, length=32)
+     * @Assert\Length(min = 3, max = 32)
+     * @Assert\NotBlank()
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min = 5, max = 255)
+     * @Assert\NotBlank()
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", unique=true, length=255)
      */
     private $token;
 
@@ -151,7 +163,7 @@ class User implements UserInterface, \Serializable
      */
     public function getRoles(): array
     {
-        return ['ROLE_ADMIN'];
+        return [self::ROLE_AMDIN];
     }
 
     /**

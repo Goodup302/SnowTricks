@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VideoRepository")
@@ -15,6 +16,8 @@ class Video
     const YOUTUBE = "YouTube";
     const DAILYMOTION = "Dailymotion";
 
+    const ACCEPTS = [Video::YOUTUBE_TYPE, Video::DAILYMOTION_TYPE];
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -24,11 +27,14 @@ class Video
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(min=0, max=1)
+     * @Assert\NotBlank()
      */
     private $platform;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Video::ACCEPTS)
      */
     private $videoId;
 

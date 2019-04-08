@@ -4,27 +4,40 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Image;
+use App\Entity\Tag;
 use App\Entity\Trick;
+use App\Entity\User;
+use App\Entity\Video;
+use App\Form\CommentType;
 use App\Form\ImageType;
+use App\Form\TagType;
 use App\Form\TrickType;
+use App\Form\VideoType;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
-use App\Service\GenerateData;
+use App\Service\Date;
+use App\Service\FileUploader;
+use App\Service\Utils;
 use Doctrine\ORM\EntityManagerInterface;
+use Faker\Provider\ka_GE\DateTime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class TrickController extends AbstractController
 {
     const UNKNOWN_ERROR = 'Une erreur inconnue est survenue';
+    const NOT_CONNECTED = "Vous devez ètre connecté pour poster des commentaires";
+    const MAX_COMMENT_PER_PAGE = 3;
 
     /**
      * @var TrickRepository
      */
-    private $repository;
+    private $trickRepository;
 
     /**
      * @var EntityManagerInterface
@@ -38,54 +51,80 @@ class TrickController extends AbstractController
      */
     public function __construct(TrickRepository $repository, EntityManagerInterface $em)
     {
-        $this->repository = $repository;
+        $this->trickRepository = $repository;
         $this->em = $em;
     }
 
     /**
-     * @Route("/", name="home")
-     * @param TrickRepository $repository
-     * @return Response
-     */
-    public function home(TrickRepository $repository, GenerateData $data): Response
-    {
-        $data->add(0);
-        return $this->render('index.html.twig', ['tricks' => $repository->findAll()]);
-    }
-
-    /**
-     * @Route("/trick/{slug}", name="trick.single", methods="GET")
+     * @Route("/trick/{slug}", name="trick.single", methods="GET|POST")
      * @param Trick $trick
      * @return Response
      */
-    public function single(Trick $trick): Response
+    public function single(Trick $trick, Request $request, CommentRepository $commentRepository): Response
     {
-        return $this->render('trick/single.html.twig', ['trick' => $trick]);
+        if ($trick->isCreated() == false) return $this->redirectToRoute("home");
+        //FORM
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            if ($user != null) {
+                $comment->setTrick($trick);
+                $comment->setUser($user);
+                $comment->setPublishDate(new \DateTime());
+                $this->em->persist($comment);
+                $this->em->flush();
+            }
+        }
+        return $this->render('trick/single.html.twig', [
+            'trick' => $trick,
+            'commentForm' => $form->createView(),
+            'commentPage' => ceil($commentRepository->countByTrick($trick->getId()) / self::MAX_COMMENT_PER_PAGE),
+        ]);
+    }
+
+
+    /**
+     * @Route("/comment/{id}", name="trick.comments", methods="GET|POST")
+     * @param Trick $trick
+     * @param Request $request
+     * @param CommentRepository $commentRepository
+     * @return Response
+     */
+    public function commentByPage(Trick $trick, Request $request, CommentRepository $commentRepository): Response
+    {
+        $page = intval($request->request->get('page'));
+        $comments = $commentRepository->getPaginate($trick->getId(), $page, self::MAX_COMMENT_PER_PAGE);
+        dump($comments);
+        return $this->render('ajax/comment.html.twig', ['comments' => $comments]);
     }
 
     /**
-     * @Route("/edit/{id}", name="trick.edit", methods="GET|POST")
+     * @Route("/edit/{slug}", name="trick.edit", methods="GET|POST")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param Trick $trick
      * @param Request $request
      * @return Response
      */
     public function edit(Trick $trick, Request $request): Response
     {
-        //var_dump($trick->getThumbnail()->relation());
-
+        //Upload Video form
+        $video = new Video();
+        $videoOption = ['attr' => [
+            'action' => $this->generateUrl('video.add', ['id' => $trick->getId()])
+        ]];
+        $videoForm = $this->createForm(VideoType::class, $video, $videoOption);
         //Upload Image form
         $image = new Image();
         $imageForm = $this->createForm(ImageType::class, $image);
-        //Trick form
-        $form = $this->createForm(TrickType::class, $trick);
+        //form
+        $form = $this->createForm(TrickType::class, $trick, ['attr' => [TrickType::TRICK => $trick->getId()]]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            //date_default_timezone_set('Europe/Paris');
-            /** @var Trick $trick */
-            $trick = $form->getData();
-            $date = new \DateTime();
-            $date->format('Y-m-d H:i:s');
-            $trick->setLastEdit($date);
+            if ($trick->isCreated()) $trick->setLastEdit(new \DateTime());
+            if (!$trick->isCreated()) $trick->setPublishDate(new \DateTime());
+            $trick->setSlug(Utils::slugify($trick->getName()));
             $this->em->persist($trick);
             $this->em->flush();
             return $this->redirectToRoute('trick.single', ['slug' => $trick->getSlug()]);
@@ -93,42 +132,39 @@ class TrickController extends AbstractController
         return $this->render('trick/edit.html.twig', [
             'form' => $form->createView(),
             'imageForm' =>$imageForm->createView(),
+            'videoForm' =>$videoForm->createView(),
             'trick' => $trick
         ]);
     }
 
     /**
      * @Route("/new", name="trick.new", methods="GET|POST")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param Request $request
      * @return Response
      */
     public function new(Request $request): Response
     {
-        $trick = new Trick();
-        $form = $this->createForm(TrickType::class, $trick);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-
-
-            $trick = $form->getData();
-
-            //Publish Date
-            //date_default_timezone_set('Europe/Paris');
-            $date = new \DateTime();
-            $date->format('Y-m-d H:i:s');
-            $trick->setPublishDate($date);
-
-            $this->em->persist($trick);
-            $this->em->flush();
-            $this->addFlash('success', 'Figure ajoutée avec succès');
-
-            return $this->redirectToRoute("trick.edit", ['id' => $trick->getId()]);
+        $name = $request->request->get('name');
+        if ($name != null) {
+            if (!$this->trickRepository->findOneBy(['name' => $name])) {
+                $trick = new Trick();
+                $trick->setName($name);
+                $trick->setSlug(Utils::slugify($trick->getName()));
+                $this->em->persist($trick);
+                $this->em->flush();
+                return $this->redirectToRoute("trick.edit", ['slug' => $trick->getSlug()]);
+            } else {
+                $this->addFlash('error', 'Le nom saisi est déjà utilisé !');
+                return $this->redirectToRoute("home");
+            }
         }
-        return $this->render('trick/edit.html.twig', ['form' => $form->createView()]);
+        return $this->redirectToRoute("home");
     }
 
     /**
      * @Route("/delete/{id}", name="trick.delete", methods="DELETE")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param Trick $trick
      * @return Response
      */
@@ -137,6 +173,12 @@ class TrickController extends AbstractController
         try {
             foreach ($trick->getComments() as $comment) {
                 $this->em->remove($comment);
+            }
+            foreach ($trick->getImages() as $image) {
+                $this->em->remove($image);
+            }
+            foreach ($trick->getVideos() as $video) {
+                $this->em->remove($video);
             }
             $this->em->remove($trick);
             $this->em->flush();
@@ -149,22 +191,41 @@ class TrickController extends AbstractController
                 'success' => false,
                 'url' => $this->generateUrl('home'),
                 'message' => self::UNKNOWN_ERROR,
+                'error' => $e->getMessage(),
             ));
         }
     }
 
     /**
-     * @Route("/add_tag", name="add.tag", methods="POST")
-     * @param Trick $trick
+     * @Route("/addtag", name="tag.add", methods="POST|GET")
+     * @Security("is_granted('ROLE_ADMIN')")
+     * @param Request $request
      * @return Response
      */
-    public function addTag(Trick $trick): Response
+    public function addTag(Request $request): Response
     {
-        foreach ($trick->getComments() as $comment) {
-            $this->em->remove($comment);
+        $tag = new Tag();
+        $form = $this->createForm(TagType::class, $tag);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $trick = $form->getData();
+            $this->em->persist($trick);
+            $this->em->flush();
         }
-        $this->em->remove($trick);
-        $this->em->flush();
-        return $this->redirectToRoute('home');
+        try {
+            $this->em->persist($trick);
+            $this->em->flush();
+            return new JsonResponse(array(
+                'success' => true,
+                'url' => $this->generateUrl('home'),
+            ));
+        } catch (\Exception $e) {
+            return new JsonResponse(array(
+                'success' => false,
+                'url' => $this->generateUrl('home'),
+                'message' => self::UNKNOWN_ERROR,
+                'error' => $e->getMessage(),
+            ));
+        }
     }
 }

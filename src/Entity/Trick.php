@@ -5,10 +5,13 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
+ * @UniqueEntity("name")
+ * @UniqueEntity("slug")
  */
 class Trick
 {
@@ -25,17 +28,19 @@ class Trick
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", unique=true, length=255)
+     * @Assert\Length(max=50)
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $publishDate;
 
@@ -55,13 +60,12 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(type="string", unique=true, length=255, nullable=true)
      */
     private $slug;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="trick")
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="trick", cascade={"persist"})
      */
     private $images;
 
@@ -216,17 +220,31 @@ class Trick
         return $this;
     }
 
-    public function getThumbnail(): ?Image
+    public function setThumbnail(Image $thumbnail = null): self
     {
-        if (is_null($this->thumbnail)) {
-            foreach ($this->images as $image) {
-                /** @var Image $image */
-                if ($image->getThumbnail()) {
-                    $this->thumbnail = $image;
-                }
+        /* @var Image $image */
+        foreach ($this->getImages() as $image) {
+            if ($image->getThumbnail()) {
+                $image->setThumbnail(false);
             }
         }
-        return $this->thumbnail;
+        if ($thumbnail != null) {
+            $thumbnail->setThumbnail(true);
+        }
+        return $this;
+    }
+
+    public function getThumbnail(): ?Image
+    {
+        if (isset($this->thumbnail)) return $this->thumbnail;
+        foreach ($this->images as $image) {
+            /** @var Image $image */
+            if ($image->getThumbnail()) {
+                $this->thumbnail = $image;
+                return $this->thumbnail;
+            }
+        }
+        return null;
     }
 
     /**
@@ -258,5 +276,13 @@ class Trick
         }
 
         return $this;
+    }
+
+    public function isCreated(): bool
+    {
+        if (is_null($this->publishDate)) {
+            return false;
+        }
+        return true;
     }
 }

@@ -8,7 +8,6 @@ Table of Contents
 
 2.0 FOOTER
 
-
 7.0 OTHER
 */
 
@@ -16,8 +15,12 @@ Table of Contents
 0.0 - GENERALE
 */
 @import url('https://fonts.googleapis.com/css?family=Acme');
+@import url('https://fonts.googleapis.com/css?family=Asap');
 * {
-    font-family: 'Abel', sans-serif;
+    font-family: 'Asap', sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Acme', sans-serif !important;
 }
 
 :root {
@@ -158,15 +161,16 @@ a.current {
 
 /* Add new button */
 .button_new {
-    color: green;
+    color: limegreen;
     font-size: 20px;
     text-align: center;
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
-
 
 /* Arrow up */
 #arrow_up {
@@ -273,6 +277,7 @@ a.current {
     color: white;
     text-shadow: black 2px 2px 15px;
     margin: 0;
+    word-wrap: break-word;
 }
 #single_thumbnail img{
     height: 400px;
@@ -300,41 +305,6 @@ a.current {
     padding: 10px;
 }
 
-/*Other*/
-
-img.img_responsive {
-    object-fit: cover;
-    width: 100%;
-}
-.absolute_center {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-}
-.delete{
-    color: red;
-    margin: 0;
-    padding: 0;
-    border: none;
-    cursor: pointer;
-    background: transparent;
-}
-.delete:focus {
-    outline: none;
-}
-.delete:hover {
-    color: #e20000;
-}
-
-
 /*************
 * EDIT TRICK *
 *************/
@@ -346,6 +316,7 @@ img.img_responsive {
     background-color: #fff0;
     border: 0;
     text-align: center;
+    padding: 1rem;
 }
 .input_trick_title:focus {
     outline: 0;
@@ -374,4 +345,142 @@ img.img_responsive {
 #ajax_loader [role="status"]{
     width: 80px;
     height: 80px;
+}
+
+/**********
+*  OTHER  *
+**********/
+
+img.img_responsive {
+    object-fit: cover;
+    width: 100%;
+}
+.absolute_center {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+    width: 100%;
+    height: 100%;
+}
+
+.fixed_popup {
+    position: fixed;
+    text-align: center;
+    z-index: 5;
+    font-size: 20px;
+    background-color: rgba(255,255,255,.95);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+.fixed_popup.fade {
+    transition: opacity 400ms !important;
+}
+
+template {
+    display: none;
+}
+/***********
+*  BUTTON  *
+***********/
+
+.button_icon {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    transition: 150ms;
+    cursor: pointer;
+}
+.button_icon:focus {
+    outline: none;
+}
+.button_icon:hover {
+    filter: contrast(0.3);
+}
+/*delete button*/
+.button_icon.fa-trash-alt{
+    color: red;
+}
+/*edit button*/
+.button_icon.fa-edit {
+    color: #007bff;
+}
+/*add media button*/
+.button_icon.add_media {
+    font-size: 35px;
+}
+/*thumbnail button*/
+.button_icon.fa-image{
+    color: green;
+}
+
+/*add media div*/
+.add_media {
+    border: black 2px solid;
+    border-radius: 3px;
+    width: 100%;
+    height: 100%;
+    transition: 150ms;
+    cursor: pointer;
+    opacity: 0.5;
+    font-size: 35px;
+    position: relative;
+}
+.add_media:hover,
+.add_media:focus{
+    transform: scale(1.1);
+    opacity: 1;
+    outline: none;
+}
+
+/*custom file input*/
+.input_file {
+    width: 100%;
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    z-index: 2;
+}
+
+/************
+*  COMMENT  *
+************/
+
+.comment_avatar {
+    height: 65px;
+    width: 65px;
+    object-fit: cover;
+    border-radius: 100%;
+}
+/*Pagination*/
+.page-link.clicked{
+    color: white;
+    background: #0061b7c9;
+}
+
+/***********
+*  FOOTER  *
+***********/
+footer {
+    background: #585b62;
+    box-shadow: 0 -2px 3px black;
+    padding-left: 30px;
+    padding-right: 30px;
+    display: none;
+}
+footer a{
+    font-size: 16px;
+    color: white !important;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }

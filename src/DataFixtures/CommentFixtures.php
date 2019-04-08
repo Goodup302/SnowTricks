@@ -15,17 +15,20 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        $date = new \DateTime();
+        $date = new \DateTimeImmutable();
         $date->format('Y-m-d H:i:s');
 
         for ($i = 0; $i < 2; $i++) {
-            $comment = (new Comment())
-                ->setContent($this->faker->realText())
-                ->setPublishDate($date)
-                ->setUser($this->getReference(UserFixtures::MAIN_USER))
-                ->setTrick($this->getReference(Trick::class.$i))
-            ;
-            $manager->persist($comment);
+            for ($ii = 0; $ii < 20; $ii++) {
+                $date = $date->add(\DateInterval::createFromDateString('1 day'));
+                $comment = (new Comment())
+                    ->setContent("{$this->faker->realText()}")
+                    ->setPublishDate($date)
+                    ->setUser($this->getReference(UserFixtures::MAIN_USER))
+                    ->setTrick($this->getReference(Trick::class.$i))
+                ;
+                $manager->persist($comment);
+            }
         }
 
         $manager->flush();
