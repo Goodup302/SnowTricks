@@ -7,6 +7,7 @@ parameters:
     locale: 'fr'
     media_directory: '%kernel.project_dir%/public/uploads'
     asset_media_directory: 'uploads/'
+    sender_email: 'contact@snowtricks.fr'
 
 services:
     # default configuration for services in *this* file

@@ -87,8 +87,8 @@
             <img src="{{ asset('image/default_user.jpg') }}" class="mr-3 comment_avatar" alt="Avatar par default">
         {% endif %}
         <div class="media-body">
-            <h5 class="mt-0" style="display: inline-flex;">{{ comment.user.username|capitalize }}</h5>
-            <span class="pl-3">{{ comment.publishDate|date("Y-m-d H:i") }}</span>
+            <h5 class="mt-0 d-sm-inline-flex">{{ comment.user.username|capitalize }}</h5>
+            <span class="pl-sm-2">{{ comment.publishDate|date("Y-m-d H:i") }}</span>
             <p>{{ comment.content }}</p>
         </div>
     </div>

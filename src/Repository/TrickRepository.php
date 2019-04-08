@@ -23,7 +23,7 @@ class TrickRepository extends ServiceEntityRepository
     /**
      * @return Trick[]|null
      */
-    public function getAll()
+    public function getVisible()
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.publishDate IS NOT NULL')

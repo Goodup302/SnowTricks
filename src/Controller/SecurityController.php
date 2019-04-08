@@ -8,9 +8,11 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -33,16 +35,21 @@ class SecurityController extends AbstractController
      */
     private $encoder;
 
+    private $params;
+
+    private $mailer;
 
     /**
      * SecurityController constructor.
      * @param EntityManagerInterface $em
      * @param UserPasswordEncoderInterface $encoder
      */
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
+    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, ParameterBagInterface $params, \Swift_Mailer $mailer)
     {
         $this->em = $em;
         $this->encoder = $encoder;
+        $this->params = $params;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -79,40 +86,19 @@ class SecurityController extends AbstractController
             //
             $this->addFlash('success', self::REGISTER_SUCCESS);
             //
-            $mail = (new \Swift_Message('Hello Email'))
-                ->setFrom('send@example.com')
-                ->setTo('contact@snowtricks.fr')
-                ->setBody(
-                    $this->renderView('email/confirm.html.twig', [
-                        'url' => 'test',
-                        'user' => $user,
-                    ]),'text/html')
+            $view = $this->renderView('email/confirm.html.twig', [
+                'url' => $this->generateUrl('activate', ['token' => $user->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
+                'user' => $user
+            ]);
+            $mail = (new \Swift_Message('Activation'))
+                ->setSender($this->params->get('sender_email'))
+                ->setFrom($this->params->get('sender_email'))
+                ->setTo($user->getEmail())
+                ->setBody($view, 'text/html')
             ;
-            $mailer->send($mail);
+            $this->mailer->send($mail);
         }
         return $this->render('security/register.html.twig', ['form' => $form->createView()]);
-    }
-
-    /**
-     * @Route("/mail", name="mail")
-     */
-    public function mail(\Swift_Mailer $mailer): Response
-    {
-        $mail = (new \Swift_Message('Hello Email'))
-            ->setSender('contact@snowtricks.fr')
-            ->setFrom('contact@snowtricks.fr')
-            ->setTo('j.f0471430704@gmail.com')
-            ->setBody(
-                $this->renderView(
-                    'email/confirm.html.twig',
-                    ['url' => 'test', 'user' => $this->getUser()]
-                ),'text/html')
-        ;
-        $mailer->send($mail);
-        return $this->render("email/confirm.html.twig", [
-            'user' => $this->getUser(),
-            'url' => 'google.fr',
-        ]);
     }
 
     /**
@@ -126,7 +112,17 @@ class SecurityController extends AbstractController
             /** @var User $user */
             $user = $userRepository->findOneBy(['username' => $username]);;
             if ($user) {
-                //Add send mail
+                $view = $this->renderView('email/confirm.html.twig', [
+                    'url' => $this->generateUrl('resetpassword', ['token' => $user->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
+                    'user' => $user
+                ]);
+                $mail = (new \Swift_Message('Récupération du mot de passe'))
+                    ->setSender($this->params->get('sender_email'))
+                    ->setFrom($this->params->get('sender_email'))
+                    ->setTo($user->getEmail())
+                    ->setBody($view, 'text/html')
+                ;
+                $this->mailer->send($mail);
                 $this->addFlash('success', self::FORGOT_SUCCESS);
             } else {
                 $this->addFlash('failed', self::FORGOT_ERROR);

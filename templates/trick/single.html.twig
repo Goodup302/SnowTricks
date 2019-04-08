@@ -4,57 +4,50 @@
 {% block title %}Figure{% endblock %}
 
 {% block body %}
-    <div class="row">
-
-        <div id="single_thumbnail" class="w-100 pt-md-4 position-relative">
-            {% if trick.thumbnail.name is defined %}
-                <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}" alt="{{ trick.thumbnail.alt }}">
-            {% else %}
-                <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}" alt="Image non disponible">
-            {% endif %}
-            <div class="absolute_center pt-md-4">
-                <div class="position-relative w-100">
-                    <h1 class="p-3">{{ trick.name }}</h1>
-                </div>
+    <div id="single_thumbnail" class="row pt-md-4 position-relative">
+        {% if trick.thumbnail.name is defined %}
+            <img class="img_responsive" src="{{ asset(asset_media~trick.thumbnail.name) }}" alt="{{ trick.thumbnail.alt }}">
+        {% else %}
+            <img class="img_responsive" src="{{ asset("image/default_thumbnail.jpg") }}" alt="Image non disponible">
+        {% endif %}
+        <div class="absolute_center pt-md-4">
+            <div class="position-relative w-100">
+                <h1 class="p-3">{{ trick.name }}</h1>
             </div>
-            {% if app.user %}
-                <div class="edit_single pt-md-4">
-                    <a class="edit" href="{{ path('trick.edit', {'slug': trick.slug}) }}"><i class="fas fa-edit button_icon"></i></a>
-                    <form
-                            method="post"
-                            action="{{ path('trick.delete', {'id': trick.id}) }}"
-                            swa-title="Êtes vous sur ?"
-                            swa-text="Après validation il est impossible de revenire en arrière"
-                            type="DELETE"
-                            redirect="true"
-                    >
-                        <button class="fas fa-trash-alt button_icon delete swa-confirm"></button>
-                        <input type="hidden" name="_method" value="DELETE">
-                    </form>
-                </div>
-            {% endif %}
         </div>
+        {% if app.user %}
+            <div class="edit_single pt-md-4">
+                <a class="edit" href="{{ path('trick.edit', {'slug': trick.slug}) }}"><i class="fas fa-edit button_icon"></i></a>
+                <form
+                        method="post"
+                        action="{{ path('trick.delete', {'id': trick.id}) }}"
+                        swa-title="Êtes vous sur ?"
+                        swa-text="Après validation il est impossible de revenire en arrière"
+                        type="DELETE"
+                        redirect="true"
+                >
+                    <button class="fas fa-trash-alt button_icon delete swa-confirm"></button>
+                    <input type="hidden" name="_method" value="DELETE">
+                </form>
+            </div>
+        {% endif %}
+    </div>
 
-        <div class="col-12 d-flex justify-content-center">
-            <span id="seemedia" class="btn btn-primary" style="display: none">Voir les médias</span>
-        </div>
-        <div id="media" class="row" style="display: none">
-            {% for image in trick.images %}
-                <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                    <img class="media img_responsive" src="{{ asset(asset_media ~ image.name)}}" alt="{{ image.alt }}">
-                </div>
-            {% endfor %}
+    <div class="col-12 d-flex justify-content-center">
+        <span id="seemedia" class="btn btn-primary" style="display: none">Voir les médias</span>
+    </div>
+    <div id="media" class="row" style="display: none">
+        {#Images List#}
+        {% for image in trick.images %}
+            {{ macro.image(image, false) }}
+        {% endfor %}
+        {#Videos list#}
+        {% for video in trick.videos %}
+            {{ macro.video(video, false) }}
+        {% endfor %}
+    </div>
 
-            {% for video in trick.videos %}
-                <div class="col-12 col-lg-4 col-md-6 d-flex justify-content-center">
-                    {{ macro.video(video) }}
-                </div>
-            {% endfor %}
-        </div>
-
-
-
-
+    <div class="row">
         <div class="col-12 py-3">
             {{ trick.description|raw }}
         </div>
@@ -74,44 +67,43 @@
                 </div>
             {% endif %}
         </div>
-
-        <div class="dropdown-divider col-12"></div>
-
-        {#COMMENT FORM#}
-        <div class="row justify-content-center w-100">
-            {{ form_errors(commentForm) }}
-            {{ form_start(commentForm, {'attr': {'class': 'col-10 text-center py-4'}}) }}
-                {% if not app.user %}
-                    <p class="text-muted">Vous devez ètre connecté pour poster un commentaire</p>
-                {% endif %}
-                {{ form_row(commentForm.content) }}
-                <button type="submit" class="btn btn-light" {{ (app.user) ? '' : 'disabled="disabled"' }}>Ajouter un commentaire</button>
-            {{ form_end(commentForm) }}
-        </div>
-
-        <div class="dropdown-divider col-12"></div>
-
-        {#COMMENT LIST#}
-        <div class="justify-content-center row">
-            <div class="col-12 col-lg-10">
-                {% if trick.comments|length > 0 %}
-                    <div id="comments"></div>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
-                            <li class="page-item"><a class="page-link" action="prev" href="#comments">Précédent</a></li>
-                            {% for i in 1..commentPage %}
-                                <li class="page-item"><a class="page-link" page="{{ i }}" href="#comments">{{ i }}</a></li>
-                            {% endfor %}
-                            <li class="page-item"><a class="page-link" action="next" href="#comments">Suivant</a></li>
-                        </ul>
-                    </nav>
-                {% else %}
-                    <p>dfd</p>
-                {% endif %}
-            </div>
-        </div>
     </div>
 
+    <div class="dropdown-divider col-12"></div>
+
+    {#COMMENT FORM#}
+    <div class="row justify-content-center w-100">
+        {{ form_errors(commentForm) }}
+        {{ form_start(commentForm, {'attr': {'class': 'col-10 text-center py-4'}}) }}
+            {% if not app.user %}
+                <p class="text-muted">Vous devez ètre connecté pour poster un commentaire</p>
+            {% endif %}
+            {{ form_row(commentForm.content) }}
+            <button type="submit" class="btn btn-light" {{ (app.user) ? '' : 'disabled="disabled"' }}>Ajouter un commentaire</button>
+        {{ form_end(commentForm) }}
+    </div>
+
+    <div class="dropdown-divider col-12"></div>
+
+    {#COMMENT LIST#}
+    <div class="justify-content-center row">
+        <div class="col-12 col-lg-10">
+            {% if trick.comments|length > 0 %}
+                <div id="comments"></div>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" action="prev" href="#comments">Précédent</a></li>
+                        {% for i in 1..commentPage %}
+                            <li class="page-item"><a class="page-link" page="{{ i }}" href="#comments">{{ i }}</a></li>
+                        {% endfor %}
+                        <li class="page-item"><a class="page-link" action="next" href="#comments">Suivant</a></li>
+                    </ul>
+                </nav>
+            {% else %}
+                <p>dfd</p>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}

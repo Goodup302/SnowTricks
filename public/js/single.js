@@ -16,19 +16,26 @@ $(document).ready(function() {
             commentContainer.html(data);
         })
     }
-    paginateElement.on('click', 'a[page]', function () {
-        page = $(this).attr('page');
-        getComments();
+    paginateElement.on('click', 'a[page]', function (e) {
+        if (page != $(this).attr('page')) {
+            page = $(this).attr('page');
+            getComments();
+        } else {
+            e.preventDefault();
+        }
     });
 
-    paginateElement.on('click', 'a[action]', function () {
+    paginateElement.on('click', 'a[action]', function (e) {
         action = $(this).attr('action');
         nbPage = paginateElement.find('a[page]').length;
         if (action === "prev" && page > 1) {
             page--;
+            getComments();
         } else if (action === "next" && page < nbPage) {
             page++;
+            getComments();
+        } else {
+            e.preventDefault();
         }
-        getComments();
     });
 });

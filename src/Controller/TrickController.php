@@ -20,6 +20,7 @@ use App\Service\FileUploader;
 use App\Service\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\ka_GE\DateTime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,6 +102,7 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/edit/{slug}", name="trick.edit", methods="GET|POST")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param Trick $trick
      * @param Request $request
      * @return Response
@@ -137,6 +139,7 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/new", name="trick.new", methods="GET|POST")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param Request $request
      * @return Response
      */
@@ -144,7 +147,7 @@ class TrickController extends AbstractController
     {
         $name = $request->request->get('name');
         if ($name != null) {
-            if (true) {
+            if (!$this->trickRepository->findOneBy(['name' => $name])) {
                 $trick = new Trick();
                 $trick->setName($name);
                 $trick->setSlug(Utils::slugify($trick->getName()));
@@ -161,6 +164,7 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/delete/{id}", name="trick.delete", methods="DELETE")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param Trick $trick
      * @return Response
      */
@@ -194,6 +198,7 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/addtag", name="tag.add", methods="POST|GET")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param Request $request
      * @return Response
      */

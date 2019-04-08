@@ -10,6 +10,7 @@ use App\Form\VideoType;
 use App\Repository\ImageRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,6 +18,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Security("is_granted('ROLE_ADMIN')")
+ */
 class MediaController extends AbstractController
 {
     /**
@@ -39,7 +43,7 @@ class MediaController extends AbstractController
     }
 
     /**
-     * @Route("/image/add/{id}", name="image.add", methods="POST|GET")
+     * @Route("/image_add/{id}", name="image.add", methods="POST|GET")
      * @param Request $request
      * @param FileUploader $fileUploader
      * @return Response
@@ -69,7 +73,7 @@ class MediaController extends AbstractController
     }
 
     /**
-     * @Route("/image/delete/{id}", name="image.delete", methods="DELETE")
+     * @Route("/image_delete/{id}", name="image.delete", methods="DELETE")
      * @param Image $image
      * @param FileUploader $fileUploader
      * @return Response
@@ -87,7 +91,7 @@ class MediaController extends AbstractController
     }
 
     /**
-     * @Route("/addvideoto/{id}", name="video.add", methods="POST|GET")
+     * @Route("/add_video_to/{id}", name="video.add", methods="POST|GET")
      */
     public function addVideoToTrick(Request $request, Trick $trick): Response
     {
@@ -104,7 +108,7 @@ class MediaController extends AbstractController
     }
 
     /**
-     * @Route("/video/delete/{id}", name="video.delete", methods="POST|GET|DELETE")
+     * @Route("/video_delete/{id}", name="video.delete", methods="POST|GET|DELETE")
      */
     public function deleteVideo(Video $video): Response
     {

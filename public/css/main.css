@@ -8,7 +8,6 @@ Table of Contents
 
 2.0 FOOTER
 
-
 7.0 OTHER
 */
 
@@ -16,8 +15,12 @@ Table of Contents
 0.0 - GENERALE
 */
 @import url('https://fonts.googleapis.com/css?family=Acme');
+@import url('https://fonts.googleapis.com/css?family=Asap');
 * {
-    font-family: 'Abel', sans-serif;
+    font-family: 'Asap', sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Acme', sans-serif !important;
 }
 
 :root {
