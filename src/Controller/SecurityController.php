@@ -140,7 +140,6 @@ class SecurityController extends AbstractController
         /** @var User $user */
         $user = $userRepository->findOneBy(['token' => $token]);
         if ($user) {
-            dump($user);
             $form = $this->createForm(ResetPasswordType::class, $user);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
@@ -170,7 +169,6 @@ class SecurityController extends AbstractController
         /** @var User $user */
         $user = $userRepository->findOneBy(['token' => $token]);
         if ($user && !$user->getActivate()) {
-            dump($user);
             $user->setActivate(true)->createToken();
             $this->em->persist($user);
             $this->em->flush();

@@ -96,7 +96,6 @@ class TrickController extends AbstractController
     {
         $page = intval($request->request->get('page'));
         $comments = $commentRepository->getPaginate($trick->getId(), $page, self::MAX_COMMENT_PER_PAGE);
-        dump($comments);
         return $this->render('ajax/comment.html.twig', ['comments' => $comments]);
     }
 
