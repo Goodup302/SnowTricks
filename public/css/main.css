@@ -61,6 +61,7 @@ h1, h2, h3, h4, h5, h6 {
 #nav_desktop {
     box-shadow: 0 0 7px black;
     display: flex;
+    min-height: 80px;
 }
 #nav_logo {
     max-height: 50px;

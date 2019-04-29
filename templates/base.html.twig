@@ -46,8 +46,19 @@
 
         <!-- HEADER OF PAGE -->
         <nav id="nav_desktop" style="display: none" class="align-items-center">
-            <h1 class="col-lg-4 d-lg-block d-none mb-0">SnowTricks</h1>
-            <img class="col-6 col-lg-4 my-3" id="nav_logo" src="{{ asset('image/nav-logo.jpg') }}" alt="snowtricks logo">
+            <div class="col-lg-4 col-6">
+                <h1 class="mb-0">
+                    <a href="{{ path('home') }}">
+                       SnowTricks
+                    </a>
+                </h1>
+            </div>
+
+            <div class="col-lg-4 d-lg-flex d-none align-items-center justify-content-center">
+                <a href="{{ path('home') }}">
+                    <img id="nav_logo" src="{{ asset('image/nav-logo.jpg') }}" alt="snowtricks logo">
+                </a>
+            </div>
 
             <div class="align-items-center col-6 col-lg-4 d-flex" style="justify-content: space-evenly;">
                 <a class="current" href="{{ path('home') }}">Accueil</a>
