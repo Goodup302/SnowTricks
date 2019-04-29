@@ -13,6 +13,8 @@ trait ConstructFixtures
      */
     private $faker;
 
+    private $size = 15;
+
     /**
      * UserPasswordEncoderInterface
      */

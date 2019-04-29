@@ -18,7 +18,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         $date = new \DateTimeImmutable();
         $date->format('Y-m-d H:i:s');
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < $this->size; $i++) {
             for ($ii = 0; $ii < 23; $ii++) {
                 $date = $date->add(\DateInterval::createFromDateString('1 day'));
                 $comment = (new Comment())

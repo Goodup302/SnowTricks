@@ -6,6 +6,8 @@ use App\Entity\Image;
 use App\Entity\Tag;
 use App\Entity\Trick;
 use App\Entity\Video;
+use App\Kernel;
+use App\Service\ImageGenerator;
 use App\Service\Utils;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -19,14 +21,14 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
     {
         $date = new \DateTime();
         $date->format('Y-m-d H:i:s');
-        for ($i = 0; $i < 50; $i++) {
-            //Images
-            $images[$i][] = (new Image())->setName("wallpaper.jpg")->setThumbnail(true)->setAlt($this->faker->text(10));
-            foreach ($images[$i] as $id => $image) $manager->persist($image);
+        for ($i = 0; $i < $this->size; $i++) {
             //Videos
             $videos[$i][] = (new Video())->setPlatform(Video::YOUTUBE_TYPE)->setVideoId('SQyTWk7OxSI');
             $videos[$i][] = (new Video())->setPlatform(Video::DAILYMOTION_TYPE)->setVideoId('x6evv3');
             foreach ($videos[$i] as $id => $video) $manager->persist($video);
+            //thumbnail
+            $thumbnail = (ImageGenerator::getImage("trick_$i.jpg"))->setThumbnail(true);
+            $manager->persist($thumbnail);
             //Trick
             $trick = new Trick();
             $trick
@@ -34,10 +36,14 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
                 ->setDescription($this->faker->realText(900))
                 ->setPublishDate($date)
                 ->setTag($this->getReference(Tag::class.'0'))
-                //
                 ->addVideo($videos[$i][rand(0, 1)])
-                ->addImage($images[$i][0])
-            ;
+                ->addImage($thumbnail);
+            //Images
+            for ($ii = 0; $ii < 4; $ii++) {
+                $image = ImageGenerator::getImage("trick_".rand(0, 14).".jpg");
+                $manager->persist($image);
+                $trick->addImage($image);
+            }
             $trick->setSlug(Utils::slugify($trick->getName()));
             $this->addReference(Trick::class.$i, $trick);
             $manager->persist($trick);
