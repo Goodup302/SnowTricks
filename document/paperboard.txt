@@ -150,5 +150,11 @@ A faire:
 	- Blocker la connection d'un utilisateur non validé
 	- faires des test unitaires
 	- Avatar sur les utilisateur / page edit account
-	- fix le header decktop/mobile
-	- Actualiser les diagrames
+	- fix le header desktop/mobile (mettre des lien sur les logo)
+	- Actualiser les diagrammes
+	- Fix les tags
+	- ajouter des securité sur les controlleurs
+	- notification quand on save un trick
+	- notification quand on poste un commentaire
+	- mettre le formulaire des commentaire en dessous des commentaire
+	- dans les fixtures des trick mettre des images/video aléatoire de trick
