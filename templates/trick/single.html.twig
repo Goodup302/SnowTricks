@@ -71,20 +71,6 @@
 
     <div class="dropdown-divider col-12"></div>
 
-    {#COMMENT FORM#}
-    <div class="row justify-content-center row">
-        {{ form_errors(commentForm) }}
-        {{ form_start(commentForm, {'attr': {'class': 'col-10 text-center py-4'}}) }}
-            {% if not app.user %}
-                <p class="text-muted">Vous devez ètre connecté pour poster un commentaire</p>
-            {% endif %}
-            {{ form_row(commentForm.content) }}
-            <button type="submit" class="btn btn-light" {{ (app.user) ? '' : 'disabled="disabled"' }}>Ajouter un commentaire</button>
-        {{ form_end(commentForm) }}
-    </div>
-
-    <div class="dropdown-divider col-12"></div>
-
     {#COMMENT LIST#}
     <div class="justify-content-center row">
         <div class="col-12 col-lg-10">
@@ -104,6 +90,21 @@
             {% endif %}
         </div>
     </div>
+
+    {#COMMENT FORM#}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div class="row justify-content-center row">
+            {{ form_errors(commentForm) }}
+            {{ form_start(commentForm, {'attr': {'class': 'col-10 text-center py-4'}}) }}
+            {% if not app.user %}
+                <p class="text-muted">Vous devez ètre connecté pour poster un commentaire</p>
+            {% endif %}
+            {{ form_row(commentForm.content) }}
+            <button type="submit" class="btn btn-light" {{ (app.user) ? '' : 'disabled="disabled"' }}>Ajouter un commentaire</button>
+            {{ form_end(commentForm) }}
+        </div>
+    {% endif %}
+    
 {% endblock %}
 
 {% block javascripts %}

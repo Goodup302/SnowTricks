@@ -90,6 +90,7 @@ class TrickController extends AbstractController
                 $comment->setPublishDate(new \DateTime());
                 $this->em->persist($comment);
                 $this->em->flush();
+                $form = $this->createForm(CommentType::class, new Comment());
             }
         }
         return $this->render('trick/single.html.twig', [
