@@ -27,14 +27,13 @@ class Video
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\Range(min=0, max=1)
+     * @Assert\Choice(choices=Video::ACCEPTS)
      * @Assert\NotBlank()
      */
     private $platform;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Choice(choices=Video::ACCEPTS)
      */
     private $videoId;
 

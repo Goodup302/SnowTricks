@@ -43,8 +43,7 @@
                          data-content='
                             <div>{{ form_label(imageForm.files) }}</div>
                             <div class="btn btn-dark w-100" data-toggle="modal" href="#link_doctor_modal"
-                                id="url_link_doctor_modal" form-open="{{ path('home', {'id': trick.id}) }}"
-                                data-target="#video_modal">
+                                form-open="{{ path('video.add', {'id': trick.id}) }}" data-target="#video_modal">
                                 Ajouter une vidéo
                             </div>
                          '>

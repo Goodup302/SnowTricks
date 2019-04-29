@@ -1,0 +1,154 @@
+Sujet: Créer un site communautaire pour apprendre les figures de snowboard
+
+
+Context:
+- Client : Jimmy Sweat est un entrepreneur passionné de snowboard.
+- Demande : Création d'un site collaboratif pour faire connaitre ce sport auprès du grand public et aider à l'apprentissage des figures (tricks).
+- But : Il souhaite capitaliser sur du contenu apporté par les internautes afin de développer un contenu riche et suscitant l’intérêt des utilisateurs du site. Par la suite, Jimmy souhaite développer un business de mise en relation avec les marques de snowboard grâce au trafic que le contenu aura généré.
+
+
+Les pages :
+	- home page (List Tricks)
+	- Create/Edit Trick
+	- Single page of a trick (with comments space)
+	- Security Page:
+		- Login Page
+		- Register Page
+		- Forgot Password
+		- Active account
+
+Fixtures:
+	Tricks: https://fr.wikipedia.org/wiki/Snowboard_freestyle#Les_types_de_tricks
+
+Règles:
+- URL avec slug (nom d'article) pas de variables dans l'url
+- Faire un bon référencement
+- bundles interdit sauf pour les données initiales
+- Site full responsive qui respecte les wireframes
+- L’ensemble des figures de snowboard doivent être présentes à l’initialisation de l’application web. Vous utiliserez un bundle externe pour charger ces données.
+- Ecrire toutes les issues/tickets
+- Faire la PHPDOCS
+- Pagination
+- load more pour les media de figures
+
+
+
+
+Connected user privilèges:
+	- delete tricks
+	- edit tricks
+	- post comments
+
+
+Espace de discution:
+	Les utilisateurs qui ne sont pas authentifiés peuvent consulter les discussions de toutes les
+	figures. En revanche, ils ne peuvent pas poster de message.
+	Pour chaque message, il sera affiché les informations suivantes :
+		● le nom complet de l’auteur du message ;
+		● la photo de l’auteur du message ;
+		● la date de création du message ;
+		● le contenu du message.
+	Dans cet espace de discussion, on peut voir la liste des messages postés par les membres,
+	du plus récent au plus ancien.
+	Ces messages doivent être paginés (10 par pages).
+	Si l’utilisateur est authentifié, il peut voir un formulaire au dessus de la liste avec un champs
+	“message” qui est obligatoire. pas de limite de message
+
+
+
+
+
+
+
+
+
+
+Livrables:
+- Un lien vers l’ensemble du projet (fichiers PHP/HTML/JS/CSS…) sur un repository Github
+- L’ensemble des diagrammes demandés (modèles de données, classes, use cases, séquentiels)
+- Les issues sur le repository Github
+- Les instructions pour installer le projet (dans un fichier README à la racine du projet)
+- Jeu de données initiales avec l’ensemble des figures de snowboard
+- Lien vers les analyses SensioLabsInsight (via une médaille dans le README par exemple).
+- Pour ce projet, la validation s’effectuera par un mentor validateur lors d’une soutenance filmée.
+- Votre mentor accompagnateur fera la demande de soutenance quand vous aurez de la visibilité sur la complétion du projet.
+
+
+
+
+
+
+
+
+Soutenance:
+
+Il s'agit d'un rendez-vous professionnel.
+Vous vous adresserez au fondateur de ToDo & Co, à votre directeur technique qui validera que le projet est prêt à être présenté au client, ainsi qu'à un développeur qui sera à même de reprendre le projet et/ou travailler en collaboration avec vous.
+
+Déroulement de la soutenance :‌‌
+
+Étape 1 : Présentation du contexte du projet, analyse du besoin & organisation du projet
+
+Présentation du contexte du projet : il s'agit de rappeler le contexte du projet dans le cadre du parcours que vous suivez.
+Analyse du besoin : vous choisirez l'une des fonctionnalités développée et il vous faudra présenter les schémas UML correspondant (diagrammes d’utilisation, de classe et de séquence, modèle de données).
+Organisation du projet : vous expliciterez la méthodologie adoptée, l'organisation de votre travail (découpage en tâches, priorisation, les estimations…).
+ ~ 10 minutes
+Étape 2 : Démonstration de l'application
+
+Il s'agit de présenter l'ensemble des fonctionnalités de l'application.‌
+
+~ 5 minutes
+Étape 3 : Exécution
+
+Vous présenterez le projet du point de vue technique cette fois-ci. Il s'agit de :
+
+Le versionning avec Git ;
+L’architecture de l’application (où sont les fichiers, et à quoi servent-ils);
+Les librairies qui ont été choisies d’être mise en place (installation avec Composer) ;
+Montrer une pull request avec des commentaires qui ont pu être fait sur le code ;
+Les outils utilisés pour garantir la mise en place de bonnes pratiques ;
+Une analyse SensioLabsInsight et les correctifs apportés ;
+Une suite de tests unitaires et le résultat dans la console.
+~ 5 minutes
+Étape 4 : Questions / Réponses
+
+Une session de questions/réponses autour de ce que vous aurez exposés sera à mener.‌‌
+
+~ 10 minutes
+Total	 30 minutes maximum
+
+
+
+ISSUES:
+ Create Entitys
+ Fixtures
+ Create forms
+ Login
+ Register
+ Email validation with token on register
+ Forgot password with token
+ Rester password page
+ Home Page
+ Single figure page
+ Media gestion
+ Discussion space related to a figure
+ New/edit figure page
+ All alert message at top of page
+ Profile page of user
+ Responsive support
+ SEO
+
+
+composer install -o
+composer update -o
+composer dump-autoload -o
+
+
+
+
+A faire:
+	- Blocker la connection d'un utilisateur non validé
+	- faires des test unitaires
+	- Avatar sur les utilisateur / page edit account
+	- fix le header decktop/mobile
+	- Actualiser les diagrames
