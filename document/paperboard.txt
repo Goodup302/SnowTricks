@@ -152,3 +152,4 @@ A faire:
 	- Actualiser les diagrammes
 	- Fix les tags
 	- ajouter des securité sur les controlleurs
+	- Corriger les fautes d'orthographe
