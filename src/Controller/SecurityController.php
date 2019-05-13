@@ -19,10 +19,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     const REGISTER_SUCCESS = "Le compte vient d'ètre créé avec succès, nous vous invitons à l'activer via le mail qui vous a été envoyé.";
-    const LOGIN_ERROR = "Identifiant invalides";
     const RESET_SUCCESS = "Votre mot de pass à bien été réinitialisé";
     const ACTIVATE_SUCCESS = "Votre compte vient d'ètre activé";
-    const FORGOT_SUCCESS = "Un mail de récupération de mot de pass vient de vous ètre envoyé";
+    const FORGOT_SUCCESS = "Un mail de récupération de mot de passe vient de vous ètre envoyé";
     const FORGOT_ERROR = "Ce pseudo est introuvable";
 
     /**
@@ -60,9 +59,11 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
-        if ($error) $this->addFlash('failed', self::LOGIN_ERROR);
         $lastUsername = $authenticationUtils->getLastUsername();
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername]);
+        return $this->render('security/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error'         => $error,
+        ]);
     }
 
     /**

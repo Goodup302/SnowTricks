@@ -147,7 +147,6 @@ composer dump-autoload -o
 
 
 A faire:
-	- Blocker la connection d'un utilisateur non validé
 	- faires des test unitaires
 	- Avatar sur les utilisateur / page edit account
 	- Actualiser les diagrammes

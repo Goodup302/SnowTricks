@@ -21,14 +21,14 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user = new User();
             $user->setUsername($this->faker->name);
             $user->setPassword($this->encoder->encodePassword($user, 'admin'));
-            $user->setEmail($this->faker->email);
+            $user->setEmail($this->defaultEmail);
             $user->createToken();
             $manager->persist($user);
         }
         $mainUser = new User();
         $mainUser->setUsername("admin");
         $mainUser->setPassword($this->encoder->encodePassword($user, 'admin'));
-        $mainUser->setEmail($this->faker->email);
+        $mainUser->setEmail($this->defaultEmail);
         $mainUser->setActivate(true);
         //$mainUser->setProfileImage($this->getReference(ImageFixtures::TEST));
         $mainUser->createToken();
