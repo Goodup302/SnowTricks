@@ -91,6 +91,7 @@ class TrickController extends AbstractController
                 $this->em->persist($comment);
                 $this->em->flush();
                 $form = $this->createForm(CommentType::class, new Comment());
+                $this->addFlash("success", "Votre commentaire a été posté !");
             }
         }
         return $this->render('trick/single.html.twig', [
@@ -142,6 +143,7 @@ class TrickController extends AbstractController
             $trick->setSlug(Utils::slugify($trick->getName()));
             $this->em->persist($trick);
             $this->em->flush();
+            $this->addFlash("success", "La figure a bien été éditée !");
             return $this->redirectToRoute('trick.single', ['slug' => $trick->getSlug()]);
         }
         return $this->render('trick/edit.html.twig', [

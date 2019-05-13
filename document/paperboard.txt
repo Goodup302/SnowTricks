@@ -153,7 +153,3 @@ A faire:
 	- Actualiser les diagrammes
 	- Fix les tags
 	- ajouter des securité sur les controlleurs
-	- notification quand on save un trick
-	- notification quand on poste un commentaire
-	- mettre le formulaire des commentaire en dessous des commentaire
-	- dans les fixtures des trick mettre des images/video aléatoire de trick

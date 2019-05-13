@@ -15,8 +15,9 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        $date = new \DateTimeImmutable();
+        $date = new \DateTime();
         $date->format('Y-m-d H:i:s');
+        $date->sub(\DateInterval::createFromDateString('356 day'));
 
         for ($i = 0; $i < $this->size; $i++) {
             for ($ii = 0; $ii < 23; $ii++) {
