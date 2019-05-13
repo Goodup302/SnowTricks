@@ -199,6 +199,7 @@ class TrickController extends AbstractController
             }
             $this->em->remove($trick);
             $this->em->flush();
+            $this->addFlash("success", "La figure a bien été supprimée !");
             return new JsonResponse(array(
                 'success' => true,
                 'url' => $this->generateUrl('home'),

@@ -69,8 +69,11 @@
                 {{ form_widget(form.description) }}
             </div>
 
-            <div class="col-12 col-md-6">
+            <div class="col-md-6">
                 {{ form_row(form.tag) }}
+            </div>
+            <div class="col-md-6 align-items-center col-md-6 d-flex justify-content-md-end justify-content-center mb-3 mb-md-0">
+                <a class="btn btn-danger text-white mr-3" onclick="$('form .delete-post').click()">Supprimer</a>
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
         </div>
@@ -114,12 +117,13 @@
     <form
             method="post"
             action="{{ path('trick.delete', {'id': trick.id}) }}"
+            class="m-2 text-center d-none"
             swa-title="Êtes vous sur ?"
             swa-text="Après validation il est impossible de revenire en arrière"
             type="DELETE"
             redirect="true"
     >
-        <button type="submit" class="btn btn-danger swa-confirm">Supprimer</button>
+        <button type="submit" class="btn btn-danger swa-confirm delete-post">Supprimer</button>
         <input type="hidden" name="_method" value="DELETE">
     </form>
 {% endblock %}

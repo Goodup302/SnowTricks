@@ -52,20 +52,20 @@
             {{ trick.description|raw }}
         </div>
 
-        <div class="align-items-center col-12 d-flex justify-content-around justify-content-lg-center">
+        <div class="align-items-center col-12 d-flex flex-column flex-md-row justify-content-around justify-content-lg-center">
             <div class="descritpion-item">
-                {{ trick.publishDate|date('Y-m-d') }}
-            </div>
-
-            <div class="descritpion-item">
-                {{ trick.tag.name }}
+                Créé le {{ trick.publishDate|date('Y-m-d') }}
             </div>
 
             {% if trick.lastEdit is not null %}
                 <div class="descritpion-item">
-                    {{ trick.lastEdit|date('Y-m-d') }}
+                    Modifiée le {{ trick.lastEdit|date('Y-m-d') }}
                 </div>
             {% endif %}
+
+            <div class="descritpion-item">
+                Tag : <strong>{{ trick.tag.name }}</strong>
+            </div>
         </div>
     </div>
 

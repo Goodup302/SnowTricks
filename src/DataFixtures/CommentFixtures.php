@@ -17,10 +17,10 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
     {
         $date = new \DateTime();
         $date->format('Y-m-d H:i:s');
-        $date->sub(\DateInterval::createFromDateString('356 day'));
+        $date->sub(\DateInterval::createFromDateString('356 days'));
 
         for ($i = 0; $i < $this->size; $i++) {
-            for ($ii = 0; $ii < 23; $ii++) {
+            for ($ii = 0; $ii < 15; $ii++) {
                 $date = $date->add(\DateInterval::createFromDateString('1 day'));
                 $comment = (new Comment())
                     ->setContent("{$this->faker->realText()}")
