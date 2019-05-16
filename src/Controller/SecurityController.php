@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class SecurityController extends AbstractController
 {
@@ -183,6 +184,7 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/account", name="account")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @return Response
      */
     public function account(Request $request): Response

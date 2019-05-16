@@ -6,7 +6,6 @@ use App\Entity\Comment;
 use App\Entity\Image;
 use App\Entity\Tag;
 use App\Entity\Trick;
-use App\Entity\User;
 use App\Entity\Video;
 use App\Form\CommentType;
 use App\Form\ImageType;
@@ -15,18 +14,14 @@ use App\Form\TrickType;
 use App\Form\VideoType;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
-use App\Service\Date;
-use App\Service\FileUploader;
 use App\Service\Utils;
 use Doctrine\ORM\EntityManagerInterface;
-use Faker\Provider\ka_GE\DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class TrickController extends AbstractController
 {
@@ -115,6 +110,9 @@ class TrickController extends AbstractController
         $comments = $commentRepository->getPaginate($trick->getId(), $page, self::MAX_COMMENT_PER_PAGE);
         return $this->render('ajax/comment.html.twig', ['comments' => $comments]);
     }
+
+
+    /*ADMIN PART*/
 
     /**
      * @Route("/edit/{slug}", name="trick.edit", methods="GET|POST")
