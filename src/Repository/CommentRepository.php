@@ -37,6 +37,7 @@ class CommentRepository extends ServiceEntityRepository
     /**
      * @param int $trickid
      * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countByTrick(int $trickid): int
     {

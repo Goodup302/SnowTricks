@@ -151,5 +151,5 @@ A faire:
 	- Avatar sur les utilisateur / page edit account
 	- Actualiser les diagrammes
 	- Fix les tags
-	- ajouter des securité sur les controlleurs
 	- Corriger les fautes d'orthographe
+	- valider toutes les issues
