@@ -83,7 +83,7 @@ Livrables:
 Soutenance:
 
 Il s'agit d'un rendez-vous professionnel.
-Vous vous adresserez au fondateur de ToDo & Co, à votre directeur technique qui validera que le projet est prêt à être présenté au client, ainsi qu'à un développeur qui sera à même de reprendre le projet et/ou travailler en collaboration avec vous.
+Vous vous adresserez au fondateur de ToDoCo à votre directeur technique qui validera que le projet est prêt à être présenté au client, ainsi qu'à un développeur qui sera à même de reprendre le projet et/ou travailler en collaboration avec vous
 
 Déroulement de la soutenance :‌‌
 
@@ -147,9 +147,4 @@ composer dump-autoload -o
 
 
 A faire:
-	- faires des test unitaires
-	- Avatar sur les utilisateur / page edit account
-	- Actualiser les diagrammes
-	- Fix les tags
 	- Corriger les fautes d'orthographe
-	- valider toutes les issues

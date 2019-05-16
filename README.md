@@ -9,7 +9,7 @@ This site is created on the base of Symfony4 framework.
 
 - [Install Producion]
 ```bash
-git clone https://github.com/Goodup302/SnowTricks.git .
+git clone https://github.com/Goodup302/SnowTricks.git
 composer install --no-dev --optimize-autoloader
 php bin/console doctrine:database:create -n
 php bin/console doctrine:schema:create -n
@@ -38,7 +38,7 @@ https://symfony.com/doc/current/configuration/environment_variables.html
 
 - [Install Development]
 ```bash
-git clone https://github.com/Goodup302/SnowTricks.git .
+git clone https://github.com/Goodup302/SnowTricks.git
 composer install
 composer require symfony/dotenv
 php bin/console doctrine:database:create -n
