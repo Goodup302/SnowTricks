@@ -74,11 +74,12 @@
             </div>
 
             <div class="align-items-center col-6 col-lg-4 d-flex" style="justify-content: space-evenly;">
-                <a class="current" href="{{ path('home') }}">Accueil</a>
+                <a class="{{ (app.request.get('_route') == 'home') ? 'current' }}" href="{{ path('home') }}">Accueil</a>
                 {% if app.user %}
+                    <a class="{{ (app.request.get('_route') == 'account') ? 'current' }}" href="{{ path('account') }}">Profile</a>
                     <a href="{{ path('logout') }}">Se déconnecter</a>
                 {% else %}
-                    <a href="{{ path('login') }}">Se connecter</a>
+                    <a class="{{ (app.request.get('_route') == 'login') ? 'current' }}" href="{{ path('login') }}">Se connecter</a>
                 {% endif %}
             </div>
         </nav>
@@ -86,6 +87,7 @@
         <nav id="nav_mobile" style="display: none">
             <a href="{{ path('home') }}"><i class="fas fa-home"></i></a>
             {% if app.user %}
+                <a href="{{ path('account') }}"><i class="fas fa-user"></i></a>
                 <a href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i></a>
             {% elseif not app.user %}
                 <a href="{{ path('login') }}"><i class="fas fa-sign-in-alt"></i></a>

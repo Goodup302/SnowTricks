@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% import "macro.html.twig" as macro %}
+
+{% block title %}Figure{% endblock %}
+
+{% block body %}
+    <div class="row">
+        {{ form_errors(form) }}
+        {{ form_start(form, {'attr': {'class': 'col-12 py-4'}}) }}
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center mt-2 mb-5">
+                    <div id="avatar_picker">
+                        <label for="{{ form.files.vars.id }}"></label>
+                        {% if user.profileImage.name is defined %}
+                            <img src="{{ asset(asset_media ~ user.profileImage.name)}}" class="comment_avatar h-100 position-absolute w-100" alt="Avatar de {{ user.username }}">
+                        {% else %}
+                            <img src="{{ asset('image/default_user.jpg') }}" class="comment_avatar h-100 position-absolute w-100" alt="Avatar par default">
+                        {% endif %}
+                        <input id="{{ form.files.vars.id }}" name="{{ form.files.vars.full_name }}"
+                               accept="image/JPEG" class="d-none" type="file">
+                    </div>
+                </div>
+
+                <div class="col-12 text-center">
+                    <h2>Information</h2>
+                    <p>Pseudo : {{ user.username }}</p>
+                    <p>Email : {{ user.email }}</p>
+                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                </div>
+            </div>
+        {{ form_end(form, {'render_rest': false}) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        /* FORM TO UPLOAD AVATAR*/
+        $('#avatar_picker #{{ form.files.vars.id }}').change(function (e) {
+            var reader = new FileReader();
+            var image = $(this).parent().find('img');
+            reader.onload = function(e) {
+                image.attr('src', e.target.result);
+            };
+            reader.readAsDataURL(this.files[0]);
+        });
+    </script>
+{% endblock %}

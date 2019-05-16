@@ -468,6 +468,49 @@ template {
     background: #0061b7c9;
 }
 
+
+/*****************
+*  ACCOUNT PAGE  *
+*****************/
+
+#avatar_picker {
+    width: 250px;
+    height: 250px;
+    position: relative;
+    transition: 0.4s all;
+}
+
+#avatar_picker:hover {
+    transform: scale(1.1);
+}
+
+#avatar_picker label{
+    z-index: 1;
+    border-radius: 100%;
+    cursor: pointer;
+    position: absolute;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+
+footer {
+    background: #585b62;
+    box-shadow: 0 -2px 3px black;
+    padding-left: 30px;
+    padding-right: 30px;
+    display: none;
+}
+footer a{
+    font-size: 16px;
+    color: white !important;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+
 /***********
 *  FOOTER  *
 ***********/

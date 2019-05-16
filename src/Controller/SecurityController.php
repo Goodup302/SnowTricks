@@ -2,13 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\User;
+use App\Form\Account\EditAccountType;
 use App\Form\Account\ResetPasswordType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +28,7 @@ class SecurityController extends AbstractController
     const ACTIVATE_SUCCESS = "Votre compte vient d'ètre activé";
     const FORGOT_SUCCESS = "Un mail de récupération de mot de passe vient de vous ètre envoyé";
     const FORGOT_ERROR = "Ce pseudo est introuvable";
+    const PROFILE_UPDATE_SUCCESS = "Votre profile a bien été mise a jour";
 
     /**
      * @var EntityManagerInterface
@@ -187,8 +192,32 @@ class SecurityController extends AbstractController
      * @Security("is_granted('ROLE_ADMIN')")
      * @return Response
      */
-    public function account(Request $request): Response
+    public function account(Request $request, FileUploader $fileUploader): Response
     {
-        return $this->redirectToRoute('home');
+        /** @var User $user */
+        $user = $this->getUser();
+        $files = new Image();
+        $form = $this->createForm(EditAccountType::class, $files);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $files->getSingleFile();
+            if ($imageFile != null) {
+                $image = (new Image())
+                    ->setName($fileUploader->upload($imageFile))
+                    ->setAlt($imageFile->getClientOriginalName())
+                ;
+                $user->setProfileImage($image);
+                //
+                $this->em->persist($image);
+                $this->em->persist($user);
+                $this->em->flush();
+                //
+                $this->addFlash('success', self::PROFILE_UPDATE_SUCCESS);
+            }
+        }
+        return $this->render('security/account.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user
+        ]);
     }
 }

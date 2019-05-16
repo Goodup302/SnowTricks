@@ -83,6 +83,11 @@ class Image
         return $this->files;
     }
 
+    public function getSingleFile()
+    {
+        return ($this->files != null)? $this->files[0] : null;
+    }
+
     public function addFiles($image)
     {
         $this->files[] = $image;
