@@ -323,6 +323,14 @@ a.current {
     outline: 0;
 }
 
+.field_error {
+    background: white;
+    padding: 8px;
+}
+.field_error *{
+    margin: 0;
+}
+
 
 /**************
 * AJAX LOADER *

@@ -14,6 +14,10 @@
             {% endif %}
             <div class="absolute_center pt-4">
                 <div class="position-relative w-100">
+                    <div class="field_error">
+                        {{ form_errors(form.name) }}
+                    </div>
+
                     {{ form_widget(form.name, {'attr': {'class': 'input_trick_title'} }) }}
                 </div>
             </div>
