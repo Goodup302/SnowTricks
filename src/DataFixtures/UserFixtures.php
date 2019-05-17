@@ -17,7 +17,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 2; $i++) {
             $user = new User();
             $user->setUsername($this->faker->name);
             $user->setPassword($this->encoder->encodePassword($user, 'admin'));

@@ -1,0 +1,62 @@
+Sujet: Créer un site communautaire pour apprendre les figures de snowboard
+
+
+Interlocuteur: Jimmy Sweat
+
+
+Présentation projet, analyse du besoin, organisation du projet (10 Minutes):
+    - Presentation contexte
+        Création d'un site collaboratif pour faire connaitre ce sport auprès du grand public
+        et aider à l'apprentissage des figures.
+
+        But : Capitaliser sur du contenu apporté par les internautes afin de développer un contenu riche
+        et suscitant l’intérêt des utilisateurs du site.
+
+        Par la suite : développer un business de mise en relation avec les marques de snowboard
+        grâce au trafic que le contenu aura généré.
+
+    - Présenter Les diagrames UML
+        1: Cas d'utilisation
+        2: Séquence
+        3: Class
+
+    - Organisation du projet
+        Découpage en tâches (Issue)
+        Priorisation
+        Les estimation
+
+Démonstration de l'application (5 Minutes):
+
+    On all page - TEST RESPONSIVE
+
+    - Home page (Load more)
+    - CGU
+    - Single trick (Comments list)
+
+    - Register
+    - Test Login with not actice account
+    - Activate account via Email
+    - Login
+
+    - Delete trick
+    - Create Trick
+    - Edit Trick
+    - Post Comments
+    - Profile (Change Profile Image)
+
+    - Lost Password
+
+Présentation Technique (5 Minutes):
+    - Versionning Git
+        Pull request
+        Branch
+        Readme
+    - L’architecture de l’application (où sont les fichiers, et à quoi servent-ils);
+
+    - Boostrap, jQuery, Ajax
+    - Présentation de faker pour les fixtures
+    - Les outils de qualité de code (PHP CS, codeclimate)
+    - Analyse codeclimate
+    - Test unitaire (Class / execution)
+
+Questions / Réponses (10 Minutes):

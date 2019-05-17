@@ -5,8 +5,6 @@ Snow Tricks is a collaborative website to introduce snowboarding to the general 
 
 This site is created on the base of Symfony4 framework.
 
-
-
 - [Install Producion]
 ```bash
 git clone https://github.com/Goodup302/SnowTricks.git
@@ -52,3 +50,6 @@ APP_ENV=prod
 DATABASE_URL=mysql://login:password@127.0.0.1:3306/snowtricks
 MAILER_URL=gmail://email:password@localhost
 ```
+
+
+**The specification and diagrams are in the "document" folder**
