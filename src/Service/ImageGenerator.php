@@ -9,10 +9,12 @@ class ImageGenerator
 {
     public static function getImage($name): Image
     {
+        $folder = Kernel::getDir()."/public/uploads/";
         $fileName = uniqid().'.jpg';
+        if (!is_dir($folder)) mkdir($folder);
         copy(
             Kernel::getDir()."/public/image/$name",
-            Kernel::getDir()."/public/uploads/$fileName"
+            $folder.$fileName
         );
         return (new Image())
             ->setAlt($name)

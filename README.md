@@ -12,6 +12,7 @@ composer install --no-dev --optimize-autoloader
 php bin/console doctrine:database:create -n
 php bin/console doctrine:schema:create -n
 php bin/console cache:clear -e prod -n --no-debug
+
 ```
 After, configuring environment variables:
 For apache:
@@ -40,9 +41,9 @@ git clone https://github.com/Goodup302/SnowTricks.git
 composer install
 php bin/console doctrine:database:drop --force -n
 php bin/console doctrine:database:create -n
-php bin/console make:mig -n
 php bin/console doctrine:schema:create -n
 php bin/console doctrine:fix:load -n
+
 ```
 After, configuring environment variables in file .env.local:
 ```bash

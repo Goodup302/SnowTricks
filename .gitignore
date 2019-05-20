@@ -17,7 +17,7 @@
 /.web-server-pid
 ###< symfony/web-server-bundle ###
 /.idea
-/public/uploads
+/public/uploads/
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache
