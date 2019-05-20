@@ -103,6 +103,7 @@ class SecurityController extends AbstractController
                 ->setBody($view, 'text/html')
             ;
             $this->mailer->send($mail);
+            return $this->redirectToRoute('login');
         }
         return $this->render('security/register.html.twig', ['form' => $form->createView()]);
     }
@@ -130,6 +131,7 @@ class SecurityController extends AbstractController
                 ;
                 $this->mailer->send($mail);
                 $this->addFlash('success', self::FORGOT_SUCCESS);
+                return $this->redirectToRoute('login');
             } else {
                 $this->addFlash('failed', self::FORGOT_ERROR);
             }

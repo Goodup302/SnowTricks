@@ -325,7 +325,7 @@ a.current {
 
 .field_error {
     background: white;
-    padding: 8px;
+    /*padding: 8px;*/
 }
 .field_error *{
     margin: 0;
