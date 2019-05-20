@@ -38,7 +38,7 @@ https://symfony.com/doc/current/configuration/environment_variables.html
 ```bash
 git clone https://github.com/Goodup302/SnowTricks.git
 composer install
-composer require symfony/dotenv
+php bin/console doctrine:database:drop --force -n
 php bin/console doctrine:database:create -n
 php bin/console make:mig -n
 php bin/console doctrine:schema:create -n

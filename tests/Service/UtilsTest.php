@@ -8,6 +8,6 @@ use PHPUnit\Framework\TestCase;
 class UtilsTest extends TestCase
 {
     public function testSlugify() {
-        $this->assertStringNotContainsString(" ", Utils::slugify('test test'));
+        $this->assertNotContains(" ", Utils::slugify('test test'));
     }
 }
