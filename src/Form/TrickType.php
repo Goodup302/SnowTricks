@@ -36,7 +36,7 @@ class TrickType extends AbstractType
             ->add('description')
             ->add('tag', EntityType::class, [
                 'choice_label' => 'name',
-                'label' => 'Group',
+                'label' => 'Groupe',
                 'class' => Tag::class,
                 'attr' => [
                     'class' => 'custom-select',

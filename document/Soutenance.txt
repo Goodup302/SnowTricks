@@ -6,7 +6,7 @@ Interlocuteur: Jimmy Sweat
 
 Présentation projet, analyse du besoin, organisation du projet (10 Minutes):
     - Presentation contexte
-        Création d'un site collaboratif pour faire connaitre ce sport auprès du grand public
+        Création d'un site collaboratif pour faire connaître ce sport auprès du grand public
         et aider à l'apprentissage des figures.
 
         But : Capitaliser sur du contenu apporté par les internautes afin de développer un contenu riche

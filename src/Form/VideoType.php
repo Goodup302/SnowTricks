@@ -19,7 +19,7 @@ class VideoType extends AbstractType
                     Video::DAILYMOTION => Video::DAILYMOTION_TYPE,
                     Video::YOUTUBE => Video::YOUTUBE_TYPE,
                 ],
-                'label' => 'Platforme',
+                'label' => 'Plateforme',
             ])
             ->add('videoId', null, [
                 'label' => 'Identifiant',

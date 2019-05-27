@@ -38,7 +38,7 @@ $('#'+fileInputId).change(function(){
     var files = document.getElementById($(this).attr('id')).files;
     if (files.length > 10) {
         Swal.fire({type: 'error', title: 'Oops...',
-            text: "Vous ne pouvez pas ajouter autant d'image"
+            text: "Vous ne pouvez pas ajouter autant d'images"
         });
         return;
     }

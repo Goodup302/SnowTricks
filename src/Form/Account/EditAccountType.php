@@ -15,7 +15,7 @@ class EditAccountType extends AbstractType
         $builder
             ->add('files', FileType::class, array(
                 //'data_class' => null,
-                'label' => 'Image du profile',
+                'label' => 'Image du profil',
                 'attr' => [
                     'accept' => 'image/JPEG',
                     'multiple' => 'false'

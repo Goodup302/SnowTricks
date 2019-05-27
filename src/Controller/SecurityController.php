@@ -24,10 +24,10 @@ class SecurityController extends AbstractController
 {
     const REGISTER_SUCCESS = "Le compte vient d'ètre créé avec succès, nous vous invitons à l'activer via le mail qui vous a été envoyé.";
     const RESET_SUCCESS = "Votre mot de pass à bien été réinitialisé";
-    const ACTIVATE_SUCCESS = "Votre compte vient d'ètre activé";
-    const FORGOT_SUCCESS = "Un mail de récupération de mot de passe vient de vous ètre envoyé";
+    const ACTIVATE_SUCCESS = "Votre compte vient d'être activé";
+    const FORGOT_SUCCESS = "Un mail de récupération de mot de passe vient de vous être envoyé";
     const FORGOT_ERROR = "Ce pseudo est introuvable";
-    const PROFILE_UPDATE_SUCCESS = "Votre profile a bien été mise a jour";
+    const PROFILE_UPDATE_SUCCESS = "Votre profil a bien été mise a jour";
 
     /**
      * @var EntityManagerInterface

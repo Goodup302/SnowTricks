@@ -18,7 +18,7 @@ class UserType extends AbstractType
                 'label' => 'Pseudo'
             ])
             ->add('password', RepeatedType::class, [
-                'invalid_message' => 'Les champs de mot de passe doivent correspondre.',
+                'invalid_message' => 'Les champs du mot de passe doivent correspondre.',
                 'type' => PasswordType::class,
                 'first_options'  => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Répéter mot de passe'],

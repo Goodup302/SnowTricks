@@ -76,7 +76,7 @@
             <div class="align-items-center col-6 col-lg-4 d-flex" style="justify-content: space-evenly;">
                 <a class="{{ (app.request.get('_route') == 'home') ? 'current' }}" href="{{ path('home') }}">Accueil</a>
                 {% if app.user %}
-                    <a class="{{ (app.request.get('_route') == 'account') ? 'current' }}" href="{{ path('account') }}">Profile</a>
+                    <a class="{{ (app.request.get('_route') == 'account') ? 'current' }}" href="{{ path('account') }}">Profil</a>
                     <a href="{{ path('logout') }}">Se déconnecter</a>
                 {% else %}
                     <a class="{{ (app.request.get('_route') == 'login') ? 'current' }}" href="{{ path('login') }}">Se connecter</a>

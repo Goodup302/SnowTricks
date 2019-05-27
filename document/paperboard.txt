@@ -16,8 +16,8 @@ A faire:
 	- Corriger les fautes d'orthographe
 
 
-Ajout possible:
-    Convertire le CSS en SASS
-    Ajouter un filtre qui tri les figures par tag
+Ajouts futurs:
+    Convertir le CSS en SASS
+    Ajouter un filtre qui trie les figures par tag
     Optimiser/retravailler le SEO du site
         Ajout de résau sociaux

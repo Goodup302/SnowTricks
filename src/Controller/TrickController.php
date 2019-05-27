@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TrickController extends AbstractController
 {
     const UNKNOWN_ERROR = 'Une erreur inconnue est survenue';
-    const NOT_CONNECTED = "Vous devez ètre connecté pour poster des commentaires";
+    const NOT_CONNECTED = "Vous devez être connecté pour poster des commentaires";
     const MAX_COMMENT_PER_PAGE = 10;
     const TRICK_PER_LOAD = 12;
 

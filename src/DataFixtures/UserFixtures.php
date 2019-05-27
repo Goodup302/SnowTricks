@@ -30,7 +30,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $mainUser->setPassword($this->encoder->encodePassword($user, 'admin'));
         $mainUser->setEmail($this->defaultEmail);
         $mainUser->setActivate(true);
-        //$mainUser->setProfileImage($this->getReference(ImageFixtures::TEST));
         $mainUser->createToken();
         $this->addReference(self::MAIN_USER, $mainUser);
         $manager->persist($mainUser);
@@ -40,8 +39,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
     public function getDependencies()
     {
-        return array(
-            ImageFixtures::class,
-        );
+        return [];
     }
 }

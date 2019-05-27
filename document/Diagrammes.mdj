@@ -4568,7 +4568,7 @@
 											"top": 115.5,
 											"width": 152,
 											"height": 13,
-											"text": "View a snowboard figure"
+											"text": "View a snowboard tricks"
 										},
 										{
 											"_type": "LabelView",
@@ -4601,7 +4601,7 @@
 									"font": "Arial;13;0",
 									"left": 426,
 									"top": 108.5,
-									"width": 162.90234375,
+									"width": 162,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAFoPR/xurXGA40="
@@ -6064,7 +6064,7 @@
 											"top": 467.5,
 											"width": 147,
 											"height": 13,
-											"text": "Edit a snowboard figure"
+											"text": "Edit a snowboard tricks"
 										},
 										{
 											"_type": "LabelView",
@@ -6097,7 +6097,7 @@
 									"font": "Arial;13;0",
 									"left": 209,
 									"top": 460.5,
-									"width": 158.0654296875,
+									"width": 157,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAFoPR/71rX01v0="
@@ -6456,7 +6456,7 @@
 											"top": 75.5,
 											"width": 166,
 											"height": 13,
-											"text": "View all snowboard figures"
+											"text": "View all snowboard tricks"
 										},
 										{
 											"_type": "LabelView",
@@ -6489,7 +6489,7 @@
 									"font": "Arial;13;0",
 									"left": 213,
 									"top": 68.5,
-									"width": 177.35595703125,
+									"width": 176,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAFoPR6VsLWXKto="
@@ -9175,7 +9175,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFoPRvAGLTxPCE="
 							},
-							"name": "View a snowboard figure"
+							"name": "View a snowboard tricks"
 						},
 						{
 							"_type": "UMLUseCase",
@@ -9183,7 +9183,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFoPRvAGLTxPCE="
 							},
-							"name": "View all snowboard figures"
+							"name": "View all snowboard tricks"
 						},
 						{
 							"_type": "UMLUseCase",
@@ -9373,7 +9373,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFoPRvGRLUKpZs="
 							},
-							"name": "Edit a snowboard figure",
+							"name": "Edit a snowboard tricks",
 							"ownedElements": [
 								{
 									"_type": "UMLInclude",
@@ -10115,7 +10115,7 @@
 												"$ref": "AAAAAAFoPTYIZMp2b2Q="
 											},
 											"edgePosition": 1,
-											"text": "1 : Filled the fields"
+											"text": "1 : Fill the fields"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -10445,7 +10445,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFoPSwFqsKkYoQ="
 							},
-							"name": "Filled the fields",
+							"name": "Fill the fields",
 							"source": {
 								"$ref": "AAAAAAFoPSwTGsLUcjs="
 							},
@@ -10559,7 +10559,8 @@
 					"_parent": {
 						"$ref": "AAAAAAFoPSwFqsKjiI0="
 					},
-					"name": "Role2"
+					"name": "Role2",
+					"type": ""
 				}
 			]
 		},
@@ -10994,7 +10995,7 @@
 												"$ref": "AAAAAAFoPTzbXstgzbg="
 											},
 											"edgePosition": 1,
-											"text": "1 : Filled the fields"
+											"text": "1 : Fill the fields"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -11775,7 +11776,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFoPTi5ncrAeqI="
 							},
-							"name": "Filled the fields",
+							"name": "Fill the fields",
 							"source": {
 								"$ref": "AAAAAAFoPTnUI8rnbNk="
 							},
@@ -11944,7 +11945,8 @@
 					"_parent": {
 						"$ref": "AAAAAAFoPTi5ncq/uos="
 					},
-					"name": "Role2"
+					"name": "Role2",
+					"type": ""
 				},
 				{
 					"_type": "UMLAttribute",
@@ -13332,7 +13334,8 @@
 					"_parent": {
 						"$ref": "AAAAAAFoPUGEYcvblYY="
 					},
-					"name": "Role2"
+					"name": "Role2",
+					"type": ""
 				},
 				{
 					"_type": "UMLAttribute",
@@ -14848,7 +14851,8 @@
 					"_parent": {
 						"$ref": "AAAAAAFqxKhxFdTxczI="
 					},
-					"name": "Role2"
+					"name": "Role2",
+					"type": ""
 				}
 			]
 		},
@@ -16070,7 +16074,8 @@
 					"_parent": {
 						"$ref": "AAAAAAFqxLcX+tZs8J0="
 					},
-					"name": "Role2"
+					"name": "Role2",
+					"type": ""
 				}
 			]
 		}
