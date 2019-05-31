@@ -17,7 +17,7 @@ class MainController extends AbstractController
      * @param AuthorizationCheckerInterface $authChecker
      * @return Response
      */
-    public function home(AuthorizationCheckerInterface $authChecker, TrickRepository $repository, SendMail $sendMail): Response
+    public function home(AuthorizationCheckerInterface $authChecker, TrickRepository $repository): Response
     {
         $tricks = $repository->loadMore(0, TrickController::TRICK_PER_LOAD);
         return $this->render('page/home.html.twig', ['tricks' => $tricks]);

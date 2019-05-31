@@ -122,7 +122,7 @@ function deleteItem(item, time) {
         item.remove();
     }, time);
 }
-$('form[type="DELETE"]').submit(function (e) {
+$(document).on('submit', 'form[type="DELETE"]', function (e) {
     e.preventDefault();
     var form = $(this);
     var redirect = (form.attr('redirect') === 'true');

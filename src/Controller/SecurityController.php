@@ -9,6 +9,7 @@ use App\Form\Account\ResetPasswordType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Service\FileUploader;
+use App\Service\SendMail;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -23,7 +24,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class SecurityController extends AbstractController
 {
     const REGISTER_SUCCESS = "Le compte vient d'ètre créé avec succès, nous vous invitons à l'activer via le mail qui vous a été envoyé.";
-    const RESET_SUCCESS = "Votre mot de pass à bien été réinitialisé";
+    const RESET_SUCCESS = "Votre mot de passe à bien été réinitialisé";
     const ACTIVATE_SUCCESS = "Votre compte vient d'être activé";
     const FORGOT_SUCCESS = "Un mail de récupération de mot de passe vient de vous être envoyé";
     const FORGOT_ERROR = "Ce pseudo est introuvable";
@@ -71,7 +72,7 @@ class SecurityController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function register(Request $request, \Swift_Mailer $mailer): Response
+    public function register(Request $request, SendMail $sendMail): Response
     {
         /** @var User $user */
         $user = new User();
@@ -87,17 +88,7 @@ class SecurityController extends AbstractController
             //
             $this->addFlash('success', self::REGISTER_SUCCESS);
             //
-            $view = $this->renderView('email/confirm.html.twig', [
-                'url' => $this->generateUrl('activate', ['token' => $user->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
-                'user' => $user
-            ]);
-            $mail = (new \Swift_Message('Activation'))
-                ->setSender($this->params->get('sender_email'))
-                ->setFrom($this->params->get('sender_email'))
-                ->setTo($user->getEmail())
-                ->setBody($view, 'text/html')
-            ;
-            $this->mailer->send($mail);
+            $sendMail->sendConfirm($user);
             return $this->redirectToRoute('login');
         }
         return $this->render('security/register.html.twig', ['form' => $form->createView()]);
@@ -107,26 +98,15 @@ class SecurityController extends AbstractController
      * @Route("/forgotpassword", name="forgotpassword")
      * @return Response
      */
-    public function forgotpassword(Request $request, UserRepository $userRepository): Response
+    public function forgotpassword(Request $request, UserRepository $userRepository, SendMail $sendMail): Response
     {
         $username =$request->request->get('username');
         if ($username) {
             /** @var User $user */
             $user = $userRepository->findOneBy(['username' => $username]);;
             if ($user) {
-                $view = $this->renderView('email/forgot.html.twig', [
-                    'url' => $this->generateUrl('resetpassword', ['token' => $user->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
-                    'user' => $user
-                ]);
-                $mail = (new \Swift_Message('Récupération du mot de passe'))
-                    ->setSender($this->params->get('sender_email'))
-                    ->setFrom($this->params->get('sender_email'))
-                    ->setTo($user->getEmail())
-                    ->setBody($view, 'text/html')
-                ;
-                $this->mailer->send($mail);
                 $this->addFlash('success', self::FORGOT_SUCCESS);
-                return $this->redirectToRoute('login');
+                $sendMail->sendForgot($user);
             } else {
                 $this->addFlash('failed', self::FORGOT_ERROR);
             }
