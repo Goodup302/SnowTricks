@@ -9,7 +9,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserFixtures extends Fixture implements DependentFixtureInterface
+class UserFixtures extends Fixture
 {
     use ConstructFixtures;
 
@@ -35,10 +35,5 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($mainUser);
 
         $manager->flush();
-    }
-
-    public function getDependencies()
-    {
-        return [];
     }
 }
