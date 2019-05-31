@@ -136,12 +136,16 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick, ['attr' => [TrickType::TRICK => $trick->getId()]]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($trick->isCreated()) $trick->setLastEdit(new \DateTime());
-            if (!$trick->isCreated()) $trick->setPublishDate(new \DateTime());
+            if ($trick->isCreated()) {
+                $this->addFlash("success", "La figure a bien été éditée !");
+                $trick->setLastEdit(new \DateTime());
+            } else {
+                $this->addFlash("success", "La figure a bien été créée !");
+                $trick->setPublishDate(new \DateTime());
+            }
             $trick->setSlug(Utils::slugify($trick->getName()));
             $this->em->persist($trick);
             $this->em->flush();
-            $this->addFlash("success", "La figure a bien été éditée !");
             return $this->redirectToRoute('trick.single', ['slug' => $trick->getSlug()]);
         }
         return $this->render('trick/edit.html.twig', [
