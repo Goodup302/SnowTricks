@@ -21,6 +21,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
     {
         $date = new \DateTime();
         $date->format('Y-m-d H:i:s');
+        $trickNames = explode("\n", file_get_contents(Kernel::getDir()."/src/DataFixtures/tricks.txt"));
         for ($i = 0; $i < $this->size; $i++) {
             //Videos
             $videos[$i][] = (new Video())->setPlatform(Video::YOUTUBE_TYPE)->setVideoId('SQyTWk7OxSI');
@@ -32,7 +33,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
             //Trick
             $trick = new Trick();
             $trick
-                ->setName($this->faker->text(30))
+                ->setName($trickNames[$i])
                 ->setDescription($this->faker->realText(900))
                 ->setPublishDate($date)
                 ->setTag($this->getReference(Tag::class.'0'))
