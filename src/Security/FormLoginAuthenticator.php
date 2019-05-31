@@ -75,7 +75,7 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        return new RedirectResponse('/');
+        return new RedirectResponse($this->router->generate('home'));
     }
 
     protected function getLoginUrl()

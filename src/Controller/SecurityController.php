@@ -39,21 +39,16 @@ class SecurityController extends AbstractController
      */
     private $encoder;
 
-    private $params;
-
-    private $mailer;
 
     /**
      * SecurityController constructor.
      * @param EntityManagerInterface $em
      * @param UserPasswordEncoderInterface $encoder
      */
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, ParameterBagInterface $params, \Swift_Mailer $mailer)
+    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
     {
         $this->em = $em;
         $this->encoder = $encoder;
-        $this->params = $params;
-        $this->mailer = $mailer;
     }
 
     /**

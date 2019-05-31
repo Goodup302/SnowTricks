@@ -186,29 +186,23 @@ class TrickController extends AbstractController
     public function delete(Trick $trick): Response
     {
         try {
-            foreach ($trick->getComments() as $comment) {
-                $this->em->remove($comment);
-            }
-            foreach ($trick->getImages() as $image) {
-                $this->em->remove($image);
-            }
-            foreach ($trick->getVideos() as $video) {
-                $this->em->remove($video);
-            }
+            foreach ($trick->getComments() as $comment) $this->em->remove($comment);
+            foreach ($trick->getImages() as $image) $this->em->remove($image);
+            foreach ($trick->getVideos() as $video) $this->em->remove($video);
             $this->em->remove($trick);
             $this->em->flush();
             $this->addFlash("success", "La figure a bien été supprimée !");
-            return new JsonResponse(array(
+            return new JsonResponse([
                 'success' => true,
                 'url' => $this->generateUrl('home'),
-            ));
+            ]);
         } catch (\Exception $e) {
-            return new JsonResponse(array(
+            return new JsonResponse([
                 'success' => false,
                 'url' => $this->generateUrl('home'),
                 'message' => self::UNKNOWN_ERROR,
                 'error' => $e->getMessage(),
-            ));
+            ]);
         }
     }
 
