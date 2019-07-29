@@ -1,8 +1,10 @@
+import $ from 'jquery'
+
 $(document).ready(function() {
     var page = 1;
 
-    paginateElement = $('.pagination');
-    commentContainer = $('#comments');
+    let paginateElement = $('.pagination');
+    let commentContainer = $('#comments');
 
     if (commentContainer.length) getComments();
 
@@ -26,8 +28,8 @@ $(document).ready(function() {
     });
 
     paginateElement.on('click', 'a[action]', function (e) {
-        action = $(this).attr('action');
-        nbPage = paginateElement.find('a[page]').length;
+        let action = $(this).attr('action');
+        let nbPage = paginateElement.find('a[page]').length;
         if (action === "prev" && page > 1) {
             page--;
             getComments();

@@ -110,5 +110,4 @@
 {% block javascripts %}
     {{ parent() }}
     <script>var comments_url = "{{ path('trick.comments', {id: trick.id}) }}"</script>
-    <script src="{{ asset('js/single.js') }}"></script>
 {% endblock %}

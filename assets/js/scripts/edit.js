@@ -1,3 +1,5 @@
+import $ from 'jquery'
+
 //Event list
 var deletableElement;
 var thumbnailElement;
@@ -129,7 +131,7 @@ function setThumbnail(id) {
         $(this).removeAttr("selected");
     });
     if (id > 0) {
-        option = getThumbnailOption(id);
+        let option = getThumbnailOption(id);
         option.attr('selected', 'selected');
         currentThumbnailId = id;
         $('img.edit_thumbnail').attr('src', uploadImageUrl+option.html())
@@ -151,7 +153,7 @@ function getThumbnailOption(id) {
 
 //Add html ajax response
 function addMedia(type, html) {
-    $items = $('div[mediatype="'+type+'"]');
+    let $items = $('div[mediatype="'+type+'"]');
     if ($items.length > 0) {
         $items.last().after(html);
     } else {
