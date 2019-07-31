@@ -1,12 +1,13 @@
-import '../scss/app.scss'
-import '../scss/style.scss'
-
-import 'bootstrap'
-
+import 'bootstrap/dist/js/bootstrap.js'
 import './scripts/main.js'
-import './scripts/edit.js'
+import './scripts/home.js'
+import './scripts/account.js'
 import './scripts/single.js'
+import './scripts/edit.js'
 
 
-import Swal from 'sweetalert2'
-import $ from 'jquery'
+// document.body.style.display = 'none';
+// window.addEventListener("DOMContentLoaded", function(e) {
+//     console.log("Load");
+//     document.body.style.display = 'unset';
+// });

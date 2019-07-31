@@ -104,10 +104,8 @@
             {{ form_end(commentForm) }}
         </div>
     {% endif %}
-    
-{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>var comments_url = "{{ path('trick.comments', {id: trick.id}) }}"</script>
+    <script>
+        _commentsUrl = "{{ path('trick.comments', {id: trick.id}) }}"
+    </script>
 {% endblock %}

@@ -5,23 +5,10 @@
         <title>{% block title %}SnowTricks{% endblock %}</title>
         <link rel="icon" href="{{ asset('image/favicon.jpg') }}" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
-        {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('library/bootstrap-4.2.1/css/bootstrap.min.css') }}">
-            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-            <link rel="stylesheet" href="{{ asset('build/app.css') }}">
-        {% endblock %}
-        {% block seo %}{% endblock %}
+        {{ encore_entry_link_tags('style') }}
     </head>
 
     <body>
-        <script>
-            //Loader
-            document.body.style.display = 'none';
-            window.addEventListener("DOMContentLoaded", function(e) {
-                console.log("Load");
-                document.body.style.display = 'unset';
-            });
-        </script>
 
         {#POPUP MESSAGE#}
         {% for message in app.flashes('error') %}
@@ -117,11 +104,7 @@
         </footer>
 
         {% block javascripts %}
-            <script src="{{ asset('library/jQuery-3.3.1/jquery-3.3.1.min.js') }}"></script>
-            <script src="{{ asset('library/bootstrap-4.2.1/js/popper.min.js') }}"></script>
-            <script src="{{ asset('library/bootstrap-4.2.1/js/bootstrap.bundle.min.js') }}"></script>
-            <script src="{{ asset('library/bootstrap-4.2.1/js/bootstrap.min.js') }}"></script>
-            <script src="{{ asset('build/app.js') }}"></script>
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </body>
 </html>

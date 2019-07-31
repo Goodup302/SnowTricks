@@ -1,7 +1,7 @@
 import $ from 'jquery'
 
 $(document).ready(function() {
-    var page = 1;
+    let page = 1;
 
     let paginateElement = $('.pagination');
     let commentContainer = $('#comments');
@@ -11,7 +11,7 @@ $(document).ready(function() {
     function getComments() {
         paginateElement.find('a[page]').each(function(){ $(this).removeClass('clicked') });
         paginateElement.find('a[page='+page+']').addClass('clicked');
-        $.post(comments_url, {
+        $.post(_commentsUrl, {
             'page': page
         }, function (data) {
             console.log(data);
@@ -19,7 +19,7 @@ $(document).ready(function() {
         })
     }
     paginateElement.on('click', 'a[page]', function (e) {
-        if (page != $(this).attr('page')) {
+        if (page !== $(this).attr('page')) {
             page = $(this).attr('page');
             getComments();
         } else {

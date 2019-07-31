@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import * as Swal from 'sweetalert2'
 
 var breakpoint_sm = 576;
 var breakpoint_md = 768;

@@ -638,6 +638,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@fortawesome/fontawesome-free@^5.10.0":
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.10.0.tgz#dbfb34093c87c9516f03ee1db3385adae3ae9461"
+  integrity sha512-XX16koDMY/tkJmec0VFfKF7RYZOze/203B1iyLnRaAySm3ZPhKaeyIpf73Yh8xhrMk3Fj4TeH3FC01qyFTyg8g==
+
 "@symfony/webpack-encore@^0.27.0":
   version "0.27.0"
   resolved "https://registry.yarnpkg.com/@symfony/webpack-encore/-/webpack-encore-0.27.0.tgz#efc960967823b5ff93881222f16496f1fa709f24"
@@ -6371,6 +6376,11 @@ timsort@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
   integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
+
+tinymce@^5.0.12:
+  version "5.0.12"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.0.12.tgz#b9b217f76643b7c6d6066b3ed75936090cbf9e8f"
+  integrity sha512-q3vmWEYRbLRekDX3pZbt39WrRsYokI/mcqHl0qQwq0Lztb/vsjiWUlTievDUN9sl36kgjNxTDnTqCTr6U5dnjg==
 
 tmp@^0.0.33:
   version "0.0.33"

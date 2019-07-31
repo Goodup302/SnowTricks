@@ -130,39 +130,6 @@
         <button type="submit" class="btn btn-danger swa-confirm delete-post">Supprimer</button>
         <input type="hidden" name="_method" value="DELETE">
     </form>
-{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
     <script src="https://cloud.tinymce.com/5/tinymce.min.js"></script>
-    <script>
-        /*tinymce*/
-        tinymce.init({
-            selector: "#trick_description",
-            setup: function (editor) {
-                editor.on('change', function () {
-                    tinymce.triggerSave();
-                });
-                editor.on('blur', function() {
-                    editor.save();
-                });
-            }
-        });
-        var tinyCreditInterval = setInterval(removeTinyCredit, 100);
-        function removeTinyCredit() {
-            var credit = $('.tox.tox-silver-sink.tox-tinymce-aux');
-            if (credit.length > 0) {
-                credit.remove();
-                clearInterval(tinyCreditInterval);
-            }
-        }
-
-        $(document).ready(function() {
-            $('.input_trick_title').removeClass('form-control');
-            $('*[data-toggle="popover"]').popover({
-                trigger: 'focus',
-                container: 'body'
-            });
-        })
-    </script>
 {% endblock %}

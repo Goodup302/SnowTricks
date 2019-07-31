@@ -30,19 +30,8 @@
             </div>
         {{ form_end(form, {'render_rest': false}) }}
     </div>
-{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
     <script>
-        /* FORM TO UPLOAD AVATAR*/
-        $('#avatar_picker #{{ form.files.vars.id }}').change(function (e) {
-            var reader = new FileReader();
-            var image = $(this).parent().find('img');
-            reader.onload = function(e) {
-                image.attr('src', e.target.result);
-            };
-            reader.readAsDataURL(this.files[0]);
-        });
+        _inputFileAvatar = '#{{ form.files.vars.id }}'
     </script>
 {% endblock %}

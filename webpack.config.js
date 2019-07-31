@@ -10,7 +10,7 @@ Encore
     // only needed for CDN's or sub-directory deploy
     //.setManifestKeyPrefix('build/')
     .addEntry('app', './assets/js/app.js')
-    .addStyleEntry('scss', './assets/scss/app.scss')
+    .addStyleEntry('style', './assets/scss/style.scss')
     //.addEntry('page1', './assets/js/page1.js'
     .splitEntryChunks()
     .enableSingleRuntimeChunk()

@@ -1,11 +1,45 @@
 import $ from 'jquery'
+import * as Swal from 'sweetalert2'
+
 
 //Event list
-var deletableElement;
-var thumbnailElement;
+let deletableElement;
+let thumbnailElement;
 //
-var selectThumbnail = $('#'+fileThumbnailId);
-var currentThumbnailId;
+let selectThumbnail = $('#'+fileThumbnailId);
+let currentThumbnailId;
+
+
+/*tinymce*/
+tinymce.init({
+    selector: "#trick_description",
+    plugins: ['paste', 'link'],
+    // setup: function (editor) {
+    //     editor.on('change', function () {
+    //         tinymce.triggerSave();
+    //     });
+    //     editor.on('blur', function() {
+    //         editor.save();
+    //     });
+    // }
+});
+// let tinyCreditInterval = setInterval(removeTinyCredit, 100);
+// function removeTinyCredit() {
+//     let credit = $('.tox.tox-silver-sink.tox-tinymce-aux');
+//     if (credit.length > 0) {
+//         credit.remove();
+//         clearInterval(tinyCreditInterval);
+//     }
+// }
+
+$(document).ready(function() {
+    $('.input_trick_title').removeClass('form-control');
+    $('*[data-toggle="popover"]').popover({
+        trigger: 'focus',
+        container: 'body'
+    });
+});
+
 
 
 /********
@@ -19,7 +53,7 @@ $(document).ready(function() {
 //Add Video
 $('form.video_form').on('submit', (function (e) {
     e.preventDefault();
-    var form = $(this);
+    let form = $(this);
     $.ajax({
         type: "POST",
         url: form.attr('action'),
@@ -35,9 +69,9 @@ $('form.video_form').on('submit', (function (e) {
 
 //Add Image
 $('#'+fileInputId).change(function(){
-    var formData = new FormData();
-    var url = $(this).attr('action');
-    var files = document.getElementById($(this).attr('id')).files;
+    let formData = new FormData();
+    let url = $(this).attr('action');
+    let files = document.getElementById($(this).attr('id')).files;
     if (files.length > 10) {
         Swal.fire({type: 'error', title: 'Oops...',
             text: "Vous ne pouvez pas ajouter autant d'images"
@@ -45,8 +79,8 @@ $('#'+fileInputId).change(function(){
         return;
     }
     //Add All File
-    for (var i = 0; i < files.length; i++) {
-        var file = files[i];
+    for (let i = 0; i < files.length; i++) {
+        let file = files[i];
         if (file.type == 'image/jpeg') {
             formData.append(fileInputName, file, file.name);
         } else {
@@ -76,10 +110,10 @@ function updateItem() {
     if (deletableElement) {deletableElement.off()}
     deletableElement = $(".media .delete");
     deletableElement.bind('click', (function (e) {
-        var item = $(this).parent().parent().parent();
-        var type = item.attr('mediatype');
-        var id = $(this).attr('data-id');
-        var url = $(this).attr('action');
+        let item = $(this).parent().parent().parent();
+        let type = item.attr('mediatype');
+        let id = $(this).attr('data-id');
+        let url = $(this).attr('action');
         //Ajax request
         $.ajax({
             type: "POST",
@@ -90,7 +124,7 @@ function updateItem() {
                 if (success) {
                     deleteItem(item);
                     if (type == 'image') {
-                        var option = getThumbnailOption(id);
+                        let option = getThumbnailOption(id);
                         if (option.val() == currentThumbnailId) {
                             resetThumbnailImg();
                         }
@@ -105,8 +139,8 @@ function updateItem() {
     if (thumbnailElement) {thumbnailElement.off()}
     thumbnailElement = $(".media .thumbnail_button");
     thumbnailElement.bind('click', (function (e){
-        var id = $(this).attr('data-id');
-        var name = $(this).attr('data-name');
+        let id = $(this).attr('data-id');
+        let name = $(this).attr('data-name');
         if (getThumbnailOption(id).length === 0) {
             selectThumbnail.append('<option value="'+id+'">'+name+'</option>');
         }
