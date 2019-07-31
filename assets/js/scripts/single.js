@@ -1,15 +1,17 @@
-$(document).ready(function() {
-    var page = 1;
+import $ from 'jquery'
 
-    paginateElement = $('.pagination');
-    commentContainer = $('#comments');
+$(document).ready(function() {
+    let page = 1;
+
+    let paginateElement = $('.pagination');
+    let commentContainer = $('#comments');
 
     if (commentContainer.length) getComments();
 
     function getComments() {
         paginateElement.find('a[page]').each(function(){ $(this).removeClass('clicked') });
         paginateElement.find('a[page='+page+']').addClass('clicked');
-        $.post(comments_url, {
+        $.post(_commentsUrl, {
             'page': page
         }, function (data) {
             console.log(data);
@@ -17,7 +19,7 @@ $(document).ready(function() {
         })
     }
     paginateElement.on('click', 'a[page]', function (e) {
-        if (page != $(this).attr('page')) {
+        if (page !== $(this).attr('page')) {
             page = $(this).attr('page');
             getComments();
         } else {
@@ -26,8 +28,8 @@ $(document).ready(function() {
     });
 
     paginateElement.on('click', 'a[action]', function (e) {
-        action = $(this).attr('action');
-        nbPage = paginateElement.find('a[page]').length;
+        let action = $(this).attr('action');
+        let nbPage = paginateElement.find('a[page]').length;
         if (action === "prev" && page > 1) {
             page--;
             getComments();

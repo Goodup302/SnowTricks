@@ -65,25 +65,3 @@
         </div>
     </div>
 {% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        $(document).ready(function() {
-            var trickNumber = {{ tricks|length }};
-            var offsetInterval = {{ tricks|length }};
-
-            function getTricks() {
-                $.post('{{ path('trick.list') }}', {
-                    'offset': trickNumber
-                }, function (data) {
-                    trickNumber += offsetInterval;
-                    $('#tricks').append(data);
-                })
-            }
-            $('#more_trick').on('click', function (e) {
-                getTricks()
-            });
-        });
-    </script>
-{% endblock %}

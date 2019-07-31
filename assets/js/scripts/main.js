@@ -1,3 +1,6 @@
+import $ from 'jquery'
+import * as Swal from 'sweetalert2'
+
 var breakpoint_sm = 576;
 var breakpoint_md = 768;
 var breakpoint_lg = 992;
@@ -131,7 +134,7 @@ $(document).on('submit', 'form[type="DELETE"]', function (e) {
         url: form.attr('action'),
         data: form.serialize(),
         success: function(data, textStatus, request){
-            contentType = request.getResponseHeader('Content-Type');
+            let contentType = request.getResponseHeader('Content-Type');
             if (contentType == "application/json") {
                 console.log(data);
                 console.log(redirect);
